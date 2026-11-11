@@ -1,6 +1,6 @@
 # Manuscript citation style
 
-`american-medical-association.csl` is the unmodified **AMA Manual of Style 11th edition** style from the [Citation Style Language repository](https://github.com/citation-style-language/styles/blob/master/american-medical-association.csl), retrieved 29 October 2026. The file retains its contributor credits and Creative Commons Attribution-ShareAlike 3.0 license.
+`american-medical-association.csl` is based on the **AMA Manual of Style 11th edition** style from the [Citation Style Language repository](https://github.com/citation-style-language/styles/blob/master/american-medical-association.csl), retrieved 29 October 2026. A local adjustment added on 11 November 2026 displays an explicitly supplied publication genre, such as `Preprint`, instead of `Published online` for unpaginated articles. The file retains its contributor credits and Creative Commons Attribution-ShareAlike 3.0 license.
 
 The [current JBR instructions](https://journals.sagepub.com/author-instructions/jbr) specify AMA style. This CSL is applied to `index.qmd`; the analytical supplement retains its existing author-date citations.
 

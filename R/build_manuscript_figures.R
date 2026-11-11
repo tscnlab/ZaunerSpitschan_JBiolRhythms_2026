@@ -85,7 +85,7 @@ hist_msf <- ggplot(people, aes(msf_hours, fill = quartile)) +
   scale_x_continuous(breaks = 1:8, labels = clock_label) +
   scale_y_continuous(breaks = scales::breaks_width(5), expand = expansion(mult = c(0, 0.06))) +
   guides(fill = guide_legend(ncol = 2, byrow = TRUE)) +
-  labs(tag = "A", x = "MSFsc (local clock time)", y = "Participants", fill = NULL)
+  labs(tag = "A", x = expression(MSF[sc] * " (local clock time)"), y = "Participants", fill = NULL)
 meq_labels <- meq_groups |> mutate(
   x = c(23.25, 36, 50, 64, 77.75),
   label = paste0(sub(" ", "\n", sub(" type$", "", meq_type)), "\nn = ", participants))
@@ -176,12 +176,12 @@ for (coordinate in c("clock", "phase")) {
     scale_y_log10(limits = range(c(1, contrasts$ratio_lower, contrasts$ratio_upper)),
       breaks = c(0.1, 1, 10, 100), labels = as.character, oob = scales::oob_keep,
       expand = expansion(mult = c(0.03, 0.03))) +
-    labs(x = if (coordinate == "clock") "Local clock time" else "Time relative to MSFsc (h)",
+    labs(x = if (coordinate == "clock") "Local clock time" else expression("Time relative to " * MSF[sc] * " (h)"),
       y = "Evening / morning") + theme(strip.text = element_blank(), strip.background = element_blank())
   if (coordinate == "phase") {
     # Centre labels over the significant grid points. Place them in the clear
     # space above the pre-MSFsc band and below the post-MSFsc band.
-    callouts <- windows |> mutate(label = if_else(end < 0, "pre-MSFsc", "post-MSFsc"),
+    callouts <- windows |> mutate(label = if_else(end < 0, "paste('pre-', MSF[sc])", "paste('post-', MSF[sc])"),
       target_x = (start + end - cfg$step) / 2,
       extremity = factor("Extreme", levels = c("Moderate", "Extreme")))
     callouts$target_y <- vapply(callouts$target_x, function(v) {
@@ -198,7 +198,7 @@ for (coordinate in c("clock", "phase")) {
         aes(x = label_x, xend = target_x, y = leader_start, yend = leader_end),
         inherit.aes = FALSE, linewidth = 0.3, color = "black") +
       geom_text(data = callouts, aes(x = label_x, y = label_y, label = label),
-        inherit.aes = FALSE, size = 2.6, color = "black")
+        inherit.aes = FALSE, size = 2.6, color = "black", parse = TRUE)
     export_data(callouts, "figure-2-patterns-phase-callouts")
   }
   panels <- c(panels, list(pattern, contrast))
@@ -240,7 +240,7 @@ day_a <- ggplot(day_curves, aes(x, estimate_melEDI, color = quartile, fill = qua
   scale_fill_manual(values = extreme_colors, labels = extreme_labels) +
   scale_y_continuous(transform = LightLogR::symlog_trans(base = 10, thr = 1, scale = 1),
     breaks = c(0, 1, 10, 100, 1000)) + phase_axis() +
-  labs(tag = "A", x = "Time relative to MSFsc (h)", y = "Melanopic EDI (lx)", color = NULL, fill = NULL)
+  labs(tag = "A", x = expression("Time relative to " * MSF[sc] * " (h)"), y = "Melanopic EDI (lx)", color = NULL, fill = NULL)
 # The same pointwise bands and support masks as in the analysis supplement.
 ratio_panels <- list()
 for (panel_data in list(day_ratios, day_change)) {
@@ -257,12 +257,12 @@ for (panel_data in list(day_ratios, day_change)) {
     geom_point(data = filter(panel_data, !supported), shape = 4, size = 0.8, color = "grey50") +
     scale_y_log10(limits = limits, oob = scales::oob_keep,
       breaks = c(0.03, 0.1, 0.3, 1, 3, 10, 30, 100), labels = function(v) paste0(v, "×")) +
-    phase_axis() + labs(x = "Time relative to MSFsc (h)")
+    phase_axis() + labs(x = expression("Time relative to " * MSF[sc] * " (h)"))
   ratio_panels <- c(ratio_panels, list(p))
 }
 day_b <- ratio_panels[[1]] + facet_wrap(~scenario, ncol = 3, labeller = as_labeller(scenario_labels)) +
   labs(tag = "B", y = "Evening / morning")
-day_c <- ratio_panels[[2]] + labs(tag = "C", y = "Longer / shorter", x = "Time relative to\nMSFsc (h)")
+day_c <- ratio_panels[[2]] + labs(tag = "C", y = "Longer / shorter", x = expression(atop("Time relative to", MSF[sc] * " (h)")))
 day_d <- ggplot(civil, aes(x, availability, color = quartile)) +
   primary_phase_interval_band(boundaries = FALSE) + dlmo_reference_band() +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey45", linewidth = 0.35) +
@@ -270,7 +270,7 @@ day_d <- ggplot(civil, aes(x, availability, color = quartile)) +
   facet_wrap(~daylength, labeller = as_labeller(c(Shorter = "Shorter absolute days", Longer = "Longer absolute days"))) +
   scale_color_manual(values = extreme_colors, labels = extreme_labels) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0, 1), breaks = c(0, 0.5, 1)) +
-  phase_axis(c(-12, 0, 12)) + labs(tag = "D", x = "Time relative to MSFsc (h)", y = "Civil daylight") +
+  phase_axis(c(-12, 0, 12)) + labs(tag = "D", x = expression("Time relative to " * MSF[sc] * " (h)"), y = "Civil daylight") +
   theme(legend.position = "none", strip.text = element_text(size = 8.5))
 figure3 <- wrap_plots(A = day_a, B = day_b, C = day_c, D = day_d,
   design = "AAA\nBBB\nCDD", heights = c(1, 1, 1.1), guides = "collect") &
@@ -305,7 +305,7 @@ kernel_labels <- c(published = "Published raw", drift_corrected = "Drift correct
 ylimits <- range(c(kernel$response, points$phase_shift_hours)) + c(-0.12, 0.65)
 prc_window_labels <- windows |> transmute(
   x = (start + end) / 2, y = ylimits[2] - 0.12,
-  label = if_else(end < 0, "pre-MSFsc", "post-MSFsc"))
+  label = if_else(end < 0, "paste('pre-', MSF[sc])", "paste('post-', MSF[sc])"))
 export_data(prc_window_labels, "figure-4-prc-window-labels")
 prc_a <- ggplot(kernel, aes(phase_msfsc, response, color = curve, linetype = curve)) +
   primary_phase_interval_band(boundaries = FALSE) + dlmo_reference_band() +
@@ -316,17 +316,17 @@ prc_a <- ggplot(kernel, aes(phase_msfsc, response, color = curve, linetype = cur
     color = "grey50", alpha = 0.75, size = 1.4) + geom_line(linewidth = 0.7) +
   annotate("label", x = offset, y = ylimits[2] - 0.12, label = "DLMO reference\n-6.45 h",
     color = "#8B6423", fill = "white", linewidth = 0, vjust = 1, size = 2.9) +
-  annotate("label", x = 0, y = ylimits[2] - 0.12, label = "MSFsc\n0 h",
+  annotate("label", x = 0, y = ylimits[2] - 0.12, label = "atop(MSF[sc], '0 h')", parse = TRUE,
     color = "#0072B2", fill = "white", linewidth = 0, vjust = 1, size = 2.9) +
   geom_label(data = prc_window_labels, aes(x, y, label = label), inherit.aes = FALSE,
     color = "grey30", fill = "white", linewidth = 0, vjust = 1, size = 2.9,
-    label.padding = grid::unit(0.07, "lines")) +
+    label.padding = grid::unit(0.07, "lines"), parse = TRUE) +
   scale_color_manual(values = c(drift_corrected = "#6A3D9A", published = "#666666"), breaks = names(kernel_labels), labels = kernel_labels) +
   scale_linetype_manual(values = c(drift_corrected = "solid", published = "longdash"), breaks = names(kernel_labels), labels = kernel_labels) +
   scale_x_continuous(breaks = seq(-12, 12, 3), limits = c(-12, 12),
     sec.axis = sec_axis(~. - offset, breaks = seq(-6, 18, 6), name = "Pulse midpoint relative to DLMO (h)")) +
   scale_y_continuous(limits = ylimits, expand = expansion(mult = 0.01)) +
-  labs(tag = "A", x = "Pulse midpoint relative to MSFsc (h)", y = "Phase response (h)", color = NULL, linetype = NULL)
+  labs(tag = "A", x = expression("Pulse midpoint relative to " * MSF[sc] * " (h)"), y = "Phase response (h)", color = NULL, linetype = NULL)
 prc_b <- ggplot(indices, aes(context, estimate, color = direction, group = direction)) +
   geom_hline(yintercept = 0, color = "grey55", linetype = 2, linewidth = 0.35) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15, position = position_dodge(0.45)) +

@@ -260,6 +260,9 @@
                           <if type="article">
                             <text term="preprint" text-case="capitalize-first"/>
                           </if>
+                          <else-if variable="genre">
+                            <text variable="genre" text-case="capitalize-first"/>
+                          </else-if>
                           <else-if type="article-newspaper"/>
                           <else>
                             <text term="advance-online-publication" text-case="capitalize-first"/>
