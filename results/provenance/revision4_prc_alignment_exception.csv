@@ -1,0 +1,2 @@
+"context","extremity","contrast","dlmo_offset","reference_alignment","prc_baseline","exposure_scale","reference_log10_difference","estimate","se","lower","upper","evening_participants","evening_days","evening_half_hours","morning_participants","morning_days","morning_half_hours"
+"Work","Extreme","Evening minus Morning",-6.95,TRUE,"Published raw","Zero-exposure centered",0,0.297317154666909,0.150927890544405,0.00150392493727142,0.593130384396546,33,111,5165,35,116,5354

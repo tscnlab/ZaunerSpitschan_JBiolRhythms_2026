@@ -1,0 +1,1404 @@
+---
+title: "MeLiDos: chronotype and daily light exposure"
+subtitle: "Local clock time, circadian phase, and work versus free days"
+author:
+  - name: Johannes Zauner
+    orcid: 0000-0003-2171-4566
+    affiliations:
+      - ref: tum
+  - name: Manuel Spitschan
+    orcid: 0000-0002-8572-9268
+    affiliations:
+      - ref: tum
+      - ref: mpi
+      - ref: ias
+      - ref: tumcreate
+affiliations:
+  - id: tum
+    name: "TUM School of Medicine and Health, Technical University of Munich, Munich, Germany"
+  - id: mpi
+    name: "Max Planck Research Group Translational Sensory & Circadian Neuroscience, Max Planck Institute for Biological Cybernetics, Tübingen, Germany"
+  - id: ias
+    name: "TUM Institute for Advanced Study (TUM-IAS), Technical University of Munich, Garching, Germany"
+  - id: tumcreate
+    name: "TUMCREATE Ltd., Singapore, Singapore"
+date: "2026-11-05"
+engine: knitr
+bibliography:
+  - references.bib
+  - manuscript-references.bib
+---
+
+## Abstract {#summary-in-brief}
+
+@goulet2007 found that morning types received more light around dim-light melatonin onset (DLMO), whereas evening types received more light 10–12 hours later, in a subset of four morning and five evening participants with extreme DLMO timing. We examined whether similar phase-dependent differences occur in a larger sample during everyday work and free days.
+
+We analysed near-eye melanopic light exposure from **140 MeLiDos participants, 778 participant-days and 35,949 half-hour observations**. Cyclic generalized additive mixed models compared four MSFsc quartiles across work and free days, using local clock time and circadian phase operationalized through midsleep on free days corrected for sleep debt (MSFsc). The models accounted for site, individual daily patterns, participant-day variation and photoperiod. DLMO was represented by a published group-average DLMO reference interval relative to MSFsc.
+
+After phase alignment, extreme morning types had higher fitted exposure **9.6–11.3 hours before MSFsc, roughly 3–5 hours before the DLMO reference**, while extreme evening types had higher exposure **0.9–4.4 hours after MSFsc**. The clock-time and circadian-phase models performed similarly well in sample (ordinary R² **0.795 and 0.794**, respectively), including participant and day effects. Chronotype direction and chronotype strength together received small Shapley allocations of **0.007 and 0.012 R²** above the common daily curve. Their 95% bootstrap intervals excluded zero. Individual patterns received the largest allocation.
+
+Similar curve shapes under MEQ and MSFsc classification in **68 participants and 379 participant-days** support robustness to the chronotype measure and its cutoffs. This sensitivity pools definite and moderate morning types and definite and moderate evening types, excluding the 72 intermediate chronotypes.
+
+An exploratory, post hoc analysis tested whether daylight timing contributes to the phase-dependent differences, making them larger on longer days. Comparing daylengths one hour below and above each site's average, the evening-to-morning ratio of exposure changed by **−16.6% before the DLMO reference** (95% CI **−66.6% to +108.5%**) and **+159.1% after MSFsc** (95% CI **+5.9% to +534.2%**). Conceptual phase-response-curve weighting gave higher advance-weighted exposure indices in extreme evening than extreme morning types, but the group differences were not statistically significant. These indices summarize exposure timing and do not predict phase shifts.
+
+## Background and aims
+
+MeLiDos is a multicentre study of personal light exposure during everyday life. Participants wore light loggers near the eyes and on the chest and recorded sleep, device removal, and daily activities. A common protocol was used at nine sites in seven countries, with measurements collected between August 2023 and October 2025. Participants were recruited through the participating research groups rather than through population sampling [@zauner2026exposome].
+
+This analysis uses prepared measurements and diary data from the [MeLiDos analysis repository](https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026) [@melidosanalysis2026]. The accompanying preprint is *The health-relevant architecture of the everyday light exposome* [@zauner2026exposome]. The imported files are included in this project, with a fixed source snapshot and checksums, so the analysis can run without a second repository checkout.
+
+The primary question is whether chronotype differences in daily exposure persist after aligning observations to circadian phase, operationalized through midsleep on free days corrected for sleep debt (**MSFsc**). We also compare work and free days to test whether daily schedules change the exposure patterns and chronotype differences. The outcome is **melanopic equivalent daylight illuminance**, abbreviated melanopic EDI: light weighted for melanopsin sensitivity and expressed as an equivalent daylight illuminance in lux. Near-eye measurements are primary. Chest measurements provide a sensitivity check, informed by the sensor-placement study by @zauner2026placement, which found close agreement for some exposure metrics and placement-dependent differences for others. During recorded sleep, the loggers were placed near the bed, so those readings describe the sleeping environment [@zauner2026exposome].
+
+Chronotype groups are defined by MSFsc quartiles: extreme morning, moderate morning, moderate evening and extreme evening. **Chronotype direction** distinguishes morning from evening, and **chronotype strength** distinguishes extreme from moderate groups. The median of 04:16 falls within a published MCTQ intermediate range of 04:00–04:59 [@juda2013]. The Morningness–Eveningness Questionnaire, or **MEQ**, measures preferred timing of sleep and activity [@horne1976] and provides an alternative group definition in a sensitivity analysis.
+
+We compare local clock time with time relative to each participant's MSFsc as a sleep-based measure of individual circadian phase. **Dim-light melatonin onset**, or **DLMO**, was not measured in MeLiDos. The diagonally striped bands show a published DLMO reference interval, 6.95–5.95 hours before MSFsc, derived from the early- and late-group means in 38 healthy adults (mean age 22.7 years, SD 4.2) studied by @facerchilds2019. This interval does not estimate individual DLMO [@kantermann2015].
+
+After examining the main results, we added an **exploratory, post hoc daylength analysis**. The hypothesis is that daylight timing contributes to the phase-dependent differences between extreme morning and evening types. Morning types reach their evening circadian phase earlier in clock time, when daylight may still be available; evening types encounter sunrise earlier relative to their own phase. If daylight contributes to these differences, the morning–evening contrast before the DLMO reference and after MSFsc should be larger on longer days and smaller on shorter days. We examine this pattern by adding daylength moderation to the phase model and by plotting civil dawn and dusk relative to MSFsc.
+
+A second exploratory analysis asks whether the timing of light exposure is consistent with an **advancing pattern in extreme evening types and a delaying pattern in extreme morning types**. We weight the estimated exposure curves of these two groups by a published light phase-response curve (PRC) [@sthilaire2012] and integrate over 24 hours, using the DLMO reference interval to align the time coordinates. The resulting signed indices summarize exposure across phases associated with advances and delays. Comparing the published raw PRC with its drift-corrected form tests how the baseline affects this interpretation; the indices describe exposure patterns rather than measured shifts of the circadian clock.
+
+## Data and sample
+
+The analysis uses R 4.6.1 and the existing tested package versions, recorded in this project's `renv.lock`. The [input guide](input-data/README.md) describes the copied data and source attribution; the [snapshot manifest](input-data/manifest.csv) records their original paths, source commit and checksums. Reusable helper files handle repeated fits, contrasts, validation and attribution. Their inputs, choices and results appear below in analysis order, and the complete files are linked at the end. The small `table_data()`, `show_table()` and `show_figure()` helpers are reused throughout: they read exported tables, apply common gt formatting, and display figures. The [table-formatting code](R/report_tables.R) changes presentation only.
+
+```{r}
+#| label: setup
+#| message: false
+source("R/setup.R")
+options(sass.cache = file.path(tempdir(), "melidos-gt-sass"))
+source("R/report_tables.R")
+for (module in c("data", "models", "inference", "diagnostics",
+                 "validation", "attribution", "plots", "sensitivity")) {
+  source(paste0("R/", module, ".R"))
+}
+table_data <- function(name, directory = "results/tables") {
+  read.csv(file.path(directory, paste0(name, ".csv")), check.names = FALSE)
+}
+show_figure <- function(name) {
+  knitr::include_graphics(file.path("results/figures", paste0(name, ".png")))
+}
+```
+
+### Prepared measurements and additional exclusions
+
+The daily-pattern data, prepared in the source repository, supply 30-minute arithmetic-mean melanopic EDI. A bin needs at least 15 valid minutes. Zeros remain in the analysis; the response is log10(melanopic EDI + 0.1). Work/free-day labels come from the diary's waking date. We require MSFsc and a day-type label for both time representations. The source repository calls its daily-pattern analysis **H02**, originating from preregistered hypothesis 02 on within-participant versus between-site variation in hourly melanopic EDI [@melidos2026preregistration; @h02]. That identifier is retained in imported filenames for traceability.
+
+```{r}
+#| label: tbl-sample-flow
+#| tbl-cap: "Sample flow. Participants are counted uniquely at each step."
+prepared <- prepare_data() # <1>
+show_table(prepared$flow)
+```
+
+1. Join the prepared light measurements, participant information and waking-date diary labels. The shared registry records each exclusion and supplies sample counts throughout the report.
+
+The sample flow in @tbl-sample-flow starts with **141 participants and 816 participant-days** with near-eye measurements. One participant has no MSFsc, removing 6 days. A further 32 days across 24 retained participants have no diary record for that waking date. The joint analysis therefore contains **140 participants, 778 participant-days and 35,949 half-hours**. The removed days still have light measurements; they cannot contribute to a model that requires a work/free label. The complete [day-inclusion registry](results/tables/day_inclusion_registry.csv) records these decisions.
+
+Both models use exactly the same records (@tbl-time-coordinates) and preserve their sequence order. Clock time is the local bin midpoint. Phase is clock time minus MSFsc, wrapped over 24 hours. Negative values on the phase plots precede MSFsc.
+
+```{r}
+#| label: tbl-time-coordinates
+#| tbl-cap: "Common analytical sample for the clock-time and circadian-phase coordinates."
+near_eye <- prepared$frames$glasses
+stopifnot(all(near_eye$clock == (near_eye$clock_bin + 15) / 60))
+stopifnot(all.equal(near_eye$phase_display,
+                   ((near_eye$clock - near_eye$msf_hours + 12) %% 24) - 12))
+show_table(count_sample(near_eye))
+```
+
+The primary sample comprises 78 female and 62 male participants, with a median age of 27 years (range 18–68). The [demographic verification script](R/manuscript_review_checks.R) joins the frozen demographic input to the primary participant registry and exports the summary below; its [runtime record](results/provenance/manuscript_review_runtime.txt) documents inputs and R/package versions.
+
+```{r}
+#| label: tbl-primary-demographics
+#| tbl-cap: "Sex and age of the 140 primary near-eye participants."
+show_table(table_data("primary_demographics"), digits = 0)
+```
+
+### Chronotype groups
+
+Quartiles use one MSFsc value per participant, so each person contributes equally. We use R's default quantile calculation (`type = 7`): after sorting the values, it locates the 25th, 50th and 75th percentiles and interpolates linearly between adjacent values when a percentile falls between them. Values equal to a boundary stay in the earlier quartile, so ties are never split. The cutoffs are fixed across work/free days and sensor placements.
+
+```{r}
+#| label: tbl-cutoffs
+#| tbl-cap: "MSFsc quartile boundaries."
+cutoffs <- quantile(distinct(near_eye, participant_key, msf_hours)$msf_hours,
+                   c(0.25, 0.50, 0.75), type = 7)
+show_table(table_data("quartile_cutoffs") |>
+  select(percentile, msf_hours, clock_time),
+  labels = c(msf_hours = "MSFsc (hours)", clock_time = "Clock time"))
+```
+
+The boundaries are 03:10, 04:16, and 05:15 (@tbl-cutoffs). A published Munich ChronoType Questionnaire (MCTQ) classification places MSFsc from 04:00 to 04:59 in an intermediate range [@juda2013]. This supports moderate-morning and moderate-evening labels on either side of the sample median. @tbl-groups summarizes the resulting groups.
+
+```{r}
+#| label: tbl-groups
+#| tbl-cap: "Four chronotype groups. Times are MSFsc; counts refer to the complete near-eye sample."
+groups <- table_data("quartile_distribution")
+groups[c("minimum", "median", "maximum")] <-
+  lapply(groups[c("minimum", "median", "maximum")], clock_label)
+show_table(groups)
+```
+
+The recorded MEQ categories provide a useful comparison (@tbl-meq-overlap). The two measures are related but describe different aspects of chronotype. Here, 18 of 34 people in Q2 and 23 of 36 in Q3 are intermediate by MEQ. Group classifications from MSFsc, MEQ and DLMO can disagree [@reiter2021].
+
+```{r}
+#| label: tbl-meq-overlap
+#| tbl-cap: "MSFsc quartiles and recorded MEQ categories. Each cell shows participants / participant-days."
+meq_order <- c("Definitely morning type", "Moderately morning type",
+               "Intermediate", "Moderately evening type",
+               "Definitely evening type")
+meq_overlap <- table_data("quartile_meq_overlap") |>
+  mutate(sample = paste(participants, participant_days, sep = " / ")) |>
+  select(quartile, meq_type, sample) |>
+  pivot_wider(names_from = meq_type, values_from = sample, values_fill = "0 / 0") |>
+  select(quartile, all_of(meq_order))
+show_table(meq_overlap)
+```
+
+{{< include notes/chronotype-distributions.qmd >}}
+
+@tbl-day-support gives the work/free-day counts available within each quartile.
+
+```{r}
+#| label: tbl-day-support
+#| tbl-cap: "Work/free-day support in the near-eye (glasses) sample. A participant may contribute to both day types."
+show_table(table_data("group_day_counts") |>
+  filter(placement == "glasses") |>
+  select(-placement))
+```
+
+## Model specification
+
+The models extend the source study's daily-pattern analysis [@zauner2026exposome; @h02] by making every daily curve cyclic: the end of one day joins smoothly to the start of the next. They use Gaussian errors on the transformed response and the R package `mgcv`'s discrete `bam()` fitting with fast restricted maximum likelihood (fREML) [@wood2017; @wood2017large]. Each model has a common daily curve, quartile and day-type deviations and their interaction, site deviations, individual random curves, participant-day random intercepts, and photoperiod effects.
+
+All daily curves are cyclic cubic splines. The sum-to-zero `sz` basis estimates curve effects for categorical groups, including quartile, day type and site; the deviations sum to zero across the relevant factor levels. The `fs` basis supplies smooth random participant effects around those shared curves. Population/group/site bases use `k = 12`, participant bases use `k = 10`, and photoperiod uses a cubic regression spline with `k = 5`. The time-by-photoperiod interaction uses `ti()` with marginal dimensions `k = c(12, 5)`. Photoperiod is the **duration from civil dawn to civil dusk**, calculated using the **suntools** package through the `LightLogR::photoperiod()` wrapper. It is centered using the mean over distinct dates within each site.
+
+```{r}
+#| label: model-specification
+formula_used <- model_formula()
+formula_used
+```
+
+The `sz` terms include level effects, so no duplicate quartile, day-type or site intercepts are added. The standard `sz` penalties are estimated separately. In the installed `mgcv` version, linking the cyclic `sz` penalties with `id` produced a numerical rank failure; removing `id` retained `sz`, its sum-to-zero constraints, and cyclic cubic margins.
+
+A separate [basis-sensitivity notebook](noncyclic-sz-sensitivity.html) compares these models with noncyclic cubic margins for every `sz` term. It retains the cyclic common curve and the original participant `fs` and time-by-photoperiod `ti()` structures, isolating the change to categorical-group curves. The primary models remain unchanged. Ordinary in-sample R² changes by less than 0.0001 on either time coordinate. The noncyclic group curves introduce small jumps at midnight or, for the phase model, at MSFsc; the overall endpoint intervals include continuity. The post-MSFsc extreme-group interval remains, from **0.92 to 4.25 hours**, with an average evening/morning factor of **13.24**. The earlier interval no longer excludes a factor of one under the simultaneous bands, so its inferential status is sensitive to the endpoint specification. The repeating daily pattern therefore retains cyclic group curves in the primary specification.
+
+The quartile-by-day model estimates all eight group/day curves. Chronotype direction, chronotype strength and their interactions are contrasts of those curves. For attribution subsets, direction alone or strength alone receives its corresponding two-level smooth; when both are present, the four-level quartile smooth is used. A day-type interaction enters only with its contributing non-interaction factors, so it is interpreted together with their effects.
+
+A preliminary fit checks the mean structure before estimating the residual correlation between adjacent observations. The first-order autoregressive correction, AR(1), follows elapsed time in UTC and resets at every participant-day, missing interval, gap and ambiguous daylight-saving link. Phase wrapping does not reorder observations.
+
+```{r}
+#| label: tbl-fitted-models
+#| tbl-cap: "Fitting summary for the two near-eye models."
+preprocessing <- fit_preprocess(near_eye, prepared$cutoffs)
+# Reuse only fits with matching data and formula signatures.
+clock_model <- fit_pair(near_eye, preprocessing, "clock", "primary")
+clock_summary <- model_summary(clock_model)
+rm(clock_model); invisible(gc())
+phase_model <- fit_pair(near_eye, preprocessing, "phase", "primary") # <1>
+phase_summary <- model_summary(phase_model)
+rm(phase_model); invisible(gc())
+show_table(bind_rows(clock_summary, phase_summary) |>
+             select(axis, rho, edf, convergence, participants,
+                    participant_days, half_hours))
+```
+
+1. Fit the same model to the same observations using circadian phase in place of clock time. Only the time coordinate changes; chronological ordering and the rules for residual correlation stay the same. Matching saved fits can be reused.
+
+## Model checks and sensitivity
+
+The fitted-model summary is given in @tbl-fitted-models. Diagnostics precede interpretation; @tbl-diagnostics gives the overview. The saved checks cover convergence, basis adequacy, residual distribution, spread, residual patterns, concurvity, sequence-specific autocorrelation, cyclic continuity, and participant/site influence. Gratia supplies the visual diagnostic bundle and coefficient simulation [@simpson2024].
+
+```{r}
+#| label: tbl-diagnostics
+#| tbl-cap: "Diagnostic summary for the two near-eye models. Flags identify checks needing attention."
+diagnostics <- table_data("diagnostic_verdicts") |> filter(model == "primary")
+show_table(diagnostics |>
+  select(axis, convergence_ok, basis_flag, standardized_lag1,
+         spread_ratio, cyclic_ok, participants, participant_days, half_hours))
+```
+
+The large global spread ratios mainly reflect the response floor and the concentration of observations there. Zero exposure maps to **`log10(0 + 0.1) = −1`**, and **31.6% of half-hours are exactly zero**. Raw residuals therefore have a lower boundary of `−1 − fitted`, producing an asymmetric pattern at low exposure. Across fitted-value deciles, the raw residual-SD ratios are **5.64 for clock and 5.91 for phase**. Rebuilding deciles among positive observations reduces them to **1.19 and 1.17**; restricting instead to fitted exposure of at least 1 lux gives **1.40 in both models** (@tbl-floor-check). These checks associate most of the global spread pattern with the floor, rather than large variance changes throughout positive exposure. They do not directly validate coverage of the full Gaussian model's uncertainty bands, which remain approximate near the boundary.
+
+```{r}
+#| label: tbl-floor-check
+#| tbl-cap: "Residual-spread checks for the unchanged near-eye models, fitted to 140 participants and 778 participant-days. Each diagnostic stratum uses its own fitted-value deciles; the retained half-hours are shown. Ratios divide the largest decile SD by the smallest; innovations incorporate the fitted AR correction. These are diagnostic restrictions, not refitted analyses."
+floor_checks <- table_data("revision_floor_audit_spread_summaries", "results/provenance") |>
+  filter(fit_kind == "primary", stratum %in% c("all", "positive", "fitted_at_least_1_lx")) |>
+  select(axis, stratum, half_hours, raw_sd_ratio, innovation_sd_ratio) |>
+  mutate(stratum = recode(stratum, all = "All observations",
+    positive = "Observed EDI > 0 lux", fitted_at_least_1_lx = "Fitted EDI ≥ 1 lux"))
+show_table(floor_checks, labels = c(stratum = "Diagnostic stratum",
+  raw_sd_ratio = "Raw residual SD ratio", innovation_sd_ratio = "AR innovation SD ratio"))
+```
+
+The [R floor audit](results/provenance/revision_floor_audit.R), with [checks for the additional models](results/provenance/revision_floor_extensions.csv), also checks exposure thresholds and adjacent observations within the original AR sequences. The variance-weighted fits below remain sensitivity checks; the original Gaussian model is the common reference for the reported candidate intervals.
+
+High concurvity between individual curves and population/group curves is expected because the individual curves can reproduce parts of the population pattern. Penalization separates these terms. Attribution therefore describes this fitted decomposition; it does not identify independent biological contributions.
+
+::: {.panel-tabset}
+
+### Clock diagnostics
+
+@fig-clock-diagnostics shows residual distributions and fitted-value patterns; @fig-clock-acf checks serial dependence, and @fig-clock-spread shows how residual spread changes across exposure levels.
+
+```{r}
+#| label: fig-clock-diagnostics
+#| fig-cap: "Clock-model residual checks. Sample counts appear above the panels."
+#| fig-alt: "Residual diagnostic plots for the near-eye clock model, including residual distribution and residuals against fitted values."
+show_figure("primary_clock_appraise")
+```
+
+```{r}
+#| label: fig-clock-acf
+#| fig-cap: "Autocorrelation within true-elapsed sequences before and after the AR correction."
+#| fig-alt: "Median and central range of raw and AR-standardized residual autocorrelation by lag."
+show_figure("primary_clock_acf")
+```
+
+```{r}
+#| label: fig-clock-spread
+#| fig-cap: "Clock-model residual spread across fitted-exposure deciles."
+#| fig-alt: "Residual standard deviation varies across deciles of predicted exposure."
+show_figure("primary_clock_spread")
+```
+
+### Phase diagnostics
+
+The corresponding circadian-phase checks are in @fig-phase-diagnostics, @fig-phase-acf and @fig-phase-spread.
+
+```{r}
+#| label: fig-phase-diagnostics
+#| fig-cap: "Phase-model residual checks. Sample counts appear above the panels."
+#| fig-alt: "Residual diagnostic plots for the near-eye circadian-phase model."
+show_figure("primary_phase_appraise")
+```
+
+```{r}
+#| label: fig-phase-acf
+#| fig-cap: "Phase-model autocorrelation within true-elapsed sequences."
+#| fig-alt: "Raw and AR-standardized residual autocorrelation in the phase model, preserving chronological order."
+show_figure("primary_phase_acf")
+```
+
+```{r}
+#| label: fig-phase-spread
+#| fig-cap: "Phase-model residual spread across fitted-exposure deciles."
+#| fig-alt: "Residual standard deviation by fitted-exposure decile for the phase model."
+show_figure("primary_phase_spread")
+```
+
+### Basis and residual patterns
+
+@tbl-basis assesses whether the chosen basis dimensions can represent the fitted patterns. @fig-residual-patterns checks the remaining structure by time and group.
+
+```{r}
+#| label: tbl-basis
+#| tbl-cap: "Basis checks. NA indicates that this diagnostic is unavailable for the factor term."
+basis <- bind_rows(lapply(c("clock", "phase"), function(axis) {
+  table_data(paste0("primary_", axis, "_basis"), "results/diagnostics") |>
+    mutate(axis = axis, .before = 1)
+}))
+show_table(basis)
+```
+
+```{r}
+#| label: fig-residual-patterns
+#| fig-subcap: ["Clock time", "Circadian phase"]
+#| layout-ncol: 1
+#| fig-cap: "Mean residuals by time, quartile and day type for clock and phase models."
+#| fig-alt: "Two figures compare hourly mean residuals across quartiles on work and free days."
+show_figure("primary_clock_residual_patterns")
+show_figure("primary_phase_residual_patterns")
+```
+
+### Concurvity and cyclic joins
+
+@tbl-concurvity describes overlap among model components, and @tbl-continuity checks that values and slopes meet at the daily boundary.
+
+```{r}
+#| label: tbl-concurvity
+#| tbl-cap: "Concurvity diagnostics; values near one indicate overlapping model components."
+concurvity <- bind_rows(lapply(c("clock", "phase"), function(axis) {
+  table_data(paste0("primary_", axis, "_concurvity"), "results/diagnostics") |>
+    mutate(axis = axis, .before = 1)
+}))
+show_table(concurvity |> filter(.type == "estimate"))
+```
+
+```{r}
+#| label: tbl-continuity
+#| tbl-cap: "Endpoint and first-derivative checks across the 24-hour join."
+show_table(bind_rows(lapply(c("clock", "phase"), function(axis) {
+  table_data(paste0("primary_", axis, "_cyclic_continuity"), "results/diagnostics") |>
+    mutate(axis = axis, .before = 1)
+})), digits = 7)
+```
+
+:::
+
+The sensitivity fits increase the daily basis to 18 and the participant basis to 14, move `rho` by ±0.10, remove the site with the most concentrated quartile distribution, remove the participant with the largest residual RMSE, and apply variance weights. Cutoffs stay fixed. Predictions use the original common photoperiod distribution and day-type weights, so changes compare the same estimand.
+
+@tbl-sensitivity quantifies how the registered contrasts change under each sensitivity scenario.
+
+```{r}
+#| label: tbl-sensitivity
+#| tbl-cap: "Sensitivity of registered contrast estimates. Changes are in log10(melanopic EDI + 0.1)."
+sensitivity <- table_data("sensitivity_summary")
+show_table(sensitivity |>
+  select(axis, sensitivity, maximum_contrast_change, rms_contrast_change,
+         deleted, convergence, participants, participant_days, half_hours))
+```
+
+The variance-weighted fits have AR-innovation SD ratios of **5.01 for clock and 3.66 for phase** across all observations, falling to **1.57 and 1.51** among positive observations. Weighting does not remove the response boundary, and these global ratios should not be read as evidence of a general variance failure. The two-step weights are estimated from the data, with uncertainty that the usual coefficient covariance does not include; they remain a sensitivity analysis rather than a demonstrated correction to the reference model.
+
+Site deletion does show a material sensitivity: removing Kumasi (KNUST) leaves **125 participants and 697 participant-days** and changes registered contrast estimates by up to **0.38 log10 units for clock and 0.34 for phase**. Separately, only **43 of 140 clock-model peaks and 41 of 140 phase-model peaks** meet the declared timing-localization rule (@tbl-individual-timing). For the others, the fitted curve is more informative than a precise peak time. A comparison restricted to sites with both chronotype groups would address site composition more directly, but has not been fitted here.
+
+## Daily exposure patterns
+
+The main curves set site, participant and participant-day effects to zero, representing the average of these effects on the fitted log scale. They average over one common distribution of within-site-centered photoperiod, giving each participant equal weight and each of that participant's observed days equal weight. Overall curves also use the same pooled participant-weighted work/free mixture in every chronotype group.
+
+For the primary exposure curves, 10,000 joint coefficient draws form 95% simultaneous bands across all 12 quartile-by-day-context curves and the 10-minute grid within each time coordinate. Clock time and MSFsc-relative time are treated separately.
+
+Intensity curves and their bands are back-transformed with `10^estimate - 0.1` and shown in lux. The **symlog axis is linear up to 1 lux and logarithmic above 1 lux**, following the approach to visualizing zero-containing light-exposure data described by @zauner2025zeros. These are back-transformed standardized log-scale means. Small negative bounds from the Gaussian model remain visible. The fitted response remains `log10(melanopic EDI + 0.1)`.
+
+The panel arrangement follows the clock-versus-phase comparison in @goulet2007. That paper used MEQ groups and measured DLMO to distinguish phase extremes. Here both the groups and the phase coordinate use MSFsc. The implications of these differences are discussed in @sec-comparison-goulet.
+
+@fig-patterns-overall, @fig-patterns-work and @fig-patterns-free show overall, work-day and free-day comparisons with a common layout and explicit participant and participant-day counts for each curve. **A identifies clock time and B identifies circadian phase, expressed as hours relative to MSFsc.** Columns distinguish moderate from extreme chronotype strength.
+
+### The published DLMO reference interval
+
+Facer-Childs et al. report group means for MSFsc and DLMO in Table 1 [@facerchilds2019]. Their offsets place DLMO approximately 6 to 7 hours before MSFsc (@tbl-dlmo-reference). The diagonally striped vertical band spans those two group-average offsets.
+
+```{r}
+#| label: tbl-dlmo-reference
+#| tbl-cap: "Group-mean times and offsets used for the DLMO reference, in decimal hours. MSFsc and DLMO are local clock times; the final column gives their difference. These are reference-study values, not MeLiDos measurements."
+reference_times <- tibble(
+  group = c("Early", "Late"),
+  MSFsc = c(2 + 24/60, 6 + 52/60),
+  DLMO = c(20 + 27/60, 23 + 55/60)
+) |> mutate(hours_relative_to_MSFsc = ((DLMO - MSFsc + 12) %% 24) - 12)
+show_table(reference_times)
+```
+
+MSFsc and DLMO can be strongly related across people, but the offset varies between individuals. Kantermann et al. found an MSFsc-DLMO correlation of 0.68 and a substantial DLMO range at a given MSFsc [@kantermann2015]. Reiter et al. found a weaker relationship and limited agreement between chronotype categories [@reiter2021]. The reference interval is labelled **DLMO reference**. It represents literature-based group means; the circadian-phase axis remains anchored to MSFsc.
+
+::: {.panel-tabset}
+
+### Overall
+
+```{r}
+#| label: fig-patterns-overall
+#| fig-cap: "Overall near-eye patterns in melanopic EDI (lux), on a symlog axis. A: clock time; B: circadian phase (hours relative to MSFsc). Columns compare moderate and extreme groups; each curve shows its participant and participant-day counts. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Four panels compare morning and evening exposure in lux on symlog axes, with participant and day counts and uncertainty bands. A marks clock time and B marks circadian phase. The diagonally striped vertical band marks the DLMO reference."
+show_figure("primary_patterns_overall")
+```
+
+### Work days
+
+```{r}
+#| label: fig-patterns-work
+#| fig-cap: "Near-eye patterns on reported work days. A: clock time; B: circadian phase (hours relative to MSFsc). Each curve shows its participant and participant-day counts. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Clock and phase curves for work days, comparing morning and evening groups separately for moderate and extreme quartiles. The diagonally striped vertical band marks the DLMO reference."
+show_figure("primary_patterns_work")
+```
+
+### Free days
+
+```{r}
+#| label: fig-patterns-free
+#| fig-cap: "Near-eye patterns on reported free days. A: clock time; B: circadian phase (hours relative to MSFsc). Each curve shows its participant and participant-day counts. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Clock and phase curves for free days, with group-specific participant and participant-day counts and uncertainty bands. The diagonally striped vertical band marks the DLMO reference."
+show_figure("primary_patterns_free")
+```
+
+:::
+
+## Difference curves and candidate intervals
+
+The comparisons were defined before fitting: evening minus morning within each chronotype-strength group; extreme minus moderate within each chronotype direction; free minus work within each quartile; three two-way interaction contrasts; and the three-way interaction. The first two sets include overall, work and free-day comparisons, giving 20 registered contrast curves per time representation.
+
+Each curve is evaluated every 10 minutes. Ten thousand joint coefficient draws form 95% simultaneous bands over all 20 registered contrasts and times within each time coordinate. Clock time and MSFsc-relative phase address separate, literature-based questions: differences in daily schedules and differences after phase alignment. We therefore define each coordinate as a separate inferential family, without an additional adjustment across the two models. The bands account for inspecting the full contrast family and phase or clock-time grid within that coordinate; nearby times remain correlated. Smoothing-parameter covariance corrections are included when available [@wood2016]. These intervals condition on the estimated AR parameter and quartile boundaries. @tbl-inference records the covariance treatment.
+
+```{r}
+#| label: tbl-inference
+#| tbl-cap: "Inference settings and analytical samples."
+inference_settings <- bind_rows(lapply(c("clock", "phase"), function(axis) {
+  table_data(paste0("primary_", axis, "_inference_metadata"))
+}))
+show_table(inference_settings |>
+  select(axis, axis_family_coverage, covariance, draws, critical, free_day_weight,
+         participants, participant_days, half_hours))
+```
+
+Support is assessed in local half-hour bins. We require at least four participants in every contributing quartile/day cell; this is an analyst-chosen support rule, not a published threshold. A time point enters an interval claim only if it passes that rule. Interval tables count unique participants and days with observed bin midpoints inside that interval. Intervals crossing midnight or the phase boundary are merged.
+
+The difference plots show **factors for melanopic EDI + 0.1**, calculated as `10^contrast`, with the same transformation applied to the uncertainty bounds. The logarithmic factor axis places **1 at no difference, 2 at twice, and 0.5 at half** the reference value. The reference is morning for evening/morning comparisons, moderate for extreme/moderate comparisons, and work days for free/work comparisons. Interaction contrasts become ratios of ratios; 1 means no interaction. This display preserves the registered contrasts, support rules and simultaneous-band inference.
+
+```{r}
+#| label: prepare-interval-tables
+#| code-fold: true
+#| code-summary: "Prepare the interval tables"
+windows <- bind_rows(lapply(c("clock", "phase"), function(axis) {
+  table_data(paste0("primary_", axis, "_significant_windows"))
+}))
+windows_display <- windows |>
+  mutate(start_label = if_else(axis == "clock", clock_label(start), sprintf("%.2f", start)),
+         end_label = if_else(axis == "clock", clock_label(end), sprintf("%.2f", end)),
+         positive_sample = paste(positive_participants, positive_days, positive_half_hours, sep = " / "),
+         negative_sample = paste(negative_participants, negative_days, negative_half_hours, sep = " / ")) |>
+  select(axis, contrast, description, context, direction, start_label, end_label,
+         wraps_boundary, duration_hours, mean_log10_difference = mean_difference,
+         factor_at_mean_difference = mean_ratio,
+         positive_sample, negative_sample)
+show_interval_table <- function(pattern) {
+  selected <- windows_display |> filter(grepl(pattern, contrast)) |> select(-contrast)
+  if (!nrow(selected)) {
+    return(show_table(tibble(Result = "No supported candidate intervals for these comparisons.")))
+  }
+  show_table(selected, labels = c(direction = "Contrast sign"))
+}
+```
+
+::: {.panel-tabset}
+
+### Morning versus evening
+
+@fig-direction-differences shows the comparisons; @tbl-windows-direction lists their supported candidate intervals.
+
+```{r}
+#| label: fig-direction-differences
+#| fig-subcap: ["Overall", "Work days", "Free days"]
+#| layout-ncol: 1
+#| fig-cap: "Evening/morning exposure factors for overall, work and free days. A: clock time; B: circadian phase (hours relative to MSFsc). Red points mark supported exclusions of 1 under the reference variance model. Counts describe each side of the contrast. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Three four-panel factor figures, with logarithmic axes, a no-difference line at one, simultaneous bands and counts for both contrast arms. The diagonally striped vertical band marks the DLMO reference."
+show_figure(paste0("primary_evening_minus_morning_", c("overall", "work", "free")))
+```
+
+```{r}
+#| label: tbl-windows-direction
+#| tbl-cap: "Morning versus evening: candidate intervals under the reference variance model, restricted to supported times. Counts are participants / participant-days / half-hours within each interval. Phase endpoints are hours relative to MSFsc."
+show_interval_table("evening_morning_")
+```
+
+### Extreme versus moderate
+
+@fig-extremity-differences shows the comparisons; @tbl-windows-strength lists their supported candidate intervals.
+
+```{r}
+#| label: fig-extremity-differences
+#| fig-subcap: ["Overall", "Work days", "Free days"]
+#| layout-ncol: 1
+#| fig-cap: "Extreme/moderate exposure factors within morning and evening directions. A: clock time; B: circadian phase (hours relative to MSFsc). Counts describe each side of the contrast. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Overall, work-day and free-day chronotype-strength contrasts with simultaneous bands and participant and participant-day counts for both groups. The diagonally striped vertical band marks the DLMO reference."
+show_figure(paste0("primary_extreme_minus_moderate_", c("overall", "work", "free")))
+```
+
+```{r}
+#| label: tbl-windows-strength
+#| tbl-cap: "Extreme versus moderate: candidate intervals under the reference variance model, restricted to supported times. Counts are participants / participant-days / half-hours within each interval. Phase endpoints are hours relative to MSFsc."
+show_interval_table("extreme_moderate_")
+```
+
+### Free versus work
+
+@fig-day-differences shows the comparisons; @tbl-windows-day lists their supported candidate intervals.
+
+```{r}
+#| label: fig-day-differences
+#| fig-cap: "Free/work exposure factors within each quartile. A: clock time; B: circadian phase (hours relative to MSFsc). The same participants can contribute to both sides of the contrast. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Work/free differences for all four quartiles on clock and phase axes. The diagonally striped vertical band marks the DLMO reference."
+show_figure("primary_free_minus_work")
+```
+
+```{r}
+#| label: tbl-windows-day
+#| tbl-cap: "Free versus work: candidate intervals under the reference variance model, restricted to supported times. Counts are participants / participant-days / half-hours within each interval. Phase endpoints are hours relative to MSFsc."
+show_interval_table("free_work_")
+```
+
+### Interactions
+
+@fig-interactions shows the comparisons; @tbl-windows-interactions lists their supported candidate intervals.
+
+```{r}
+#| label: fig-interactions
+#| fig-cap: "Chronotype direction, chronotype strength and day-type interaction factors, expressed as ratios of ratios. A: clock time; B: circadian phase (hours relative to MSFsc). The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Three two-way and one three-way interaction contrast on each time representation. The diagonally striped vertical band marks the DLMO reference."
+show_figure("primary_interactions")
+```
+
+```{r}
+#| label: tbl-windows-interactions
+#| tbl-cap: "Interactions: candidate intervals under the reference variance model, restricted to supported times. Counts are participants / participant-days / half-hours within each interval. Phase endpoints are hours relative to MSFsc."
+show_interval_table("^direction_|^extremity_")
+```
+
+:::
+
+
+
+The tables in the four comparison tabs (@tbl-windows-direction, @tbl-windows-strength, @tbl-windows-day and @tbl-windows-interactions) use the same interval definitions. Each interval factor is 10 raised to the mean log-scale difference across that interval. The complete exports also include minimum and maximum differences and factors, plus every grid point's uncertainty and support. Their filenames retain `significant_windows`; the displayed tables identify them as candidate intervals under the Gaussian reference model, with the floor-related uncertainty limitation described above.
+
+The larger timing separation is between the extreme groups. In the phase model, the reference-model bands identify extreme evening-minus-morning differences around 1 to 4 hours after MSFsc, while no supported interval overlaps the striped DLMO reference interval itself (@tbl-windows-direction). The reference interval represents published average timing rather than each participant's DLMO.
+
+To summarize the magnitude within the two primary phase intervals, we average their contrast design vectors before applying the full coefficient covariance. This retains covariance between phase points. The 95% intervals in @tbl-primary-interval-averages treat the selected windows as fixed and are not adjusted for interval selection or multiplicity; the simultaneous bands above determine where intervals are identified.
+
+```{r}
+#| label: tbl-primary-interval-averages
+#| tbl-cap: "Extreme-evening/extreme-morning interval-average exposure ratios with 95% coefficient intervals. These summaries condition on the selected windows. The exact exposure scale is melanopic EDI + 0.1."
+primary_interval_averages <- local({
+  bundle <- readRDS("results/models/primary_phase.rds")
+  inference <- readRDS("results/data/primary_phase_inference.rds")
+  interval_average_contrasts(inference, bundle)
+})
+save_table(primary_interval_averages, "primary_phase_interval_averages")
+show_table(primary_interval_averages |>
+  mutate(interval = if_else(start < 0, "Pre-MSFsc", "Post-MSFsc")) |>
+  select(interval, start, end, ratio, ratio_lower, ratio_upper), digits = 2)
+```
+
+The extreme-group pattern is similar on work and free days (@fig-direction-differences). Across the early interval, **11.25 to 9.58 hours before MSFsc**, the mean evening/morning factor is **0.13 on work days and 0.21 on free days**: exposure remains lower in extreme evening types, but the difference is attenuated on free days. Across **0.92 to 4.42 hours after MSFsc**, evening-type exposure remains higher, with factors of **15.5 and 12.0**, respectively. This is a descriptive attenuation; the simultaneous bands include the no-interaction value throughout the phase cycle for both the registered chronotype-direction-by-day-type comparison and its interaction with chronotype strength (@fig-interactions). The [work/free interval summaries](results/tables/primary_phase_work_free_interval_averages.csv) retain the estimates and exploratory interval-average uncertainty.
+
+## Individual patterns and timing
+
+@tbl-individual-timing summarizes peak localization, and @fig-individual-timing shows individual timing uncertainty. Individual curves add each participant's fitted random curve to the same standardized group curve. Site and participant-day effects remain excluded. They use the same back-transformation and symlog lux axis as the group patterns. Peak shifts are circular differences from the corresponding group peak, using 1,000 joint coefficient draws for uncertainty. A peak is labelled localized only when its 95% circular interval is no wider than four hours and its circular concentration is at least 0.8. These are descriptive timing summaries, not fitted horizontal-shift parameters. The display transformation preserves peak locations.
+
+```{r}
+#| label: tbl-individual-timing
+#| tbl-cap: "Individual timing localization by quartile. Median shift uses localized peaks only."
+timing <- bind_rows(lapply(c("clock", "phase"), function(axis) {
+  table_data(paste0("primary_", axis, "_individual_timing")) |>
+    mutate(axis = axis, .before = 1)
+}))
+timing_summary <- timing |>
+  summarise(participants = n_distinct(participant_key),
+            localized_days = sum(participant_days[localized]),
+            participant_days = sum(participant_days), half_hours = sum(half_hours),
+            localized_participants = sum(localized),
+            median_localized_shift = if (any(localized)) median(shift_hours[localized]) else NA_real_,
+            .by = c(axis, quartile))
+show_table(timing_summary)
+```
+
+Every participant's curve and contributing-day count appears in the [clock PDF](results/figures/primary_clock_individual_curves.pdf) and [phase PDF](results/figures/primary_phase_individual_curves.pdf). Full timing estimates and intervals are in the corresponding [clock CSV](results/tables/primary_clock_individual_timing.csv) and [phase CSV](results/tables/primary_phase_individual_timing.csv).
+
+```{r}
+#| label: fig-individual-timing
+#| fig-subcap: ["Clock time", "Circadian phase"]
+#| layout-ncol: 1
+#| fig-cap: "Individual peak shifts relative to the matching group curve, with uncertainty and localization flags."
+#| fig-alt: "Participant-level circular peak differences and intervals, separated by quartile and time representation."
+show_figure("primary_clock_timing")
+show_figure("primary_phase_timing")
+```
+
+## Photoperiod
+
+@fig-photoperiod compares photoperiod at the weighted 10th and 90th percentiles with the weighted median, at the same clock time or phase. Each factor includes the photoperiod main smooth and its interaction with time. The other model terms cancel in the comparison. A factor above 1 indicates higher fitted melanopic EDI + 0.1 than at the median photoperiod. The median reference stays at 1; pointwise bands use the covariance of each contrast with that reference.
+
+```{r}
+#| label: fig-photoperiod
+#| fig-subcap: ["Clock time", "Circadian phase"]
+#| layout-ncol: 1
+#| fig-cap: "Photoperiod factors at the 10th, 50th and 90th percentiles of the common participant-weighted reference distribution, relative to its median. The diagonally striped vertical band in the circadian-phase panel marks the DLMO reference."
+#| fig-alt: "Clock and phase photoperiod factors relative to the median, with pointwise uncertainty bands and a reference line at one. The diagonally striped vertical band in the circadian-phase panel marks the DLMO reference."
+show_figure("primary_clock_photoperiod")
+show_figure("primary_phase_photoperiod")
+```
+
+## Fit, prediction and attribution
+
+### In-sample fit
+
+@tbl-fit reports the in-sample fit statistics. Adjusted R² is `mgcv`'s adjusted fit statistic. Deviance explained and ordinary R² describe in-sample fit; for these Gaussian models, ordinary R² is 1 minus residual sum of squares divided by the total sum of squares. They include fitted participant and day terms and do not measure prediction for new people.
+
+```{r}
+#| label: tbl-fit
+#| tbl-cap: "In-sample fit statistics, kept separate from predictive performance and attribution."
+show_table(table_data("model_fit") |>
+  select(model, axis, adjusted_R2, deviance_explained, ordinary_R2,
+         participants, participant_days, half_hours))
+```
+
+### Held-out prediction
+
+Five participant-held-out folds assess new-person prediction. Assignment is balanced within site. The final observed day is separately held out for each participant with at least three eligible days, assessing prediction for known participants. The clock and phase models use identical splits. Cutoffs, photoperiod centers, smoothing and AR correlation are estimated in training data only.
+
+New-participant predictions exclude participant and day effects. Predictions for known participants retain the participant curve but exclude the held-out day effect. Baselines use the participant-weighted training response mean. Scores give participants equal weight; paired bootstrap intervals resample participants within site and condition on the fitted folds.
+
+```{r}
+#| label: tbl-validation-samples
+#| tbl-cap: "Separate training and assessment samples for every split and time representation."
+show_table(table_data("validation_samples") |>
+  select(target, axis, split, training_participants, training_days,
+         training_half_hours, assessment_participants, assessment_days,
+         assessment_half_hours))
+```
+
+Days in @tbl-validation-samples are participant-days. The [complete split table](results/tables/validation_samples.csv) also records training cutoffs, rho, and photoperiod support. Wide tables can be scrolled horizontally.
+
+```{r}
+#| label: tbl-validation-scores
+#| tbl-cap: "Held-out scores on the log10(melanopic EDI + 0.1) scale. Predictive R² compares squared error with the training-mean baseline."
+validation_scores <- table_data("validation_scores")
+show_table(validation_scores)
+```
+
+```{r}
+#| label: tbl-validation-paired
+#| tbl-cap: "Paired phase-minus-clock score differences with 95% participant-bootstrap intervals. Negative RMSE/MAE favors phase; positive predictive R² favors phase."
+paired_scores <- table_data("validation_paired_differences")
+show_table(paired_scores)
+```
+
+@tbl-validation-scores reports the held-out scores. Calibration intercept and slope describe agreement between held-out observations and predictions. An ideal intercept is zero and slope is one. The paired score intervals quantify assessment-sample uncertainty; they do not repeat the full training process in each bootstrap.
+
+**Clock time predicts new participants slightly better.** Its RMSE is 0.887 versus 0.908 for phase, with predictive R² of 0.668 versus 0.652. The paired phase-minus-clock RMSE difference is 0.0205, with a 95% interval from 0.0108 to 0.0310 (@tbl-validation-paired). For the final day of known participants, the models perform similarly: RMSE is 0.852 for clock and 0.855 for phase; the paired difference interval includes zero.
+
+### Shapley allocation of ordinary in-sample R²
+
+The common time or phase curve is the mandatory baseline. Seven groups enter the allocation: chronotype direction, chronotype strength, day type, site, photoperiod, participant pattern and participant-day variation. All 128 subsets per axis are fitted, with interactions only when their contributing variables are present and with the full model's `rho` held fixed. The allocation averages each group's improvement over subset orders [@azen2003]. Negative allocations, if present, are retained.
+
+The intervals use 2,000 hierarchical site-participant-day bootstrap samples of **fixed fitted predictions**, following the source study's attribution procedure [@h02]. They are conditional on the fitted models. This is a descriptive allocation of in-sample R², distinct from a variance component or a causal contribution.
+
+```{r}
+#| label: tbl-shapley
+#| tbl-cap: "Shapley allocations above the common-curve baseline, with conditional bootstrap intervals. All rows use 140 participants, 778 participant-days and 35,949 half-hours."
+shapley <- bind_rows(table_data("shapley_clock"), table_data("shapley_phase")) # <1>
+show_table(shapley |>
+  select(axis, component, allocation, lower, upper, baseline_R2, full_R2))
+stopifnot(all(abs(shapley |>
+  summarise(error = sum(allocation) - (first(full_R2) - first(baseline_R2)),
+            .by = axis) |> pull(error)) < 1e-9))
+```
+
+1. Combine the saved allocations from all 128 model subsets per time representation. Each component receives its average increase in ordinary in-sample R² across the allowed subset orders; the check below confirms that the allocations sum to the full-model improvement over the common curve.
+
+@tbl-shapley and @fig-shapley show the component allocations. Participant-specific patterns receive the largest allocation above the common curve: 0.091 for clock time and 0.110 for phase. Participant-day variation is next, at about 0.042 in both models. These values describe fitted variation in this sample.
+
+```{r}
+#| label: fig-shapley
+#| fig-cap: "Conditional Shapley allocation of in-sample R². Error bars are the hierarchical bootstrap intervals."
+#| fig-alt: "Two panels compare the seven R-squared allocations for clock and phase."
+p <- ggplot(shapley |> mutate(component = recode(component,
+    direction = "Chronotype direction", extremity = "Chronotype strength")),
+  aes(allocation, reorder(component, allocation))) +
+  geom_vline(xintercept = 0, color = "grey65") +
+  geom_errorbar(aes(xmin = lower, xmax = upper), orientation = "y", width = 0.2) +
+  geom_point(color = "#0072B2") +
+  facet_wrap(~axis, labeller = as_labeller(c(
+    clock = "A  Clock time", phase = "B  circadian phase"))) +
+  labs(x = "Allocation of ordinary in-sample R²", y = NULL,
+       subtitle = sample_label(near_eye))
+save_plot(p, "shapley", 11, 5)
+show_figure("shapley")
+```
+
+## Chest and placement checks
+
+Chest models use the same near-eye quartile cutoffs and the same modeling and contrast definitions. Their own complete observations determine sample counts and their common photoperiod reference. The paired placement check then compares only exact matching participant/date/clock bins. Full attribution and predictive validation remain near-eye analyses.
+
+::: {.panel-tabset}
+
+### Chest patterns
+
+@fig-chest-patterns shows the chest patterns with the same group and time-coordinate layout as the near-eye results.
+
+```{r}
+#| label: fig-chest-patterns
+#| fig-subcap: ["Overall", "Work days", "Free days"]
+#| layout-ncol: 1
+#| fig-cap: "Chest daily patterns in melanopic EDI (lux) on symlog axes, for overall, work and free days. A: clock time; B: circadian phase (hours relative to MSFsc). Each curve shows its participant and participant-day counts. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Three chest-exposure comparison figures on clock and phase axes, each with group-specific participant and participant-day counts and uncertainty bands. The diagonally striped vertical band marks the DLMO reference."
+show_figure(paste0("chest_patterns_", c("overall", "work", "free")))
+```
+
+### Chest contrasts
+
+@fig-chest-contrasts compares evening and morning chest exposure.
+
+```{r}
+#| label: fig-chest-contrasts
+#| fig-subcap: ["Overall", "Work days", "Free days"]
+#| layout-ncol: 1
+#| fig-cap: "Chest evening/morning exposure factors by day context. A: clock time; B: circadian phase (hours relative to MSFsc). Counts describe both sides of each contrast. Other registered chest contrasts are linked below. The diagonally striped vertical band marks the DLMO reference."
+#| fig-alt: "Chest difference curves for overall, work and free days with simultaneous bands and arm-specific counts. The diagonally striped vertical band marks the DLMO reference."
+show_figure(paste0("chest_evening_minus_morning_", c("overall", "work", "free")))
+```
+
+The full chest contrast set includes [overall chronotype strength](results/figures/chest_extreme_minus_moderate_overall.pdf), [work-day chronotype strength](results/figures/chest_extreme_minus_moderate_work.pdf), [free-day chronotype strength](results/figures/chest_extreme_minus_moderate_free.pdf), [work/free differences](results/figures/chest_free_minus_work.pdf), and [interactions](results/figures/chest_interactions.pdf). Candidate interval tables are available for [clock](results/tables/chest_clock_significant_windows.csv) and [phase](results/tables/chest_phase_significant_windows.csv).
+
+### Chest diagnostics
+
+@tbl-chest-diagnostics and @fig-chest-diagnostics summarize the chest-model checks.
+
+```{r}
+#| label: tbl-chest-diagnostics
+#| tbl-cap: "Chest diagnostic summary and analytical samples."
+show_table(table_data("diagnostic_verdicts") |> filter(model == "chest") |>
+  select(axis, convergence_ok, basis_flag, standardized_lag1,
+         spread_ratio, cyclic_ok, participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: fig-chest-diagnostics
+#| fig-subcap: ["Clock time", "Circadian phase"]
+#| layout-ncol: 1
+#| fig-cap: "Chest residual diagnostics for clock and phase models."
+#| fig-alt: "Residual diagnostic panels for both chest models, with sample counts."
+show_figure("chest_clock_appraise")
+show_figure("chest_phase_appraise")
+```
+
+### Matched sensor bins
+
+```{r}
+#| label: tbl-placement
+#| tbl-cap: "Chest/near-eye exposure factors on matched bins, with log-scale differences and RMSE for reference."
+show_table(table_data("matched_placement_summary") |>
+  select(quartile, daytype, factor_at_mean_difference,
+         mean_log10_difference = mean_difference, RMSE_log10 = RMSE,
+         participants, participant_days, half_hours))
+```
+
+@fig-placement shows how the matched chest/near-eye factor changes over the day.
+
+```{r}
+#| label: fig-placement
+#| fig-cap: "Matched-bin chest/near-eye exposure factors by clock time, quartile and day type."
+#| fig-alt: "Chest/near-eye factors over the day, separately for reported work and free days, with equality at one."
+show_figure("matched_placement")
+```
+
+@tbl-placement averages log differences across matched bins. The time curves first average days within each participant, then give participants equal weight. Both convert the resulting log difference to a factor for melanopic EDI + 0.1.
+
+:::
+
+## Exploratory daylength analysis {#sec-daylight}
+
+Civil daylight occurs at different circadian phases across chronotypes, especially in the extreme morning and evening groups. We explore the hypothesis that this difference in daylight timing contributes to their phase-dependent light-exposure differences, producing larger contrasts on longer days. Pointwise comparisons and the interval-average contrast indicate a larger extreme-group ratio after MSFsc on longer days. This section is an additional exploration. The primary models, contrasts and attribution results remain unchanged.
+
+### Question, model and comparison
+
+The question is whether the extreme evening/morning exposure ratio changes with daylength, particularly during the phase intervals identified in the primary analysis: before the DLMO reference and after MSFsc. Photoperiod here means the duration from civil dawn to civil dusk, when the sun elevation is above −6°. It describes astronomical daylight availability. The measured exposure also includes artificial light and reflects indoor attenuation and participants' choices of location and activity.
+
+We add a cyclic quartile-specific change per hour of photoperiod to the full phase model. Photoperiod remains centered within each site's observed date distribution. The common phase curve, original quartile and day-type deviations, site curves, participant curves, day intercepts and common photoperiod terms remain in the model. The added quartile change is linear in centered photoperiod and shared across work and free days. Predictions use the same pooled work/free mix as the primary comparisons and exclude site, participant and day effects.
+
+Site adjustment is retained because dropping it could attribute differences between sites to daylength. Centering photoperiod within site draws on variation relative to each site's reference. The limited overlap of extreme chronotypes within sites still limits what this pooled comparison can establish.
+
+The added term retains cyclic cubic `sz` smooths and their sum-to-zero constraint. In the installed `mgcv` version, a varying numeric `by` variable otherwise removes that constraint. The short wrapper below keeps the original constructor and prediction method, retains the constraint, and supplies native `sz` bookkeeping for discrete fitting. Its fitted design is checked for zero sums across quartiles, zero contribution at centered photoperiod zero, linear scaling and cyclic continuity.
+
+```{r}
+#| label: daylight-model
+source("R/daylight.R")
+smooth.construct.szphoto.smooth.spec
+smooth.info.szphoto.smooth.spec
+daylight_formula()
+# This reads verified caches when available. All new artifacts have a daylight prefix.
+daylight_result <- run_daylight(prepared)
+```
+
+The main figures use centered-photoperiod targets of **−1, 0 and +1 hours**. These are shorter or longer days relative to each site's mean over observed dates. We also show the participant-weighted quartiles and 10th/90th-percentile targets as sensitivities below. An observation supports a target when its centered photoperiod is within one hour. Every phase comparison requires **at least four participants** in each extreme-quartile by work/free-day cell in the corresponding half-hour phase bin. All 144 phase points pass this rule for the main targets and both sensitivities.
+
+@tbl-daylight-scenario-samples records local support around the three targets; @tbl-daylight-model reports the expanded model fit.
+
+```{r}
+#| label: tbl-daylight-scenario-samples
+#| tbl-cap: "Observations within one hour of each centered-photoperiod target. Participants can contribute to both day types and to more than one target; these counts must not be added."
+show_table(table_data("daylight_scenario_samples") |>
+  select(scenario, photo_target, quartile, daytype,
+         participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: tbl-daylight-model
+#| tbl-cap: "Expanded phase-model fit and its analytical sample. Ordinary R² and deviance explained are in-sample measures."
+show_table(table_data("daylight_model_summary") |>
+  select(rho, adjusted_R2, deviance_explained, ordinary_R2,
+         participants, participant_days, half_hours))
+```
+
+### Model checks
+
+The model converges, its cyclic curves join correctly, and the basis check does not call for larger dimensions. AR-standardized lag-one residual correlation is approximately **0.080**. The diagnostic plots retain the full response range, including the zero-exposure boundary discussed above.
+
+@tbl-daylight-diagnostics summarizes these checks. @fig-daylight-model-checks, @fig-daylight-spread and @fig-daylight-autocorrelation show the residual distribution, spread and serial dependence.
+
+```{r}
+#| label: tbl-daylight-diagnostics
+#| tbl-cap: "Diagnostic checks for the expanded phase model and its analytical sample."
+show_table(table_data("daylight_phase_verdict", "results/diagnostics") |>
+  select(convergence_ok, basis_flag, standardized_lag1, spread_ratio,
+         cyclic_ok, spread_flag, participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: fig-daylight-model-checks
+#| fig-cap: "Residual checks for the expanded phase model: distribution, fitted-value pattern and spread. The model uses 140 participants, 778 days and 35,949 half-hours."
+#| fig-alt: "Residual diagnostic panels show the expanded phase model's distribution and residual patterns, including unequal residual spread across fitted values."
+show_figure("daylight_phase_appraise")
+```
+
+```{r}
+#| label: fig-daylight-spread
+#| fig-cap: "Residual standard deviation across fitted-value deciles, including observations at the transformed zero-exposure boundary."
+#| fig-alt: "Residual standard deviation varies strongly across the ten fitted-value groups rather than remaining constant."
+show_figure("daylight_phase_spread")
+```
+
+```{r}
+#| label: fig-daylight-autocorrelation
+#| fig-cap: "Raw and AR-standardized residual autocorrelation within true-elapsed sequences."
+#| fig-alt: "Standardized residual autocorrelation is lower than raw residual autocorrelation across within-sequence time lags."
+show_figure("daylight_phase_acf")
+```
+
+### Exposure patterns and changes in the group ratio
+
+The higher phase-aligned exposure in the extreme evening group after MSFsc becomes more pronounced on longer days. For this exploratory assessment, we use 95% pointwise intervals on the 10-minute phase grid, based on the coefficient covariance with smoothing-parameter correction. Each interval addresses one phase-specific comparison; it does not provide simultaneous coverage over the complete curve. Interval-average comparisons use the covariance of the average log contrast and treat the two intervals identified by the primary 95% simultaneous bands within the phase coordinate as fixed. These comparisons are not adjusted for multiplicity or interval selection. 
+
+@fig-daylight-patterns shows the scenario curves, @fig-daylight-ratios compares the two extreme groups, and @fig-daylight-moderation isolates the longer-versus-shorter-day change.
+
+```{r}
+#| label: fig-daylight-patterns
+#| fig-cap: "Phase curves at −1, 0 and +1 hours of site-centered photoperiod. Bands are pointwise 95% intervals. Facet counts describe observed participants and days within one hour of the target; the full model uses 140 participants and 778 days. Grey windows with dashed boundaries mark the two primary phase intervals; the diagonally striped band marks the DLMO reference."
+#| fig-alt: "Three panels show extreme morning and evening phase curves on shorter, typical and longer days. The evening curve rises earlier after MSFsc in all panels. Each panel gives separate participant and day counts for both groups. Grey windows with dashed boundaries mark the two primary phase intervals; the diagonally striped band marks the DLMO reference."
+show_figure("daylight_phase_patterns")
+```
+
+```{r}
+#| label: fig-daylight-ratios
+#| fig-cap: "Extreme-evening/extreme-morning ratios of melanopic EDI plus 0.1 at the three targets. Bands are 95% pointwise intervals for each phase-specific group ratio; bold segments exclude one and meet the four-person support rule. Grey windows with dashed boundaries mark the two primary phase intervals; the diagonally striped band marks the DLMO reference."
+#| fig-alt: "The evening-to-morning ratio falls below one before MSFsc and rises above one after it. The later peak is higher in the longer-day scenario, with wide uncertainty bands. Bold sections mark supported pointwise intervals excluding one. Grey windows with dashed boundaries mark the two primary phase intervals; the diagonally striped band marks the DLMO reference."
+show_figure("daylight_phase_contrasts")
+```
+
+```{r}
+#| label: fig-daylight-moderation
+#| fig-cap: "Change in the extreme-group ratio from shorter to longer days. A value of one means the group ratio is unchanged. Bands are 95% pointwise intervals; bold sections exclude one and meet the four-person support rule. Grey windows with dashed boundaries mark the two primary phase intervals; the diagonally striped band marks the DLMO reference."
+#| fig-alt: "The longer-to-shorter ratio of group ratios dips before MSFsc and peaks around two hours after MSFsc. Bold sections show where supported pointwise intervals exclude one. Grey windows with dashed boundaries mark the two primary phase intervals; the diagonally striped band marks the DLMO reference."
+show_figure("daylight_phase_moderation")
+```
+
+Over the primary candidate interval from **0.92 to 4.42 hours after MSFsc**, the geometric mean evening/morning ratio is **7.99** at the −1-hour target and **20.69** at the +1-hour target. Their ratio is **2.59** (95% CI **1.06–6.34**), equivalent to an increase of **159.1%** (95% CI **5.9%–534.2%**). Over the earlier interval, **11.25 to 9.58 hours before MSFsc**, the corresponding change is **−16.6%** (95% CI **−66.6% to +108.5%**). The later increase is supported by this exploratory interval-average comparison, while the earlier point estimate is in the proposed direction. The bold pointwise phase comparisons exclude no change from approximately **1.17 to 3.17 hours after MSFsc**. These intervals were selected in the primary analysis and are reused here with no selection or multiplicity adjustment.
+
+Before the DLMO reference interval, the largest estimated decrease in the group ratio occurs around **8.33 hours before MSFsc**: the longer-day evening/morning ratio is **0.41 times** the shorter-day ratio (pointwise 95% CI **0.16–1.04**). This indication of a photoperiod effect lies closer to DLMO than the primary exposure difference at **9.6–11.3 hours before MSFsc**. Its interval still includes no change; the pointwise exclusions of one occur after MSFsc.
+
+@tbl-daylight-primary-intervals summarizes the scenario ratios within the two primary candidate intervals.
+
+```{r}
+#| label: tbl-daylight-primary-intervals
+#| tbl-cap: "Scenario ratios within the two primary candidate phase intervals. Bounds are 95% conditional Gaussian intervals for each average log contrast, with the selected interval treated as fixed and no multiplicity or selection adjustment. Counts include actual observed phase midpoints within each reported interval and within one hour of the target. Each sample entry gives participants / participant-days / valid half-hours."
+daylight_interval_counts <- table_data("daylight_primary_interval_samples") |>
+  filter(contrast != "Longer_minus_shorter") |>
+  mutate(sample = paste(participants, participant_days, half_hours, sep = " / ")) |>
+  select(interval, contrast, quartile, sample) |>
+  pivot_wider(names_from = quartile, values_from = sample)
+show_table(table_data("daylight_primary_interval_summaries") |>
+  filter(contrast != "Longer_minus_shorter") |>
+  select(interval, start_phase, end_phase, contrast, ratio, ratio_lower, ratio_upper) |>
+  left_join(daylight_interval_counts, by = c("interval", "contrast")))
+```
+
+The complete [scenario contrast table](results/tables/daylight_contrasts.csv), [pointwise candidate windows](results/tables/daylight_pointwise_windows.csv), [interval-specific sample records](results/tables/daylight_primary_interval_samples.csv), [time-varying support counts](results/tables/daylight_local_support.csv) and the [original simultaneous windows](results/tables/daylight_significant_windows.csv) are available as CSV files. These post hoc comparisons remain exploratory.
+
+#### Sensitivity to the daylength targets
+
+We repeat the figures using the participant-weighted quartiles (**−0.77, 0.00 and +1.35 hours**) and the 10th, 50th and 90th percentiles (**−2.17, 0.00 and +2.36 hours**). @tbl-daylight-target-sensitivities lists all three specifications. These percentiles describe centered daylength, not new chronotype cutoffs. The four-person local-support rule retains all 144 phase points in each specification, including the four morning participants near the 10th-percentile target.
+
+```{r}
+#| label: tbl-daylight-target-sensitivities
+#| tbl-cap: "Centered-photoperiod targets (hours) for the main figures and two sensitivities. Percentiles give participants equal weight, then weight their observed days equally. The same 140 participants, 778 days and 35,949 half-hours supply the fitted model for every specification."
+show_table(table_data("daylight_sensitivity_targets") |>
+  mutate(specification = recode(specification, fixed = "Main: −1 / 0 / +1 h",
+    quartiles = "P25 / P50 / P75", p10_p90 = "P10 / P50 / P90")) |>
+  select(specification, scenario, photo) |>
+  pivot_wider(names_from = scenario, values_from = photo), digits = 2)
+```
+
+The longer-versus-shorter ratio over the primary interval after MSFsc is **2.59 (95% CI 1.06–6.34)** for the main targets, **2.74 (1.06–7.09)** for the quartiles and **8.64 (1.14–65.66)** for P10/P90. The earlier interval remains uncertain under all three choices (@tbl-daylight-interval-sensitivities). The model's photoperiod moderation is linear, so a wider target separation rescales the log contrast and its standard error together. The same phase segments therefore exclude one; the larger P10/P90 estimate comes with a much wider interval.
+
+```{r}
+#| label: tbl-daylight-interval-sensitivities
+#| tbl-cap: "Longer-versus-shorter changes in the extreme evening/morning ratio within the two primary phase intervals. All intervals are exploratory 95% Gaussian intervals on the average log contrast. Local samples are printed in the corresponding sensitivity figures and retained in the scenario exports."
+show_table(table_data("daylight_sensitivity_intervals") |>
+  mutate(specification = recode(specification, fixed = "Main: −1 / 0 / +1 h",
+    quartiles = "P25 / P50 / P75", p10_p90 = "P10 / P50 / P90"),
+    phase_interval = if_else(interval == 1L, "Before DLMO reference", "After MSFsc"),
+    interval_95 = sprintf("%.2f to %.2f", ratio_lower, ratio_upper)) |>
+  select(specification, phase_interval, ratio, interval_95), digits = 2,
+  labels = c(ratio = "Ratio of ratios", interval_95 = "95% CI"))
+```
+
+@fig-daylight-quartile-sensitivity and @fig-daylight-decile-sensitivity repeat the exposure curves, group ratios and longer-versus-shorter comparisons. Bold segments identify supported pointwise intervals excluding one, using the same rule as the main figures.
+
+::: {.panel-tabset}
+
+##### P25 / P50 / P75
+
+```{r}
+#| label: fig-daylight-quartile-sensitivity
+#| fig-subcap: ["Exposure curves", "Extreme evening/morning ratios", "Longer-versus-shorter change"]
+#| layout-ncol: 1
+#| fig-cap: "Daylength sensitivity at the participant-weighted 25th, 50th and 75th percentiles of centered photoperiod: −0.77, 0.00 and +1.35 hours. Bands are 95% pointwise intervals. Bold ratio-curve segments exclude one and meet the four-person local-support rule. Each panel or caption reports observed participants and days near its targets. Grey windows mark the primary phase intervals; striped bands mark the DLMO reference."
+#| fig-alt: "Quartile-target sensitivity: three exposure-curve panels, three evening/morning ratio panels and a longer-versus-shorter ratio curve. The latter has a bold section approximately 1.17 to 3.17 hours after MSFsc, where its pointwise interval is above one. Grey windows with dashed boundaries show the primary phase intervals, and striped bands show the DLMO reference."
+show_figure("daylight_quartiles_phase_patterns")
+show_figure("daylight_quartiles_phase_contrasts")
+show_figure("daylight_quartiles_phase_moderation")
+```
+
+##### P10 / P50 / P90
+
+```{r}
+#| label: fig-daylight-decile-sensitivity
+#| fig-subcap: ["Exposure curves", "Extreme evening/morning ratios", "Longer-versus-shorter change"]
+#| layout-ncol: 1
+#| fig-cap: "Daylength sensitivity at the participant-weighted 10th, 50th and 90th percentiles of centered photoperiod: −2.17, 0.00 and +2.36 hours. Bands are 95% pointwise intervals. Bold ratio-curve segments exclude one and meet the four-person local-support rule. Four morning participants contribute near the shorter-day target. Grey windows mark the primary phase intervals; striped bands mark the DLMO reference."
+#| fig-alt: "P10/P90-target sensitivity shows a larger longer-versus-shorter peak and wider intervals than the main comparison. Its bold section remains approximately 1.17 to 3.17 hours after MSFsc. All phase points meet the revised four-person support rule. Grey windows with dashed boundaries show the primary phase intervals, and striped bands show the DLMO reference."
+show_figure("daylight_p10_p90_phase_patterns")
+show_figure("daylight_p10_p90_phase_contrasts")
+show_figure("daylight_p10_p90_phase_moderation")
+```
+
+:::
+
+### Solar timing relative to MSFsc
+
+We separately project each retained participant-day's civil dawn and dusk onto its participant's MSFsc coordinate. Here the shorter/longer split is **absolute civil daylength**, divided at the full sample's participant-weighted median of **13.25 hours**. This differs from the site-centered targets used in the exposure model. Within each group and absolute-daylength category, participants receive equal weight and their days receive equal weight.
+
+@fig-daylight-civil-availability shows civil daylight availability across circadian phase; @tbl-daylight-civil-reference summarizes availability within the two primary candidate intervals.
+
+```{r}
+#| label: fig-daylight-civil-availability
+#| fig-cap: "Astronomical civil daylight availability in the two extreme groups, using 70 participants and 390 participant-days. The grey vertical bands with dashed boundaries mark the primary candidate intervals before the DLMO reference and after MSFsc; the striped band marks the DLMO reference itself. Counts describe all retained days with solar metadata."
+#| fig-alt: "Two panels compare civil daylight availability on shorter and longer absolute days. Grey bands with dashed boundaries mark the two primary candidate intervals, and the striped band marks the DLMO reference. Morning types have more daylight availability in the earlier interval; evening types have more in the interval after MSFsc. The availability gaps are smaller on longer days."
+show_figure("daylight_civil_availability")
+```
+
+In the **primary interval before the DLMO reference**, civil daylight availability averages **100.0% for morning types on both shorter and longer days**, compared with **18.3% and 81.9% for evening types**. In the **primary interval after MSFsc**, the corresponding values are **19.7% and 69.0% for morning types**, and **81.4% and 100.0% for evening types**. Thus daylight availability separates the groups in both intervals, with smaller availability gaps on longer absolute days. These absolute-daylength summaries describe a different comparison from the within-site-centered photoperiod targets used in the exposure model.
+
+```{r}
+#| label: tbl-daylight-civil-reference
+#| tbl-cap: "Mean civil daylight availability (%) within the two primary candidate intervals, evaluated on the 10-minute phase grid. All retained days with solar metadata contribute, with equal participant and within-participant day weights. Counts refer to those solar-metadata days, not only days with observed light-bin midpoints inside each interval."
+show_table(table_data("daylight_civil_primary_intervals") |>
+  arrange(interval, factor(daylength, levels = c("Shorter", "Longer")), quartile) |>
+  select(interval_label, daylength, quartile, mean_percent,
+         participants, participant_days), digits = 1,
+  labels = c(interval_label = "Primary interval", mean_percent = "Daylight availability (%)"))
+```
+
+### Prediction and scope
+
+The expanded model is evaluated in the same five participant-held-out folds as the primary phase model. Quartile cutoffs, site photoperiod centers, smoothing and AR correlation are estimated from training data. Neither participant nor day effects enter predictions for the held-out participants. Model comparisons use paired predictions on identical observations and 2,000 participant bootstrap samples stratified by site.
+
+@tbl-daylight-validation-samples records the matched validation splits. The resulting scores and paired differences appear in @tbl-daylight-validation-scores and @tbl-daylight-validation-differences.
+
+```{r}
+#| label: tbl-daylight-validation-samples
+#| tbl-cap: "Separate training and assessment samples for each participant-held-out fold. Each row uses the same split for both models; training participants and days are disjoint from assessment participants and days."
+show_table(table_data("daylight_validation_samples") |>
+  filter(model == "Photoperiod moderation") |>
+  select(split, training_participants, training_days, training_half_hours,
+         assessment_participants, assessment_days, assessment_half_hours))
+```
+
+```{r}
+#| label: tbl-daylight-validation-scores
+#| tbl-cap: "Participant-weighted out-of-sample prediction on identical held-out observations. Error measures use log10(melanopic EDI + 0.1). R² is relative to the training-mean baseline. Counts are assessment counts pooled uniquely across the five folds."
+show_table(table_data("daylight_validation_scores"))
+```
+
+The expanded model's predictive R² is **0.649**, compared with **0.652** for the primary phase model. Its RMSE is **0.0044 higher**, with a paired 95% interval from **−0.0008 to 0.0100**. Adding photoperiod moderation does not improve new-participant prediction in these data.
+
+```{r}
+#| label: tbl-daylight-validation-differences
+#| tbl-cap: "Paired expanded-minus-primary score differences, with 95% intervals from 2,000 site-stratified participant bootstrap samples. Positive RMSE/MAE differences favor the primary model; positive R² differences favor the expanded model."
+show_table(table_data("daylight_validation_paired_differences"), digits = 4)
+```
+
+Finally, the extreme chronotypes have little overlap within individual sites: **no site has at least five participants in both Q1 and Q4**. Site curves adjust for shared site patterns, but cannot replace that missing overlap. The daylength result is a pooled exploratory association with site adjustment. It cannot establish daylight as the singular driver of the chronotype difference. A stronger test needs both extreme groups observed at the same sites across a wider seasonal range, together with information separating outdoor daylight from artificial or indoor light.
+
+@tbl-daylight-site-composition shows the limited within-site overlap of the extreme groups.
+
+```{r}
+#| label: tbl-daylight-site-composition
+#| tbl-cap: "Site composition of the two extreme quartiles. Zero rows show an absent group; only Q1 and Q4 are included."
+show_table(table_data("daylight_site_composition"))
+```
+
+The [basis checks](results/provenance/daylight_basis_acceptance.csv), [independent design audit](results/provenance/daylight_independent_audit.txt), [acceptance checks](results/provenance/daylight_acceptance_checks.csv) and [primary-cache checksums](results/provenance/daylight_primary_cache_preservation.csv) document the constrained smooth, unchanged primary results and separate daylight outputs. The complete additional analysis is in [R/daylight.R](R/daylight.R).
+
+## Sensitivity to questionnaire-based chronotype {#sec-meq}
+
+The Morningness–Eveningness Questionnaire (MEQ) measures reported preference for earlier or later activity and sleep. It offers a second way to define the comparison groups [@horne1976]. This sensitivity analysis changes **group membership**. The phase coordinate still uses MSFsc, so it does not provide a separate measurement of circadian phase.
+
+All 140 participants in the complete near-eye sample have MEQ scores. The recorded categories agree with the conventional score ranges: 70–86 definitely morning, 59–69 moderately morning, 42–58 intermediate, 31–41 moderately evening, and 16–30 definitely evening. @tbl-meq-categories includes the full sample before restricting the sensitivity analysis.
+
+```{r}
+#| label: tbl-meq-categories
+#| tbl-cap: "MEQ categories in the complete near-eye sample. Counts are unique within each row."
+show_table(table_data("meq_category_sample"))
+```
+
+There are only **three definitely evening participants**, contributing 17 participant-days. A separate extreme-evening curve would be poorly supported. We therefore pool definite and moderate types within each direction and exclude the 72 intermediate participants. The fitted sensitivity sample contains **68 participants, 379 participant-days, and 17,558 valid half-hours**: 44 morning and 24 evening participants.
+
+### Matched models and comparison sample
+
+The pooled MEQ models use the same response, bin rules, work/free labels, cyclic spline structure, photoperiod adjustment, and true-elapsed AR(1) sequence boundaries as the primary analysis. The quartile term is replaced by a two-level MEQ chronotype-direction factor. The cyclic `sz` group and day-type deviations, their interaction, and the participant `fs` curves remain in the model. Population bases use `k = 12`, participant bases use `k = 10`, and the photoperiod basis uses `k = 5`. No extreme-versus-moderate effect is fitted in this reduced sample.
+
+To separate the change in questionnaire from the change in sample, we also fit MSFsc models to **exactly the same observations**, dividing these participants at the original full-sample MSFsc median. These labels mean earlier and later MSFsc. Of the 68 participants, 60 retain the same direction and eight switch direction. The [classification overlap table](results/tables/meq_classification_overlap.csv) gives the participant, participant-day, and half-hour counts for each pairing.
+
+```{r}
+#| label: tbl-meq-fit-checks
+#| tbl-cap: "Convergence and common sample for the paired chronotype classifications."
+source("R/meq.R")
+meq_raw <- meq_prepare(prepared)
+meq_preprocessing <- fit_preprocess(meq_raw, prepared$cutoffs)
+model_formula(k = 12L, kp = 10L)
+
+# Each call checks the data and formula signature before reusing its fit.
+meq_fit_checks <- list()
+for (classification in c("MEQ", "MSFsc")) {
+  for (axis in c("clock", "phase")) {
+    fitted_meq <- meq_fit(meq_raw, meq_preprocessing, axis,
+                          classification, k = 12L, kp = 10L)
+    meq_fit_checks[[paste(classification, axis)]] <-
+      model_summary(fitted_meq) |>
+      mutate(classification = classification)
+    rm(fitted_meq)
+  }
+}
+show_table(bind_rows(meq_fit_checks) |>
+  select(classification, axis, convergence, participants,
+         participant_days, half_hours))
+```
+
+@tbl-meq-fit-checks records convergence and sample counts. In the printed formula, `quartile` is the binary morning/evening grouping for this sensitivity. The preprocessing centers photoperiod within site on the restricted sample and retains the original MSFsc cutoffs. Rendering executes these steps and checks the four cached fits. The diagnostics, standardized predictions, and contrasts below read the exports produced by `run_meq(prepared)`; rendering does not repeat the 10,000 coefficient draws. The full analytical entry point also writes the acceptance checks.
+
+Population predictions use the restricted sample's common photoperiod distribution, with equal participant weights and equal weights for each person's observed days. Overall curves use the same work/free proportions in both groups. Site, participant, and participant-day effects are omitted from the displayed predictions.
+
+### Model checks
+
+All four fits converged. The basis checks did not flag an undersized basis, and the fitted curves join continuously at the daily boundary. The AR correction reduces lag-one residual correlation from about 0.62 to about 0.085. The largest raw residual standard deviation across fitted-value deciles is **7.5–8.0 times** the smallest when zeros are included, but **1.22–1.28 times** among positive observations. Restricting instead to fitted exposure of at least 1 lux gives ratios of **1.43–1.45**, consistent with a pattern concentrated near the zero boundary. High overlap among the hierarchical population, site, and participant curves also limits interpretation of isolated model terms; the full concurvity results are exported.
+
+The response has the same zero-exposure boundary as the primary analysis, so the global spread ratio should be read in that context. These fits assess the **direction and shape** of the sensitivity results. Their candidate intervals retain the Gaussian uncertainty approximation near the boundary.
+
+@tbl-meq-diagnostics summarizes the checks, with residual plots in @fig-meq-appraise.
+
+```{r}
+#| label: tbl-meq-diagnostics
+#| tbl-cap: "MEQ sensitivity diagnostics. Each model uses the same 68 participants, 379 participant-days, and 17,558 valid half-hours. Spread ratio is the largest divided by the smallest residual standard deviation across fitted-value deciles."
+show_table(table_data("meq_diagnostic_verdicts") |>
+  select(classification, axis, convergence_ok, basis_flag,
+         standardized_lag1, spread_ratio, cyclic_ok,
+         participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: fig-meq-appraise
+#| fig-cap: "Diagnostic views for the MEQ clock-time and circadian-phase models. Each fit uses 68 participants, 379 participant-days, and 17,558 valid half-hours."
+#| fig-subcap: ["Clock time", "circadian phase"]
+#| layout-ncol: 1
+show_figure("meq_defined_clock_appraise")
+show_figure("meq_defined_phase_appraise")
+```
+
+The in-sample fits are very similar under both classifications and both time coordinates (@tbl-meq-fit). These values include participant and day effects. They do not establish which questionnaire or time coordinate predicts new observations better. Predictive validation and Shapley attribution remain focused on the primary near-eye sample.
+
+```{r}
+#| label: tbl-meq-fit
+#| tbl-cap: "In-sample fit for the MEQ sensitivity and the paired MSFsc comparison. Adjusted R² is the `mgcv` estimate; ordinary R² compares residual variation with the observed response variation."
+show_table(table_data("meq_model_fit") |>
+  select(classification, axis, rho, adjusted_R2, ordinary_R2,
+         deviance_explained, participants, participant_days, half_hours), digits = 4)
+```
+
+### Daily patterns and differences
+
+The MEQ curves retain the main later-timing pattern: evening participants have higher exposure around late clock evening and during the rising portion of the curve after MSFsc. The same-subset MSFsc contrast has a similar shape (@fig-meq-factors). This agreement shows that these patterns are not confined to the full sample's quartile classification. It does not establish agreement between the two instruments in the full cohort, because intermediate MEQ participants are excluded here.
+
+@fig-meq-patterns shows the fitted daily curves under MEQ classification.
+
+```{r}
+#| label: fig-meq-patterns
+#| fig-alt: "Morning and evening near-eye exposure curves under MEQ classification, shown by clock time and circadian phase for overall, work and free days. Pointwise bands show uncertainty. A diagonally striped vertical band in the phase panels marks the DLMO reference."
+#| fig-cap: "Near-eye exposure grouped by MEQ: clock time (A) and circadian phase (B), overall and by day type. Each curve reports participants and participant-days. Bands are pointwise 95% intervals under the Gaussian reference model. The diagonally striped vertical band marks the DLMO reference."
+show_figure("meq_patterns_meq")
+```
+
+```{r}
+#| label: fig-meq-factors
+#| fig-alt: "Evening-to-morning exposure factors under MEQ and matched-sample MSFsc classifications, with simultaneous uncertainty bands, counts and a no-difference line at one. Striped vertical bands mark the DLMO reference in the circadian-phase panels."
+#| fig-cap: "Evening-to-morning factors for MEQ and MSFsc classifications on identical observations. Panels report participants / participant-days for both sides. Bands use 10,000 coefficient draws, include smoothing-parameter uncertainty, and cover all three day contexts and times at 95% within each coordinate and classification under the fitted covariance model. The diagonally striped vertical band marks the DLMO reference."
+show_figure("meq_factor_comparison")
+```
+
+Large factors in the early rising portion of the phase curve occur at low absolute exposure. For example, at 2.5 hours after MSFsc, the overall MEQ curves estimate approximately **0.17 lx** for morning participants and **2.94 lx** for evening participants. The factor compares **melanopic EDI + 0.1**, so it is not an unshifted lux ratio. The factor plot should be read alongside the intensity plot.
+
+The Gaussian reference bands identify a candidate overall MEQ interval from 1.25 to 3.58 hours after MSFsc. There is no supported interval in the published DLMO reference interval. The [candidate-window table](results/tables/meq_candidate_windows.csv) provides circular interval boundaries, directions, magnitudes, and the participants, participant-days, and half-hours observed inside each interval. Claims are withheld wherever either direction has fewer than five contributing participants; overall comparisons require that support in both work and free-day cells. Time-varying support is retained in the [curve data](results/tables/meq_all_curves.csv) and [contrast data](results/tables/meq_all_contrasts.csv).
+
+Site composition also limits this comparison. Only MPI has at least five participants in each MEQ direction, and four sites contribute only one direction. Adjusting for site cannot supply the missing within-site comparisons. The sensitivity is therefore evidence about this smaller pooled sample, not a separate confirmation of a general MEQ effect.
+
+@tbl-meq-sites shows the site composition of the retained MEQ groups.
+
+```{r}
+#| label: tbl-meq-sites
+#| tbl-cap: "Site support for the MEQ sensitivity. Each cell gives participants / participant-days / valid half-hours."
+show_table(table_data("meq_site_support") |>
+  mutate(sample = paste(participants, participant_days, half_hours, sep = " / ")) |>
+  select(site, meq_direction, sample) |>
+  pivot_wider(names_from = meq_direction, values_from = sample,
+              values_fill = "0 / 0 / 0"))
+```
+
+The [paired MSFsc pattern figure](results/figures/meq_patterns_msfsc.pdf), [sample registry](results/tables/meq_sample_registry.csv), [diagnostic tables](https://github.com/tscnlab/ZaunerSpitschan_JBiolRhythms_2026/tree/main/results/diagnostics), [acceptance checks](results/provenance/meq_acceptance.csv), and [complete analytical code](R/meq.R) accompany this section. The entry point is `Rscript --vanilla R/meq.R`; cached fits are reused when their data and specification signatures agree.
+
+## Exploratory phase-response weighting {#sec-phase-response}
+
+Daily exposure can occur at phases when light tends to advance or delay the circadian clock. We weight the primary model's estimated near-eye phase curves for the **extreme morning and extreme evening groups** by a published light phase-response curve (PRC) and sum the contributions over 24 hours. This exploratory index is a conceptual comparison of exposure across the advance and delay regions of that PRC, not a prediction of phase shifts. An ambulatory precedent multiplied transformed personal light exposure by the Khalsa PRC and integrated the advance and delay regions [@arguellesprieto2022]. That study used a nonlinear intensity–response transformation and a wrist-temperature phase anchor; here we use modelled log melanopic exposure and MSFsc-relative timing.
+
+### Published curve and phase alignment
+
+We use the PRC from @sthilaire2012, who measured DLMO shifts after a one-hour pulse of approximately 8,000 photopic lux of white light in 18 participants. The numerical coordinates come from the [CSV deposited with their analysis](https://github.com/arcascope/amplitude-simulations/blob/a7abd407f656284a8ae6e8f3490789d2dcda2372/hilaire_12_Fig3A_digitized_data.csv) [@walch2025amplitude]. These authors had digitized the published figure. We use their numerical file without extracting an image ourselves; it is not the original raw dataset. The [local source record](input-data/phase_response/source_manifest.json) fixes the repository version and coordinate definitions.
+
+The figure repeats observations across its circular boundary. We retain one 24-hour interval containing 18 responses, verify that the other ten coordinates are periodic copies, and add 0.5 hours to convert pulse onset to pulse midpoint. A two-harmonic, 24-hour curve is fitted in R. The reusable [PRC helper](R/phase_response.R) defines the import, integration and sensitivity calculations; the calls below execute them at this point in the report.
+
+```{r}
+#| label: phase-response-source
+source("R/phase_response.R")
+prc_source <- phase_response_read_prc()
+c(source_participants = nrow(prc_source$points),
+  minimum_shift_hours = prc_source$minimum_shift,
+  maximum_shift_hours = prc_source$maximum_shift)
+```
+
+The fitted extrema round to **−1.75 and +0.45 hours**, matching the published extrema. Positive response values indicate advances and negative values delays. The study measured phase before and after the light pulse using dim-light constant routines. Its no-net-light-response reference of **−0.54 hours** allows for the assumed free-running delay across the three-day measurement interval, based on a mean intrinsic period of 24.18 hours. We compare the **published raw PRC**, $K(u)=P(u)$, with the **drift-corrected PRC**, $K(u)=P(u)+0.54$, where $P(u)$ is the reconstructed curve at pulse midpoint $u$ relative to DLMO.
+
+We align DLMO at **6.45 hours before MSFsc**, the midpoint of the published group-average reference interval, and repeat the calculation at its endpoints, **6.95 and 5.95 hours before MSFsc**. Two wider offsets, 8.45 and 4.45 hours before MSFsc, are additional stress tests. @fig-phase-response-kernel shows both PRC baselines at the central alignment, with markers for DLMO and MSFsc, axes for both time coordinates, and the two primary phase intervals.
+
+```{r}
+#| label: fig-phase-response-kernel
+#| fig-alt: "Published raw and drift-corrected light phase-response curves, with 18 source points. A gold marker anchors DLMO at 6.45 hours before MSFsc, and a blue marker anchors MSFsc at zero. Bottom and top axes show pulse midpoint relative to MSFsc and DLMO, respectively. Grey windows with dashed boundaries mark the two primary MeLiDos phase intervals. The striped band spans the published DLMO reference interval."
+#| fig-cap: "One-hour bright-light PRC fitted to previously digitized coordinates for 18 participants in St Hilaire et al. (2012). The dashed curve retains the published raw baseline; the solid curve adds 0.54 hours for drift correction. Both are shown before weight normalization. The pulse-midpoint coordinate is anchored to the central DLMO reference and MSFsc. Grey windows with dashed boundaries mark the two primary MeLiDos phase intervals. Points come from the PRC study."
+phase_response_kernel_figure(prc_source)
+show_figure("phase_response_kernel")
+```
+
+### Weighted exposure indices
+
+For each extreme group $g$ and day-type context $c$, let $\hat\eta_{gc}(x_j)$ be the primary-model estimate of $\log_{10}(\mathrm{melanopic\ EDI}+0.1)$ at MSFsc-relative phase $x_j$. At ten-minute spacing, $\Delta=1/6$ hour, we calculate
+
+$$
+\begin{aligned}
+w_j(d)&=\frac{K(x_j-d)\Delta}{\sum_j |K(x_j-d)|\Delta},\\
+I_{gc}(d)&=\sum_j w_j(d)\{\hat\eta_{gc}(x_j)+1\}.
+\end{aligned}
+$$
+
+Here $d$ is DLMO relative to MSFsc. **Zero-exposure centering** subtracts $\log_{10}(0+0.1)=-1$, so the integrated curve is $\hat\eta_{gc}+1$. The positive denominator rescales the sum without changing its sign; the unnormalized signed integral is also exported. The curves retain the primary model's common photoperiod distribution, with site, participant and day effects excluded. Overall curves use the same pooled work/free-day mixture as the main analysis.
+
+The PRC weights have a nonzero signed sum, so the index depends on the PRC baseline as well as the timing of exposure. We compare the published raw and drift-corrected PRCs using the same zero-exposure reference.
+
+We integrate the model design vectors before calculating uncertainty, retaining covariance across phase and between groups. The 95% coefficient intervals use the full covariance with smoothing-parameter correction. They are unadjusted and conditional on the fitted PRC and assumed alignment. They do not propagate uncertainty in the external PRC fit or individual DLMO.
+
+```{r}
+#| label: phase-response-integrate
+prc_result <- phase_response_integrate(
+  prc_source,
+  readRDS("results/models/primary_phase.rds"),
+  readRDS("results/data/primary_phase_inference.rds")
+)
+prc_result$checks |> count(passed, name = "checks")
+```
+
+```{r}
+#| label: phase-response-exports
+#| code-fold: true
+#| code-summary: "Export PRC results and prepare figures"
+phase_response_export(prc_result)
+phase_response_figures(prc_result)
+```
+
+@fig-phase-response-indices compares the two PRC baselines. At the central alignment, the published raw PRC gives zero-exposure-centered overall indices of **−0.15 for extreme morning and +0.05 for extreme evening**, with both intervals including zero. With drift correction, the corresponding estimates are **1.28 and 1.42**. Both intervals exclude zero, indicating advance-weighted exposure (@tbl-phase-response-overall).
+
+```{r}
+#| label: fig-phase-response-indices
+#| fig-alt: "Two panels compare extreme morning and evening PRC-weighted indices across overall, work and free days, using zero-exposure centering. The left panel uses the published raw PRC and has intervals spanning zero. The right panel uses the drift-corrected PRC and has positive intervals for both groups. Morning-evening intervals overlap in both panels."
+#| fig-cap: "PRC-weighted indices for extreme morning and evening groups at the central DLMO alignment, with 95% coefficient intervals. Both panels use zero-exposure centering; the left uses the published raw PRC and the right the drift-corrected PRC. The extreme groups comprise 70 participants, 390 participant-days and 18,066 half-hours; the unchanged four-quartile model uses 140 participants, 778 days and 35,949 half-hours. Positive indices are advance-weighted exposure balances, not phase shifts in hours."
+show_figure("phase_response_indices")
+```
+
+```{r}
+#| label: tbl-phase-response-overall
+#| tbl-cap: "Overall PRC-weighted indices at the central DLMO alignment, centered at zero exposure, with 95% coefficient intervals. Extreme morning: 36 participants, 200 days and 9,241 half-hours. Extreme evening: 34 participants, 190 days and 8,825 half-hours."
+prc_overall <- table_data("phase_response_overall_report") |>
+  arrange(factor(prc_baseline, c("Published raw", "Drift corrected")), quartile) |>
+  mutate(group = paste(extremity, direction),
+         interval = sprintf("%.3f to %.3f", lower, upper)) |>
+  select(prc_baseline, group, estimate, interval)
+show_table(prc_overall, labels = c(prc_baseline = "PRC baseline",
+  group = "Group", estimate = "Index",
+  interval = "95% CI"))
+```
+
+At the central DLMO alignment, the estimates consistently place the extreme evening exposure pattern in a **more phase-advancing direction** than the extreme morning pattern across overall, work and free days and under both PRC baselines. The direct group differences are not statistically significant. The overall evening-minus-morning difference is **0.198 (95% CI −0.094 to 0.491)** with published raw weights and **0.146 (−0.106 to 0.398)** with drift-corrected weights. All group-contrast intervals include zero at the central alignment. Across the three alignments within the published reference interval (5.95, 6.45 and 6.95 hours before MSFsc), the only exception is the work-day contrast with published raw weights and zero-exposure centering at DLMO = −6.95 hours: **0.297 (95% CI 0.001–0.593)**. Overall contrasts remain uncertain under every combination. @tbl-phase-response-contrasts shows the central-alignment results.
+
+```{r}
+#| label: tbl-phase-response-contrasts
+#| tbl-cap: "Extreme-evening minus extreme-morning PRC-weighted contrasts at the central alignment, centered at zero exposure, with 95% coefficient intervals. Context-specific group samples are shown in the preceding figure; the fitted model and samples are identical under both PRC baselines."
+prc_contrasts <- table_data("phase_response_contrast_report") |>
+  mutate(interval = sprintf("%.3f to %.3f", lower, upper)) |>
+  select(prc_baseline, context, estimate, interval)
+show_table(prc_contrasts, labels = c(prc_baseline = "PRC baseline",
+  estimate = "Difference", interval = "95% CI"))
+```
+
+The absolute balance depends on the drift convention and alignment. Neither PRC baseline gives a clearly separated overall morning–evening index within the published reference interval. Thus these results provide no clear support for an advancing exposure pattern in extreme evening types paired with a delaying pattern in extreme morning types. The laboratory pulse response is not calibrated for summing naturally varying daily melanopic exposure, so these indices cannot be read as hours of phase advance or delay.
+
+The [complete index results](results/tables/phase_response_summary.csv), [group contrasts](results/tables/phase_response_contrasts.csv), [time-specific contributions](results/tables/phase_response_components.csv), and [PRC weights](results/tables/phase_response_weights.csv) retain the alignment and PRC-baseline sensitivities, with zero-exposure centering throughout. The [source guide](input-data/phase_response/README.md), [fitted coefficients](results/provenance/phase_response_fitted_coefficients.csv), [input checksums](results/provenance/phase_response_inputs.csv), and [R session](results/provenance/phase_response_session.txt) document reproduction. The standalone entry point is `Rscript --vanilla R/run_phase_response.R`.
+
+### Sensitivity: advance-to-delay exposure balance
+
+As a sensitivity, we use the broad phase regions of @emens2009. Their advance-to-delay balance divides mean log-transformed exposure from **16 to 4 hours before DLMO** by the mean from **4 hours before to 8 hours after DLMO**. Both regions span 12 hours. We apply their transformation to the fitted near-eye curves, $L_g(x)=\max\{10^{\hat\eta_g(x)}-0.1,0\}$, and calculate the ratio of the two regional means of $\log_{10}\{L_g(x)+1\}$. This is a transformation of the existing fitted exposure curves, rather than a refit with a different response. The overall curves retain the common photoperiod distribution and work/free-day mixture. The calculation uses equal weights within each region and does not use the shape or drift correction of the published PRC.
+
+We retain joint uncertainty across time and groups through **10,000 coefficient draws** with smoothing-parameter correction. The 95% percentile intervals are conditional on the fitted model and assumed DLMO alignment, without multiplicity adjustment. We calculate the central alignment at 6.45 hours before MSFsc and repeat it at 5.95 and 6.95 hours, overall and separately for work and free days. The [calculation helper](R/emens_balance.R) also verifies that averaging the six four-hour bins used by Emens and colleagues gives the same balance as the ten-minute grid.
+
+```{r}
+#| label: emens-balance-calculate
+source("R/emens_balance.R")
+emens_result <- emens_balance(
+  readRDS("results/models/primary_phase.rds"),
+  readRDS("results/data/primary_phase_inference.rds")
+)
+emens_result$checks |> count(passed, name = "checks")
+```
+
+```{r}
+#| label: emens-balance-export
+#| code-fold: true
+#| code-summary: "Export advance-to-delay sensitivity results"
+emens_balance_export(emens_result)
+```
+
+At the central alignment, the advance-to-delay balance was **2.43 (95% CI 1.94–3.06)** for extreme morning types and **4.28 (3.23–5.71)** for extreme evening types. The evening/morning ratio of these balances was **1.76 (1.21–2.58)**, indicating a higher relative concentration of exposure in the advance region in evening types (@tbl-emens-balance). Its interval excluded one at all three alignments, overall and on work and free days. This broad-region summary supports the direction of the main PRC comparison, whose overall group-contrast intervals included zero. The two methods apply different temporal weights and transformations, and neither estimates a phase shift in hours.
+
+```{r}
+#| label: tbl-emens-balance
+#| tbl-cap: "Emens-style advance-to-delay balance at the central DLMO alignment. The first two rows divide the advance-region mean by the delay-region mean; the final row compares those balances between groups. Intervals are 95% coefficient-draw percentile intervals. Extreme morning: 36 participants and 200 days; extreme evening: 34 participants and 190 days."
+emens_report <- bind_rows(
+  emens_result$summary |>
+    filter(context == "Overall", dlmo_offset == -6.45) |>
+    mutate(comparison = paste("Extreme", tolower(direction))) |>
+    select(comparison, estimate, lower, upper),
+  emens_result$contrasts |>
+    filter(context == "Overall", dlmo_offset == -6.45,
+           contrast == "Evening / morning") |>
+    mutate(comparison = "Evening / morning balance") |>
+    select(comparison, estimate, lower, upper)
+) |>
+  mutate(interval = sprintf("%.2f to %.2f", lower, upper)) |>
+  select(comparison, estimate, interval)
+show_table(emens_report, digits = 2,
+  labels = c(comparison = "Comparison", estimate = "Ratio", interval = "95% CI"))
+```
+
+The [complete balances](results/tables/emens_balance_summary.csv), [direct group comparisons](results/tables/emens_balance_contrasts.csv), and [phase-region definitions](results/tables/emens_balance_regions.csv) include all three alignments and day-type contexts. The [standalone R script](R/run_emens_balance.R), [input checksums](results/provenance/emens_balance_inputs.csv), and [runtime record](results/provenance/emens_balance_runtime.txt) document reproduction.
+
+{{< include notes/sleep-diary-section.qmd >}}
+
+## Comparison with Goulet and colleagues {#sec-comparison-goulet}
+
+### The question shared by the two studies
+
+@goulet2007 explored whether morning and evening types encounter different light patterns when exposure is expressed in clock time or relative to measured circadian phase. That distinction also motivates this analysis. In both studies, the phase comparison tests whether a clock-time difference reflects a shift of the whole daily pattern or a difference that remains after alignment.
+
+The earlier study analysed nine morning and ten evening participants after data-quality exclusions. In the full sample, morning types received more light in the morning and evening types more light late at night. Aligning the observations to measured DLMO removed a statistically detectable group-by-time difference in that full sample. The important exception was the subset with extreme DLMO timing: four morning and five evening participants. In that subset, morning types had higher exposure during much of the three hours before to three hours after DLMO, and evening types had higher exposure 10–12 hours after DLMO. The intermediate-DLMO subset did not show a statistically detectable group-by-time interaction [@goulet2007, pp. 153–156].
+
+“Intermediate” and “extreme” in that comparison described DLMO timing within participants already selected as morning or evening types by MEQ. They were not MEQ severity categories or MSFsc quartiles. The two studies therefore address related questions with different group definitions.
+
+### Design differences and what they contribute
+
+@tbl-study-comparison shows which differences strengthen the present analysis and which limit direct comparison.
+
+The sensor-placement comparison uses the context-specific errors in momentary exposure reported from concurrent MeLiDos recordings by @zauner2026placement.
+
+```{r}
+#| label: tbl-study-comparison
+#| tbl-cap: "Study designs, analytical samples, strengths and limitations."
+show_table(table_data("study_comparison"), stub = "feature",
+  labels = c(feature = "Feature", goulet = "Goulet and colleagues",
+             melidos = "This analysis",
+             interpretation = "Consequence for interpretation"))
+```
+
+Both studies concern observed personal exposure rather than a controlled change in light. Goulet and colleagues interpreted the extreme-DLMO result as compatible with differences in intrinsic circadian period, but did not measure intrinsic period. The association could also reflect differences in behaviour and available light. Likewise, an association between day length and the MeLiDos contrasts does not establish which exposure caused a chronotype or which behavioural response produced the exposure.
+
+### Similarities, differences and the strength of the conclusions
+
+Both analyses show that clock-time and phase-aligned patterns answer different questions, and that the more extreme groups can show clearer separation. Goulet and colleagues reported two phase-specific findings in their extreme subset: higher morning-type exposure around DLMO and higher evening-type exposure 10–12 hours after DLMO. Our candidate evening-higher difference around 1 to 4 hours after MSFsc is qualitatively compatible with their later-phase finding. We have no supported interval overlapping the published DLMO reference interval (@tbl-windows-direction), although exposure is lower for extreme evening types before the reference interval, which is also qualitatively consistent with that study. The reference interval does not locate each participant's DLMO, so these results cannot establish precise temporal agreement or resolve the earlier near-DLMO finding.
+
+The main strengths here are the larger analytical sample, measurements of melanopic exposure near the eyes, explicit work/free-day comparisons, individual daily curves, and prediction assessed on held-out observations. The earlier study's main strength is its direct measurement of DLMO after a week with relatively stable preferred sleep schedules. Its extreme-phase finding rests on a small selected subgroup, while the present analysis is limited by its sleep-based phase coordinate and uneven site composition.
+
+## Reproducibility and outputs
+
+All counts originate from the shared observation registry. Participants are counted uniquely across day types. Individual plots show their contributing days, model and diagnostic tables show the full analytical sample, and validation separates training from assessment counts.
+
+@tbl-acceptance summarizes the primary acceptance checks.
+
+```{r}
+#| label: tbl-acceptance
+#| tbl-cap: "Acceptance checks for data joins, time coordinates, AR boundaries, contrasts, counts, Shapley totals and validation separation."
+acceptance <- table_data("acceptance_checks", "results/provenance")
+show_table(acceptance |> count(passed, name = "checks"))
+stopifnot(all(acceptance$passed))
+```
+
+The imported data also reproduce in a temporary project without access to the source repository. Eight portability checks confirm unchanged observations, cutoffs, participant metadata and counts. The additional analyses check their samples, classifications, time coordinates, support and displayed counts. An independent daylight verification also checks the constrained basis, direct predictions, interval counts and training-only preprocessing. The [numerical verification](results/provenance/revision7_verify.R) checks 95% simultaneous coverage within each coordinate, reconstructs the primary interval-average contrasts with the full covariance, and verifies the interval definitions used by the photoperiod summaries and manuscript figures. It also confirms that the fitted models, prepared observations and validation inputs are unchanged. The [inference refresh script](results/provenance/revision7_inference.R) regenerates these results from the saved fits.
+
+@tbl-extension-checks summarizes the checks for the additional analyses, and @tbl-versions records the computational environment.
+
+```{r}
+#| label: tbl-extension-checks
+#| tbl-cap: "Checks for standalone data preparation and the additional analyses."
+extension_checks <- bind_rows(
+  table_data("standalone_checks", "results/provenance") |> mutate(analysis = "Standalone inputs"),
+  table_data("meq_acceptance", "results/provenance") |> mutate(analysis = "MEQ sensitivity"),
+  table_data("noncyclic_sz_clock_acceptance", "results/provenance") |> mutate(analysis = "Noncyclic group-curve sensitivity"),
+  table_data("noncyclic_sz_phase_acceptance", "results/provenance") |> mutate(analysis = "Noncyclic group-curve sensitivity"),
+  table_data("noncyclic_sz_comparison_acceptance", "results/provenance") |> mutate(analysis = "Noncyclic group-curve sensitivity"),
+  table_data("daylight_acceptance_checks", "results/provenance") |> mutate(analysis = "Daylight exploration"),
+  table_data("daylight_independent_checks", "results/provenance") |> mutate(analysis = "Original daylight fit verification"),
+  table_data("phase_response_checks", "results/provenance") |> mutate(analysis = "PRC weighting"),
+  table_data("phase_response_independent_source_checks", "results/provenance") |> mutate(analysis = "Published PRC source verification"),
+  table_data("revision5_analysis_checks", "results/provenance") |> mutate(analysis = "PRC and photoperiod model verification"),
+  table_data("revision7_verification", "results/provenance") |> mutate(analysis = "Within-coordinate inference and interval propagation"),
+  table_data("revision9_verification", "results/provenance") |> mutate(analysis = "Exposure bands and Emens sensitivity"),
+  table_data("emens_balance_checks", "results/provenance") |> mutate(analysis = "Advance-to-delay sensitivity")
+)
+stopifnot(all(extension_checks$passed))
+show_table(extension_checks |> count(analysis, passed, name = "checks"))
+```
+
+```{r}
+#| label: tbl-versions
+#| tbl-cap: "Recorded R and package versions."
+show_table(table_data("versions", "results/provenance"))
+```
+
+The [imported-data manifest](input-data/manifest.csv), [analysis input manifest](results/provenance/inputs.csv), [source manifest](results/provenance/analysis_sources.csv), [session information](results/provenance/session-info.txt), and [complete acceptance results](results/provenance/acceptance_checks.csv) record provenance. The prepared inputs are byte-for-byte copies of source commit `a5ca7e6e9968e3ca904528a2638f215dfbbd0212`, copied on 22 October 2026. The [input guide](input-data/README.md) explains their roles and retained licensing and citation records.
+
+The OpenMP preload enables `gratia`'s `mvnfast` dependency on this machine. The installed `mgcv` build reports that its own OpenMP support is unavailable, so `bam()` computation runs on one thread. This runtime warning does not indicate a failed model fit.
+
+The full pipeline is invoked with `Rscript --vanilla run.R all`, followed by a fresh Quarto render. The [README](README.md) describes resumable stages and the local OpenMP preload used by gratia. The helpers are [data preparation](R/data.R), [models](R/models.R), [inference](R/inference.R), [diagnostics and individual curves](R/diagnostics.R), [validation](R/validation.R), [attribution](R/attribution.R), [sensitivity checks](R/sensitivity.R), and [figures](R/plots.R). The [histogram section](notes/chronotype-distributions.qmd) is included directly in this document; its [standalone verification](R/chronotype_distributions.R) executes the same code and checks its plotted bin counts. The [gt helper](R/report_tables.R) supplies repeated table formatting. All tables, figure data, fitted models, and diagnostics remain inside this secondary-analysis project.
+
+For display changes alone, `Rscript --vanilla run.R figures` regenerates these figures from saved fits and inference. Model-scale CSV columns remain available alongside the lux and factor columns. Residual diagnostics and predictive scores retain the fitted model's log scale.
+
+## Artificial-intelligence assistance
+
+OpenAI Codex Desktop version 26.623.141536 (build 4753), using GPT-6 Astra (model identifier `gpt-6-astra`) on the Max reasoning setting, assisted with R and Quarto code development, reference checks, numerical checks, figure and table preparation, and text editing. The authors claim responsibility for all calculations, interpretations and text.
+
+## References
+
+::: {#refs}
+:::

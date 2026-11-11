@@ -1,0 +1,7 @@
+"check","passed"
+"Timing-only scenario preserves all non-timing fields",TRUE
+"Timing-only scenario uses exactly the diary alignment",TRUE
+"Final classification change preserves all non-group fields",TRUE
+"All fixed-window exposure comparisons meet the four-person support rule",TRUE
+"All main fixed-window daylength comparisons meet the four-person support rule",TRUE
+"Fixed-group model inputs and producers have unchanged hashes",TRUE

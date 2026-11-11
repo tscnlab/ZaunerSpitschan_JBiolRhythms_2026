@@ -1,0 +1,35 @@
+"check","passed"
+"Native gt table returned",TRUE
+"Prepared data unchanged",TRUE
+"Stub row order preserved",TRUE
+"Count integers and separators",TRUE
+"Three decimals and explicit missing value",TRUE
+"Logical values remain explicit",TRUE
+"Requested precision retained",TRUE
+"Explicit double-storage counts",TRUE
+"Fractional values cannot silently receive count formatting",TRUE
+"Inherited grouping does not reorder rows",TRUE
+"Semantic column headers",TRUE
+"Semantic stub row headers",TRUE
+"Custom stub label",TRUE
+"No gt-owned caption",TRUE
+"Horizontal scroll container",TRUE
+"Prepared values unchanged: sample_flow.csv",TRUE
+"All rows and columns displayed: sample_flow.csv",TRUE
+"Visible row order: sample_flow.csv",TRUE
+"Prepared values unchanged: primary_phase_basis.csv",TRUE
+"All rows and columns displayed: primary_phase_basis.csv",TRUE
+"Visible row order: primary_phase_basis.csv",TRUE
+"Prepared values unchanged: validation_scores.csv",TRUE
+"All rows and columns displayed: validation_scores.csv",TRUE
+"Visible row order: validation_scores.csv",TRUE
+"Prepared values unchanged: validation_samples.csv",TRUE
+"All rows and columns displayed: validation_samples.csv",TRUE
+"Visible row order: validation_samples.csv",TRUE
+"Prepared values unchanged: meq_category_sample.csv",TRUE
+"All rows and columns displayed: meq_category_sample.csv",TRUE
+"Visible row order: meq_category_sample.csv",TRUE
+"Prepared values unchanged: daylight_primary_interval_summaries.csv",TRUE
+"All rows and columns displayed: daylight_primary_interval_summaries.csv",TRUE
+"Full gt dependency closure is locked",TRUE
+"Locked gt dependency versions match installation",TRUE

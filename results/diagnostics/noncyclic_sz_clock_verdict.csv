@@ -1,0 +1,2 @@
+"model","axis","convergence_ok","basis_flag","raw_lag1","standardized_lag1","residual_skewness","residual_excess_kurtosis","spread_ratio","maximum_group_hour_mean_residual","cyclic_ok","residual_dependence_flag","distribution_flag","spread_flag","participants","participant_days","half_hours"
+"noncyclic_sz","clock",TRUE,FALSE,0.627355402264472,0.0790421821953881,-0.107395697631272,1.85852805226298,5.72856405764228,0.238557757103882,FALSE,FALSE,FALSE,TRUE,140,778,35949

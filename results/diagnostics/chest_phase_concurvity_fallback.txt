@@ -1,0 +1,3 @@
+Error in La.svd(x, nu, nv) : error code 1 from Lapack routine 'dgesdd'
+
+Fallback: unweighted model-design projections using QR with rank tolerance 1e-8. Worst-case SVD index omitted.

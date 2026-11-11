@@ -1,0 +1,4 @@
+"classification","axis","context","start","end","wraps_boundary","duration_hours","direction","mean_log10_difference","factor_at_mean_difference","evening_participants","evening_days","evening_half_hours","morning_participants","morning_days","morning_half_hours"
+"MEQ","clock","Overall",22.5833333333333,1.25,TRUE,2.66666666666667,"Evening higher",0.757838522080275,5.72583095472931,24,137,662,44,242,1188
+"MEQ","clock","Work",22.5833333333333,1.08333333333333,TRUE,2.5,"Evening higher",0.781539820821618,6.04699794229103,24,84,401,43,150,737
+"MEQ","clock","Free",22.9166666666667,1.25,TRUE,2.33333333333333,"Evening higher",0.755302146072216,5.69248829222758,24,53,210,39,92,362

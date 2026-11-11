@@ -1,0 +1,2 @@
+"contrast","x","estimate","se","pointwise_lower","pointwise_upper","ratio","pointwise_ratio_lower","pointwise_ratio_upper","pointwise_excludes_one","pointwise_significant","supported","minimum_cell_participants","minimum_cell_days","morning_participants","morning_days","evening_participants","evening_days"
+"Longer_minus_shorter",-8.33333333333333,-0.390423340180234,0.207847498173629,-0.797796950877302,0.0169502705168335,0.406983366446727,0.159295331899773,1.0398010951666,FALSE,FALSE,TRUE,12,29,36,200,34,190

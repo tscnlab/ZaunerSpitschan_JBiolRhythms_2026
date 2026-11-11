@@ -1,0 +1,5 @@
+"quartile","direction","extremity","participants","minimum","median","maximum","participant_days","half_hours"
+"Q1","Morning","Extreme",36,1.33333333333333,2.6815476190216,3.16666666666667,200,9241
+"Q2","Morning","Moderate",34,3.18452380945285,3.80059523805976,4.23571428583728,188,8656
+"Q3","Evening","Moderate",36,4.29166666666667,4.77678571431173,5.25,200,9227
+"Q4","Evening","Extreme",34,5.26785714278618,5.875,8.13095238082939,190,8825

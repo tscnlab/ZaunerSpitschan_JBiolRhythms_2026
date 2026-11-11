@@ -1,0 +1,26 @@
+/* Keep wide analytical tables within the reading column on every viewport. */
+.cell-output-display {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.cell-output-display table {
+  font-size: 0.85rem;
+}
+.cell-output-display th {
+  white-space: normal;
+  min-width: 4.5rem;
+}
+.cell-output-display th:first-child,
+.cell-output-display td:first-child {
+  min-width: 5rem;
+}
+figcaption, .table-caption {
+  text-align: left;
+}
+#refs a {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .cell-output-display table { font-size: 0.8rem; }
+  h1 { font-size: 1.8rem; }
+}

@@ -1,0 +1,8 @@
+"axis","component","allocation","lower","upper","baseline_R2","full_R2","bootstrap_replicates","interval","participants","participant_days","half_hours"
+"clock","direction",0.00565676048611139,0.00202033348999075,0.00983943871891223,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949
+"clock","extremity",0.00129819822195224,-4.63296382218258e-05,0.00275356706719808,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949
+"clock","daytype",0.00873280447316813,0.00219342435154276,0.0161418181950078,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949
+"clock","site",0.0146545214726384,0.00765663903736047,0.0241150340946349,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949
+"clock","photoperiod",0.00746365543810965,0.00113992507301968,0.012910394198818,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949
+"clock","participant",0.0913197464500211,0.0723106073141353,0.116111334722116,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949
+"clock","participant_day",0.042634593377979,0.0309903514362343,0.0575848443223183,0.623355823750025,0.795116103670005,2000,"Site-participant-day bootstrap of fixed predictions; conditional on fitted models",140,778,35949

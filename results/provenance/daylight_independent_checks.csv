@@ -1,0 +1,75 @@
+"check","passed"
+"Fold 1 has disjoint participants",TRUE
+"Fold 1 training-only quartiles match primary validation",TRUE
+"Fold 1 training-only photoperiod centers match primary validation",TRUE
+"Fold 1 assessment sites occur in training",TRUE
+"Fold 2 has disjoint participants",TRUE
+"Fold 2 training-only quartiles match primary validation",TRUE
+"Fold 2 training-only photoperiod centers match primary validation",TRUE
+"Fold 2 assessment sites occur in training",TRUE
+"Fold 3 has disjoint participants",TRUE
+"Fold 3 training-only quartiles match primary validation",TRUE
+"Fold 3 training-only photoperiod centers match primary validation",TRUE
+"Fold 3 assessment sites occur in training",TRUE
+"Fold 4 has disjoint participants",TRUE
+"Fold 4 training-only quartiles match primary validation",TRUE
+"Fold 4 training-only photoperiod centers match primary validation",TRUE
+"Fold 4 assessment sites occur in training",TRUE
+"Fold 5 has disjoint participants",TRUE
+"Fold 5 training-only quartiles match primary validation",TRUE
+"Fold 5 training-only photoperiod centers match primary validation",TRUE
+"Fold 5 assessment sites occur in training",TRUE
+"Reference weights sum to one",TRUE
+"Each participant has equal total reference weight",TRUE
+"Scenario values are inverse weighted empirical quantiles",TRUE
+"Added cyclic sz term has 33 constrained columns",TRUE
+"Added term is zero at centered photoperiod zero",TRUE
+"Added term is linear in the numeric photoperiod modifier",TRUE
+"Added-term lpmatrix sums to zero over quartiles",TRUE
+"Full population lpmatrix is cyclic at zero and 24 hours",TRUE
+"Longer-minus-shorter contrast cancels every other model term",TRUE
+"Direct predictions equal the weighted Shorter/Q4 design prediction",TRUE
+"Ordinary window has the intended boundary status",TRUE
+"Ordinary window Q1 counts match exact observed phase coordinates",TRUE
+"Ordinary window Q4 counts match exact observed phase coordinates",TRUE
+"Circular-boundary window has the intended boundary status",TRUE
+"Circular-boundary window Q1 counts match exact observed phase coordinates",TRUE
+"Circular-boundary window Q4 counts match exact observed phase coordinates",TRUE
+"No observed site has at least five participants in both extreme groups",TRUE
+"Shorter pointwise bounds equal direct coefficient-covariance calculations",TRUE
+"Shorter pointwise exclusions equal supported zero exclusions",TRUE
+"Typical pointwise bounds equal direct coefficient-covariance calculations",TRUE
+"Typical pointwise exclusions equal supported zero exclusions",TRUE
+"Longer pointwise bounds equal direct coefficient-covariance calculations",TRUE
+"Longer pointwise exclusions equal supported zero exclusions",TRUE
+"Longer_minus_shorter pointwise bounds equal direct coefficient-covariance calculations",TRUE
+"Longer_minus_shorter pointwise exclusions equal supported zero exclusions",TRUE
+"Moderation export contains the same complete 144-point grid",TRUE
+"Interval 1 Shorter uses the covariance of the averaged design",TRUE
+"Interval 1 Typical uses the covariance of the averaged design",TRUE
+"Interval 1 Longer uses the covariance of the averaged design",TRUE
+"Interval 1 Longer_minus_shorter uses the covariance of the averaged design",TRUE
+"Interval 2 Shorter uses the covariance of the averaged design",TRUE
+"Interval 2 Typical uses the covariance of the averaged design",TRUE
+"Interval 2 Longer uses the covariance of the averaged design",TRUE
+"Interval 2 Longer_minus_shorter uses the covariance of the averaged design",TRUE
+"Solar metadata has one record per participant local date",TRUE
+"Every retained day has complete solar metadata",TRUE
+"Absolute-daylength split is the participant-weighted empirical median",TRUE
+"Civil summaries have exactly the two primary windows and four cells per window",TRUE
+"Solar interval 1 Q1 Longer matches direct weighted day-phase calculations",TRUE
+"Solar interval 1 Q1 Longer separately records observed support",TRUE
+"Solar interval 1 Q4 Shorter matches direct weighted day-phase calculations",TRUE
+"Solar interval 1 Q4 Shorter separately records observed support",TRUE
+"Solar interval 1 Q1 Shorter matches direct weighted day-phase calculations",TRUE
+"Solar interval 1 Q1 Shorter separately records observed support",TRUE
+"Solar interval 1 Q4 Longer matches direct weighted day-phase calculations",TRUE
+"Solar interval 1 Q4 Longer separately records observed support",TRUE
+"Solar interval 2 Q1 Longer matches direct weighted day-phase calculations",TRUE
+"Solar interval 2 Q1 Longer separately records observed support",TRUE
+"Solar interval 2 Q4 Shorter matches direct weighted day-phase calculations",TRUE
+"Solar interval 2 Q4 Shorter separately records observed support",TRUE
+"Solar interval 2 Q1 Shorter matches direct weighted day-phase calculations",TRUE
+"Solar interval 2 Q1 Shorter separately records observed support",TRUE
+"Solar interval 2 Q4 Longer matches direct weighted day-phase calculations",TRUE
+"Solar interval 2 Q4 Longer separately records observed support",TRUE

@@ -1,0 +1,35 @@
+"check","passed"
+"Existing model, inference, validation and subset caches remain byte-identical",TRUE
+"Every exported interval belongs to exactly one comparison tab",TRUE
+"Table source values remain unchanged",TRUE
+"Near-eye and chronotype terminology are presentation labels",TRUE
+"Table numerical values retain intended precision",TRUE
+"Every rendered table is native gt",TRUE
+"Four interval tables are present",TRUE
+"Interval row count: direction",TRUE
+"Interval table is inside its tab: direction",TRUE
+"Interval row count: strength",TRUE
+"Interval table is inside its tab: strength",TRUE
+"Interval row count: day",TRUE
+"Interval table is inside its tab: day",TRUE
+"Interval row count: interactions",TRUE
+"Interval table is inside its tab: interactions",TRUE
+"Repeated Shapley sample columns moved to caption",TRUE
+"Shapley caption retains all three denominators",TRUE
+"Fit table displays Near-eye instead of primary",TRUE
+"Zauner zero-data reference renders",TRUE
+"Three existing code annotations remain",TRUE
+"Interval factors preserved: direction",TRUE
+"Interval factors preserved: strength",TRUE
+"Interval factors preserved: day",TRUE
+"Both PRC source citations render",TRUE
+"PRC table row count: tbl-phase-response-overall",TRUE
+"PRC table indices preserved: tbl-phase-response-overall",TRUE
+"PRC table row count: tbl-phase-response-contrasts",TRUE
+"PRC table indices preserved: tbl-phase-response-contrasts",TRUE
+"PRC implementation checks pass",TRUE
+"All relative report links resolve",TRUE
+"All internal links resolve",TRUE
+"All numbered figures and tables have prose cross-references",TRUE
+"No unresolved figure or table reference remains in rendered prose",TRUE
+"All report R cells parse",TRUE

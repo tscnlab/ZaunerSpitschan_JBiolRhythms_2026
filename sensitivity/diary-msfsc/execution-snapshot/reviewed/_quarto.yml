@@ -1,0 +1,103 @@
+project:
+  type: website
+  output-dir: report
+  execute-dir: project
+  render:
+    - index.qmd
+    - analysis.qmd
+    - noncyclic-sz-sensitivity.qmd
+    - diary-msfsc-sensitivity.qmd
+    - figures.qmd
+  resources:
+    - README.md
+    - renv.lock
+    - restore.R
+    - input-data/README.md
+    - input-data/manifest.csv
+    - input-data/package-manifest.csv
+    - input-data/phase_response/*
+    - input-data/upstream-metadata/LICENSE.md
+    - input-data/upstream-metadata/CITATION.cff
+    - R/*.R
+    - notes/chronotype-distributions.qmd
+    - notes/sleep-diary-section.qmd
+    - data/intermediate/sleep_diary_*.csv
+    - results/data/sleep_diary_nights.csv
+    - results/tables/*.csv
+    - results/diagnostics/*.csv
+    - results/provenance/*.csv
+    - results/provenance/session-info.txt
+    - results/provenance/phase_response_session.txt
+    - results/provenance/phase_response_command.txt
+    - results/provenance/phase_response_independent_*
+    - results/provenance/revision5_verify_analysis.R
+    - results/provenance/revision5_analysis_runtime.txt
+    - results/provenance/revision7_inference.R
+    - results/provenance/revision7_inference_runtime.txt
+    - results/provenance/revision7_verify.R
+    - results/provenance/revision7_verification_runtime.txt
+    - results/provenance/revision9_inference.R
+    - results/provenance/revision9_runtime.txt
+    - results/provenance/revision9_verify.R
+    - results/provenance/revision9_verification_runtime.txt
+    - results/provenance/emens_balance_runtime.txt
+    - results/provenance/sleep_diary_runtime.txt
+    - results/provenance/daylight_design.txt
+    - results/provenance/daylight_session.txt
+    - results/provenance/daylight_independent_summary.md
+    - results/provenance/daylight_independent_audit.txt
+    - results/provenance/daylight_independent_runtime.txt
+    - results/provenance/daylight_independent_verify.R
+    - results/provenance/revision_floor_audit.R
+    - results/figures/*.pdf
+    - results/figures/manuscript/*
+    - data/intermediate/manuscript/*
+    - sensitivity/diary-msfsc/*.R
+    - sensitivity/diary-msfsc/*.md
+    - sensitivity/diary-msfsc/*.csv
+    - sensitivity/diary-msfsc/*.txt
+    - sensitivity/diary-msfsc/comparison/*.csv
+    - sensitivity/diary-msfsc/comparison/*.pdf
+    - sensitivity/diary-msfsc/data/intermediate/*.csv
+website:
+  title: "MeLiDos chronotype study"
+  navbar:
+    background: light
+    left:
+      - href: index.qmd
+        text: Manuscript
+      - href: analysis.qmd
+        text: Analysis supplement
+      - href: figures.qmd
+        text: Figures
+    right:
+      - text: Additional analyses
+        menu:
+          - href: noncyclic-sz-sensitivity.qmd
+            text: Cyclic-basis sensitivity
+          - href: diary-msfsc-sensitivity.qmd
+            text: Diary-derived MSFsc sensitivity
+  page-navigation: false
+engine: knitr
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    code-annotations: below
+    embed-resources: true
+    lightbox: true
+    theme: cosmo
+    css: styles.css
+    number-sections: true
+    fig-width: 11
+    fig-height: 8
+execute:
+  echo: true
+  warning: true
+  error: false
+  cache: false
+  freeze: false
+bibliography: references.bib
+link-citations: true

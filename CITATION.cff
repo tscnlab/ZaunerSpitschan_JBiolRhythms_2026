@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "Please cite this repository when using its analysis code or online supplements, and cite the original MeLiDos study when reusing the prepared data."
+type: software
+title: "MeLiDos chronotype analysis: online supplements and reproducible code"
+authors:
+  - family-names: Zauner
+    given-names: Johannes
+    orcid: "https://orcid.org/0000-0003-2171-4566"
+  - family-names: Spitschan
+    given-names: Manuel
+    orcid: "https://orcid.org/0000-0002-8572-9268"
+repository-code: "https://github.com/tscnlab/ZaunerSpitschan_JBiolRhythms_2026"
+url: "https://tscnlab.github.io/ZaunerSpitschan_JBiolRhythms_2026/"
+date-released: 2026-11-11
+abstract: >-
+  Reproducible R analyses and a Quarto manuscript examining daily melanopic
+  light exposure across chronotypes in the MeLiDos cohort. The project compares
+  clock-time and corrected-midsleep alignment, work and free days, photoperiod
+  moderation, conceptual phase-response-curve weighting, and sleep-diary
+  sensitivity analyses. The manuscript is a working draft.
+keywords:
+  - chronotype
+  - melanopic light exposure
+  - photoperiod
+  - circadian entrainment
+  - sleep diary
+  - Quarto

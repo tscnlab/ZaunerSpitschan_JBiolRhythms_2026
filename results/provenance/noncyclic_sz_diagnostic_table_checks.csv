@@ -1,0 +1,6 @@
+"check","passed"
+"Exactly four model-axis rows",TRUE
+"Same columns as per-model exports",TRUE
+"No missing or non-finite values",TRUE
+"Counts match 140/778/35949",TRUE
+"CSV roundtrip matches combined source rows",TRUE

@@ -1,0 +1,28 @@
+"check","passed"
+"glasses matched observation rows, response, day labels and AR ordering",TRUE
+"chest matched observation rows, response, day labels and AR ordering",TRUE
+"Identical held-out participant folds",TRUE
+"Matched questionnaire (135) clock fold 1 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) phase fold 1 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) clock fold 2 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) phase fold 2 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) clock fold 3 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) phase fold 3 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) clock fold 4 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) phase fold 4 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) clock fold 5 training-only cutoffs and photoperiod centers",TRUE
+"Matched questionnaire (135) phase fold 5 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) clock fold 1 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) phase fold 1 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) clock fold 2 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) phase fold 2 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) clock fold 3 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) phase fold 3 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) clock fold 4 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) phase fold 4 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) clock fold 5 training-only cutoffs and photoperiod centers",TRUE
+"Diary dMSFsc (135) phase fold 5 training-only cutoffs and photoperiod centers",TRUE
+"All scenario-stage completion, Shapley and noncyclic-basis checks pass",TRUE
+"Matched questionnaire (135) frozen scientific producers match the initial source snapshot",TRUE
+"Diary dMSFsc (135) frozen scientific producers match the initial source snapshot",TRUE
+"Original scientific inputs and models unchanged; authorized diary display edits recorded",TRUE

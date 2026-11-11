@@ -1,0 +1,25 @@
+"check","passed"
+"One diary record per participant and waking date",TRUE
+"Primary participants match the exposure cohort",TRUE
+"Sleep onset equals attempted sleep plus latency",TRUE
+"All valid durations are positive and shorter than 24 hours",TRUE
+"Midpoints use dated timestamps across midnight",TRUE
+"Midnight-adjacent clocks remain adjacent on the noon branch",TRUE
+"No observed noon-branch discontinuity",TRUE
+"Diary day types are retained on their waking-day records",TRUE
+"SD requires at least three nights within its context",TRUE
+"SD is unavailable at two or fewer nights",TRUE
+"Elapsed and wall midpoint agree away from DST changes",TRUE
+"All bootstrap confidence limits are finite",TRUE
+"SD summaries retain per-participant night counts",TRUE
+"Panel B has one mean per participant and day type",TRUE
+"Panel B includes every plotted night in its day-type mean",TRUE
+"Panel B correlations match the participant-mean results",TRUE
+"Diary correction requires both work and free nights",TRUE
+"Count-weighted duration equals the average of the retained nights",TRUE
+"Correction is zero when free-day duration does not exceed work-day duration",TRUE
+"Correction is nonnegative and advances or retains free-day midsleep",TRUE
+"Corrected correlation confidence limits are finite",TRUE
+"Panel C has one corrected value per eligible participant",TRUE
+"Marginal histogram counts every participant-day-type mean",TRUE
+"All plotted points fall inside the displayed clock range",TRUE

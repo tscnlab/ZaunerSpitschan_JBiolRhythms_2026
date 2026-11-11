@@ -1,0 +1,25 @@
+{
+  "source_paper": {
+    "title": "Human phase response curve to a 1 h pulse of bright white light",
+    "doi": "10.1113/jphysiol.2012.227892",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3406389/",
+    "figure": "3A",
+    "abscissa": "Light pulse onset relative to DLMO, hours",
+    "ordinate": "DLMO phase shift, hours; positive advance, negative delay"
+  },
+  "numerical_repository": {
+    "url": "https://github.com/arcascope/amplitude-simulations",
+    "deposit_paper_doi": "10.1093/sleep/zsae247",
+    "commit": "a7abd407f656284a8ae6e8f3490789d2dcda2372",
+    "blob_sha": "c048111a2b924665bf53aee24ac5b88ce12ee67b",
+    "file": "hilaire_12_Fig3A_digitized_data.csv",
+    "url_pinned": "https://github.com/arcascope/amplitude-simulations/blob/a7abd407f656284a8ae6e8f3490789d2dcda2372/hilaire_12_Fig3A_digitized_data.csv",
+    "provenance": "Previously digitized coordinates deposited by authors of Walch et al. (2025); not original individual-level raw measurements. This analysis performs no image extraction."
+  },
+  "protocol": "1 h bright white light, approximately 8000 photopic lux; 18 participants aged 18–30 in this condition. DLMO shifts computed across three 24 h cycles.",
+  "conversion": "Retain onset interval [-12,12) from double-plotted coordinates; audit other points as periodic duplicates. Add 0.5 h to onset to define pulse midpoint. Fit a 24 h two-harmonic ordinary least-squares curve.",
+  "drift": "The source compares raw phase shifts with assumed drift of -0.54 h over three cycles, based on mean intrinsic period 24.18 h. Main weighting subtracts -0.54 h, equivalent to adding 0.54 h to the raw fitted PRC. Uncorrected curve retained as sensitivity.",
+  "alignment": "MSFsc phase minus common DLMO offset, with offsets -6.95, -6.45 and -5.95 h; -8.45 and -4.45 h are additional stress tests, not published reference bounds.",
+  "uncertainty": "Intervals propagate the full covariance of the existing standardized GAM phase curves, conditional on the fitted PRC, drift convention and DLMO alignment. They do not include PRC estimation, digitization, or individual DLMO alignment uncertainty.",
+  "date": "2026-10-23"
+}

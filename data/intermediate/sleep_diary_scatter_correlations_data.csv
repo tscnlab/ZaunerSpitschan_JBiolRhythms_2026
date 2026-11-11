@@ -1,0 +1,8 @@
+"panel","daytype","r","n","label","x","y","label_color"
+"A  Individual nights","Overall",0.664765969255709,971,"Overall: r = 0.66; n = 971",0.2,13.6,"black"
+"A  Individual nights","Work",0.66829597838471,620,"Work: r = 0.67; n = 620",0.2,12.9,"#268bd2"
+"A  Individual nights","Free",0.74308112600072,351,"Free: r = 0.74; n = 351",0.2,12.2,"#dc322f"
+"B  Participant means","Overall",0.808621621463189,140,"Overall: r = 0.81; n = 140",0.2,13.6,"black"
+"B  Participant means","Work",0.751611984020842,139,"Work: r = 0.75; n = 139",0.2,12.9,"#268bd2"
+"B  Participant means","Free",0.815605490387158,136,"Free: r = 0.82; n = 136",0.2,12.2,"#dc322f"
+"C  Diary-derived MSFsc",NA,0.787466982462817,135,"r = 0.79; n = 135",0.2,13.6,"black"

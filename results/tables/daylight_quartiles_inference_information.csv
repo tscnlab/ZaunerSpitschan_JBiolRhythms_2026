@@ -1,0 +1,2 @@
+"critical","draws","curves","time_points","coverage","covariance","free_weight","participants","participant_days","half_hours","pointwise_critical","pointwise_interval"
+3.14453335265015,10000,4,144,0.95,"Bayesian coefficient covariance with smoothing-parameter correction (Vc)",0.404897959183673,140,778,35949,1.95996398454005,"95% pointwise Gaussian; exploratory and unadjusted across the phase grid"

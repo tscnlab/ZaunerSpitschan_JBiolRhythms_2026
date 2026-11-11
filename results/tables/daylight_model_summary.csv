@@ -1,0 +1,2 @@
+"model","axis","rho","adjusted_R2","deviance_explained","ordinary_R2","edf","coefficients","rank","convergence","warnings","participants","participant_days","half_hours"
+"daylight","phase",0.595506214329067,0.787398888267573,0.794056089963603,0.794056089963602,1127.80303873665,2291,2291,"TRUE","openMP not available: single threaded computation only",140,778,35949

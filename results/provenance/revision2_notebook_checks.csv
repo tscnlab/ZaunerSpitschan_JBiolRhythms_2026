@@ -1,0 +1,10 @@
+"check","passed"
+"All nine notebook tables use the shared gt presentation",TRUE
+"Diagnostic comparison has both specifications on both time axes",TRUE
+"Rendered diagnostic comparison retains all four rows",TRUE
+"Rendered diagnostic values agree with numerical exports",TRUE
+"All notebook internal links resolve",TRUE
+"All notebook relative file links resolve",TRUE
+"No unresolved notebook cross-reference remains",TRUE
+"All notebook tables and figures have prose references",TRUE
+"Notebook R cells parse",TRUE

@@ -1,0 +1,8 @@
+"check","passed"
+"28 digitized plotted points",TRUE
+"18 original responses in one24h period",TRUE
+"10 remaining points match periodic repetitions",TRUE
+"Source fit amplitude near2.20h",TRUE
+"Source fit advance near0.45h",TRUE
+"Source fit delay near−1.75h",TRUE
+"Half-hour midpoint conversion preserves fitted source curve",TRUE

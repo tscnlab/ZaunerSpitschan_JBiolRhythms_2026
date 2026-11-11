@@ -1,0 +1,2 @@
+"classification","axis","critical","draws","covariance","within_fit_coverage","inference_family","across_coordinate_adjustment","minimum_cell_support","free_weight","participants","participant_days","half_hours"
+"MSFsc","clock",2.93232518248877,10000,"Bayesian coefficient covariance with smoothing-parameter correction (Vc)",0.95,"All three day contexts and grid points within this classification and coordinate","None; separate time-coordinate and classification sensitivity questions",4,0.379376750700279,68,379,17558

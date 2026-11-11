@@ -1,0 +1,5 @@
+"model","old_critical","new_critical","coverage","old_exclusions","new_exclusions","estimates_unchanged","standard_errors_unchanged","support_unchanged"
+"primary_clock",3.86246396826609,3.65867833748513,0.95,193,221,TRUE,TRUE,TRUE
+"primary_phase",3.85434345064898,3.65263887504679,0.95,243,278,TRUE,TRUE,TRUE
+"chest_clock",3.86812350035507,3.66277012341709,0.95,253,291,TRUE,TRUE,TRUE
+"chest_phase",3.86657978127939,3.66413988330303,0.95,409,446,TRUE,TRUE,TRUE

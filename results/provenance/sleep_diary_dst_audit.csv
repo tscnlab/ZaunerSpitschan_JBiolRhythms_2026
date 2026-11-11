@@ -1,0 +1,4 @@
+"site","Id","waking_date","daytype","midsleep_hours","elapsed_midpoint_hours","elapsed_minus_wall_minutes"
+"MPI","MPI_S221",2023-10-29,"Free",5.25,4.75,-30
+"RISE","RISE_S004",2025-03-30,"Free",4.29999999998836,4.79999999998836,30
+"THUAS","THUAS_S005",2025-03-30,"Work",3.8666666666395,4.3666666666395,30

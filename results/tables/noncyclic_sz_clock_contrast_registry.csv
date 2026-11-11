@@ -1,0 +1,21 @@
+"contrast","family","context","description","Q1_Work","Q1_Free","Q2_Work","Q2_Free","Q3_Work","Q3_Free","Q4_Work","Q4_Free"
+"evening_morning_Moderate_Overall","Evening minus morning","Overall","Evening minus morning: Moderate",0,0,-0.595102040816327,-0.404897959183673,0.595102040816327,0.404897959183673,0,0
+"evening_morning_Extreme_Overall","Evening minus morning","Overall","Evening minus morning: Extreme",-0.595102040816327,-0.404897959183673,0,0,0,0,0.595102040816327,0.404897959183673
+"extreme_moderate_Morning_Overall","Extreme minus moderate","Overall","Extreme minus moderate: Morning",0.595102040816327,0.404897959183673,-0.595102040816327,-0.404897959183673,0,0,0,0
+"extreme_moderate_Evening_Overall","Extreme minus moderate","Overall","Extreme minus moderate: Evening",0,0,0,0,-0.595102040816327,-0.404897959183673,0.595102040816327,0.404897959183673
+"evening_morning_Moderate_Work","Evening minus morning","Work","Evening minus morning: Moderate",0,0,-1,0,1,0,0,0
+"evening_morning_Extreme_Work","Evening minus morning","Work","Evening minus morning: Extreme",-1,0,0,0,0,0,1,0
+"extreme_moderate_Morning_Work","Extreme minus moderate","Work","Extreme minus moderate: Morning",1,0,-1,0,0,0,0,0
+"extreme_moderate_Evening_Work","Extreme minus moderate","Work","Extreme minus moderate: Evening",0,0,0,0,-1,0,1,0
+"evening_morning_Moderate_Free","Evening minus morning","Free","Evening minus morning: Moderate",0,0,0,-1,0,1,0,0
+"evening_morning_Extreme_Free","Evening minus morning","Free","Evening minus morning: Extreme",0,-1,0,0,0,0,0,1
+"extreme_moderate_Morning_Free","Extreme minus moderate","Free","Extreme minus moderate: Morning",0,1,0,-1,0,0,0,0
+"extreme_moderate_Evening_Free","Extreme minus moderate","Free","Extreme minus moderate: Evening",0,0,0,0,0,-1,0,1
+"free_work_Q1","Free minus work","Free versus work","Free minus work: Q1",-1,1,0,0,0,0,0,0
+"free_work_Q2","Free minus work","Free versus work","Free minus work: Q2",0,0,-1,1,0,0,0,0
+"free_work_Q3","Free minus work","Free versus work","Free minus work: Q3",0,0,0,0,-1,1,0,0
+"free_work_Q4","Free minus work","Free versus work","Free minus work: Q4",0,0,0,0,0,0,-1,1
+"direction_extremity","Interactions","Overall","Direction by extremity",-0.595102040816327,-0.404897959183673,0.595102040816327,0.404897959183673,-0.595102040816327,-0.404897959183673,0.595102040816327,0.404897959183673
+"direction_daytype","Interactions","Free versus work","Direction by day type",0.5,-0.5,0.5,-0.5,-0.5,0.5,-0.5,0.5
+"extremity_daytype","Interactions","Free versus work","Extremity by day type",-0.5,0.5,0.5,-0.5,0.5,-0.5,-0.5,0.5
+"direction_extremity_daytype","Interactions","Free versus work","Direction by extremity by day type",1,-1,-1,1,1,-1,-1,1

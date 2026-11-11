@@ -1,0 +1,2 @@
+"model","axis","covariance","draws","critical","axis_family_coverage","inference_family","across_coordinate_adjustment","minimum_cell_support","free_day_weight","participants","participant_days","half_hours"
+"noncyclic_sz","phase","Bayesian coefficient covariance with smoothing-parameter correction (Vc)",10000,3.66261822511488,0.95,"All 20 registered contrasts and grid points within this time coordinate","None; clock time and phase address separate questions",4,0.404897959183673,140,778,35949

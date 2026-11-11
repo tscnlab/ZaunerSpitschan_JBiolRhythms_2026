@@ -1,0 +1,61 @@
+"check","passed"
+"meq_defined clock/phase observations and AR order match",TRUE
+"meq_defined no link crosses a day or gap",TRUE
+"meq_matched_msfsc clock/phase observations and AR order match",TRUE
+"meq_matched_msfsc no link crosses a day or gap",TRUE
+"clock paired classifications use identical ordered observations and photoperiod centers",TRUE
+"phase paired classifications use identical ordered observations and photoperiod centers",TRUE
+"Factor signs retain coefficient-scale direction",TRUE
+"Candidate windows obey local support rule",TRUE
+"Primary MEQ sample",TRUE
+"One observed half-hour per participant-day and clock bin",TRUE
+"Same-subset MSFsc groups retain frozen median",TRUE
+"MSFsc-relative display wraps correctly",TRUE
+"MEQ clock Overall Morning curve totals and local support match registry",TRUE
+"MEQ clock Overall Morning contrast counts match registry",TRUE
+"MEQ clock Overall Evening curve totals and local support match registry",TRUE
+"MEQ clock Overall Evening contrast counts match registry",TRUE
+"MEQ clock Work Morning curve totals and local support match registry",TRUE
+"MEQ clock Work Morning contrast counts match registry",TRUE
+"MEQ clock Work Evening curve totals and local support match registry",TRUE
+"MEQ clock Work Evening contrast counts match registry",TRUE
+"MEQ clock Free Morning curve totals and local support match registry",TRUE
+"MEQ clock Free Morning contrast counts match registry",TRUE
+"MEQ clock Free Evening curve totals and local support match registry",TRUE
+"MEQ clock Free Evening contrast counts match registry",TRUE
+"MEQ phase Overall Morning curve totals and local support match registry",TRUE
+"MEQ phase Overall Morning contrast counts match registry",TRUE
+"MEQ phase Overall Evening curve totals and local support match registry",TRUE
+"MEQ phase Overall Evening contrast counts match registry",TRUE
+"MEQ phase Work Morning curve totals and local support match registry",TRUE
+"MEQ phase Work Morning contrast counts match registry",TRUE
+"MEQ phase Work Evening curve totals and local support match registry",TRUE
+"MEQ phase Work Evening contrast counts match registry",TRUE
+"MEQ phase Free Morning curve totals and local support match registry",TRUE
+"MEQ phase Free Morning contrast counts match registry",TRUE
+"MEQ phase Free Evening curve totals and local support match registry",TRUE
+"MEQ phase Free Evening contrast counts match registry",TRUE
+"MSFsc clock Overall Morning curve totals and local support match registry",TRUE
+"MSFsc clock Overall Morning contrast counts match registry",TRUE
+"MSFsc clock Overall Evening curve totals and local support match registry",TRUE
+"MSFsc clock Overall Evening contrast counts match registry",TRUE
+"MSFsc clock Work Morning curve totals and local support match registry",TRUE
+"MSFsc clock Work Morning contrast counts match registry",TRUE
+"MSFsc clock Work Evening curve totals and local support match registry",TRUE
+"MSFsc clock Work Evening contrast counts match registry",TRUE
+"MSFsc clock Free Morning curve totals and local support match registry",TRUE
+"MSFsc clock Free Morning contrast counts match registry",TRUE
+"MSFsc clock Free Evening curve totals and local support match registry",TRUE
+"MSFsc clock Free Evening contrast counts match registry",TRUE
+"MSFsc phase Overall Morning curve totals and local support match registry",TRUE
+"MSFsc phase Overall Morning contrast counts match registry",TRUE
+"MSFsc phase Overall Evening curve totals and local support match registry",TRUE
+"MSFsc phase Overall Evening contrast counts match registry",TRUE
+"MSFsc phase Work Morning curve totals and local support match registry",TRUE
+"MSFsc phase Work Morning contrast counts match registry",TRUE
+"MSFsc phase Work Evening curve totals and local support match registry",TRUE
+"MSFsc phase Work Evening contrast counts match registry",TRUE
+"MSFsc phase Free Morning curve totals and local support match registry",TRUE
+"MSFsc phase Free Morning contrast counts match registry",TRUE
+"MSFsc phase Free Evening curve totals and local support match registry",TRUE
+"MSFsc phase Free Evening contrast counts match registry",TRUE

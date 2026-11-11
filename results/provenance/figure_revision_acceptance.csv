@@ -1,0 +1,10 @@
+"check","passed"
+"All fitted models are byte-identical",TRUE
+"Primary, chest and MEQ numerical results are byte-identical",TRUE
+"Reference band retains published endpoints",TRUE
+"Display terminology preserves morning/evening names",TRUE
+"Reference band does not change symlog axis ranges",TRUE
+"Reference band renders without warnings on symlog axis",TRUE
+"Reference band does not change logarithmic axis ranges",TRUE
+"Reference band renders without warnings on logarithmic axis",TRUE
+"Histogram verification passes all 14 checks",TRUE

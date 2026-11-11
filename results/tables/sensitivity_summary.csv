@@ -1,0 +1,13 @@
+"axis","sensitivity","maximum_contrast_change","rms_contrast_change","rho","k","participant_k","deleted","convergence","warnings","participants","participant_days","half_hours","innovation_spread_ratio"
+"clock","larger_basis",0.199779842376959,0.0343356661568659,0.593986244821507,18,14,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,
+"clock","lower_rho",0.0414142950160112,0.0125067192691974,0.493986244821507,12,10,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,
+"clock","higher_rho",0.219544984199084,0.0361812313571777,0.693986244821507,12,10,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,
+"clock","delete_site",0.376223077301347,0.0833600123630038,0.593986244821507,12,10,"KNUST",TRUE,"openMP not available: single threaded computation only",125,697,32248,
+"clock","delete_participant",0.06259607467037,0.0136693383755434,0.593986244821507,12,10,"KNUST::KNUST_S008",TRUE,"openMP not available: single threaded computation only",139,773,35729,
+"clock","variance_weighted",0.201964696717585,0.0530090966405465,0.593986244821507,12,10,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,5.01018096417743
+"phase","larger_basis",0.25868118525512,0.0432260463311992,0.595995176930004,18,14,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,
+"phase","lower_rho",0.0501830528877816,0.013822729854705,0.495995176930004,12,10,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,
+"phase","higher_rho",0.0835144533550808,0.0192270261003388,0.695995176930004,12,10,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,
+"phase","delete_site",0.337496523500316,0.0741909969175973,0.595995176930004,12,10,"KNUST",TRUE,"openMP not available: single threaded computation only",125,697,32248,
+"phase","delete_participant",0.113466133852878,0.028443079819725,0.595995176930004,12,10,"KNUST::KNUST_S008",TRUE,"openMP not available: single threaded computation only",139,773,35729,
+"phase","variance_weighted",0.282633494068089,0.0603927947342001,0.595995176930004,12,10,"",TRUE,"openMP not available: single threaded computation only",140,778,35949,3.65553037667284

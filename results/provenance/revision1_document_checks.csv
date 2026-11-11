@@ -1,0 +1,15 @@
+"check","passed"
+"All 308 model, inference, validation and attribution caches are unchanged",TRUE
+"Every rendered table uses gt",TRUE
+"Cutoff table omits repeated sample columns",TRUE
+"Displayed work/free table matches exactly the eight glasses rows",TRUE
+"Three brief code-annotation blocks are rendered",TRUE
+"Both verified ORCIDs are linked",TRUE
+"Both new source references are rendered",TRUE
+"Abstract and AI-assistance sections are present",TRUE
+"Both histogram panels are embedded as one tagged figure",TRUE
+"Every relative link resolves inside the rendered project",TRUE
+"Every internal anchor resolves",TRUE
+"All checks pass: summary_comment_acceptance",TRUE
+"All checks pass: chronotype_distribution_acceptance",TRUE
+"All checks pass: report_tables_checks",TRUE

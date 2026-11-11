@@ -1,0 +1,4 @@
+"check","passed"
+"Relative linked files exist",TRUE
+"Internal anchors exist",TRUE
+"Source manifest current in rendered outputs",TRUE

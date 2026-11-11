@@ -1,0 +1,15 @@
+check,status,detail
+render,pass,HTML rendered with R4.6.1 and gt1.3.0 and Quarto1.9.37; no render warnings
+desktop,pass,1280 by720; title and ORCIDs and abstract and background and annotations and gt tables and histograms and AI-assistance statement inspected
+narrow_screen,pass,390 by844; author metadata and cutoff table and MEQ table and histograms inspected; wide tables scroll inside the page
+annotation_interaction,pass,Clicking the explanation number highlights the associated R line
+histogram_enlargement,pass,Lightbox loads the saved histogram PNG and its caption
+relative_links,pass,All local links and internal anchors resolve in the rendered report
+file_url,unavailable,Browser inspection rejects file protocol; used a bounded read-only HTTP preview of only the rendered report directory
+preview_command,recorded,python3 -u -m http.server 0 --bind 127.0.0.1 --directory /Users/zauner/Documents/Arbeit/12-TUM/MeLiDos/WP2.2.5_Data_Analysis/chronotype_analysis/report
+preview_lifecycle,closed,PID18208; address127.0.0.1; port50204; URLhttp://127.0.0.1:50204/analysis.html; first request logged23/Oct/2026 10:31:28; terminated after inspection; no listener remained
+preview_tab,closed,Temporary tab3 closed and viewport override reset
+immutable_artifacts,pass,468 source and rendered files identical before and after inspection; zero symlinks
+model_caches,pass,All308 model and inference and validation and attribution cache files unchanged
+screenshots,saved,results/provenance/qa-revision1-*.png
+formats,HTML,No PDF or Word report rendering requested or claimed; histogram PNG and PDF exports produced

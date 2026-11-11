@@ -1,0 +1,185 @@
+"check","passed","error"
+"Published PRC coefficients unchanged",TRUE,0
+"Zero-exposure regression keys identical",TRUE,
+"Zero-exposure estimates and intervals reproduce the previous analysis",TRUE,0
+"Only extreme groups with zero-exposure centering remain",TRUE,
+"Full-design integral and covariance 1",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 2",TRUE,6.66133814775094e-16
+"Full-design integral and covariance 3",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 4",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 5",TRUE,0
+"Full-design integral and covariance 6",TRUE,6.66133814775094e-16
+"Full-design integral and covariance 7",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 8",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 9",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 10",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 11",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 12",TRUE,0
+"Full-design integral and covariance 13",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 14",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 15",TRUE,0
+"Full-design integral and covariance 16",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 17",TRUE,8.88178419700125e-16
+"Full-design integral and covariance 18",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 19",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 20",TRUE,1.11022302462516e-15
+"Full-design integral and covariance 21",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 22",TRUE,1.55431223447522e-15
+"Full-design integral and covariance 23",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 24",TRUE,1.11022302462516e-15
+"Full-design integral and covariance 25",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 26",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 27",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 28",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 29",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 30",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 31",TRUE,6.66133814775094e-16
+"Full-design integral and covariance 32",TRUE,6.66133814775094e-16
+"Full-design integral and covariance 33",TRUE,8.88178419700125e-16
+"Full-design integral and covariance 34",TRUE,5.55111512312578e-17
+"Full-design integral and covariance 35",TRUE,1.11022302462516e-15
+"Full-design integral and covariance 36",TRUE,0
+"Full-design integral and covariance 37",TRUE,1.22124532708767e-15
+"Full-design integral and covariance 38",TRUE,9.71445146547012e-16
+"Full-design integral and covariance 39",TRUE,1.08246744900953e-15
+"Full-design integral and covariance 40",TRUE,1.36002320516582e-15
+"Full-design integral and covariance 41",TRUE,7.21644966006352e-16
+"Full-design integral and covariance 42",TRUE,7.21644966006352e-16
+"Full-design integral and covariance 43",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 44",TRUE,3.33066907387547e-16
+"Full-design integral and covariance 45",TRUE,1.11022302462516e-16
+"Full-design integral and covariance 46",TRUE,3.33066907387547e-16
+"Full-design integral and covariance 47",TRUE,5.55111512312578e-17
+"Full-design integral and covariance 48",TRUE,8.32667268468867e-17
+"Full-design integral and covariance 49",TRUE,2.32452945780892e-16
+"Full-design integral and covariance 50",TRUE,8.88178419700125e-16
+"Full-design integral and covariance 51",TRUE,6.10622663543836e-16
+"Full-design integral and covariance 52",TRUE,5.55111512312578e-17
+"Full-design integral and covariance 53",TRUE,3.60822483003176e-16
+"Full-design integral and covariance 54",TRUE,9.22872889219661e-16
+"Full-design integral and covariance 55",TRUE,4.44089209850063e-16
+"Full-design integral and covariance 56",TRUE,4.02455846426619e-16
+"Full-design integral and covariance 57",TRUE,1.11022302462516e-16
+"Full-design integral and covariance 58",TRUE,2.22044604925031e-16
+"Full-design integral and covariance 59",TRUE,3.60822483003176e-16
+"Full-design integral and covariance 60",TRUE,2.91433543964104e-16
+"Joint group-contrast covariance 1",TRUE,3.33066907387547e-16
+"Joint group-contrast covariance 2",TRUE,7.7715611723761e-16
+"Joint group-contrast covariance 3",TRUE,5.55111512312578e-16
+"Joint group-contrast covariance 4",TRUE,6.10622663543836e-16
+"Joint group-contrast covariance 5",TRUE,1.11022302462516e-16
+"Joint group-contrast covariance 6",TRUE,1.66533453693773e-16
+"Joint group-contrast covariance 7",TRUE,1.0547118733939e-15
+"Joint group-contrast covariance 8",TRUE,1.66533453693773e-16
+"Joint group-contrast covariance 9",TRUE,9.99200722162641e-16
+"Joint group-contrast covariance 10",TRUE,1.23512311489549e-15
+"Joint group-contrast covariance 11",TRUE,1.39471767468535e-15
+"Joint group-contrast covariance 12",TRUE,9.71445146547012e-16
+"Joint group-contrast covariance 13",TRUE,8.32667268468867e-17
+"Joint group-contrast covariance 14",TRUE,3.33066907387547e-16
+"Joint group-contrast covariance 15",TRUE,3.46944695195361e-16
+"Joint group-contrast covariance 16",TRUE,1.66533453693773e-16
+"Joint group-contrast covariance 17",TRUE,1.66533453693773e-16
+"Joint group-contrast covariance 18",TRUE,1.11022302462516e-16
+"Joint group-contrast covariance 19",TRUE,4.44089209850063e-16
+"Joint group-contrast covariance 20",TRUE,1.11022302462516e-16
+"Joint group-contrast covariance 21",TRUE,3.60822483003176e-16
+"Joint group-contrast covariance 22",TRUE,1.66533453693773e-16
+"Joint group-contrast covariance 23",TRUE,2.77555756156289e-17
+"Joint group-contrast covariance 24",TRUE,8.32667268468867e-17
+"Joint group-contrast covariance 25",TRUE,4.57966997657877e-16
+"Joint group-contrast covariance 26",TRUE,1.38777878078145e-16
+"Joint group-contrast covariance 27",TRUE,2.77555756156289e-16
+"Joint group-contrast covariance 28",TRUE,1.66533453693773e-16
+"Joint group-contrast covariance 29",TRUE,5.55111512312578e-17
+"Joint group-contrast covariance 30",TRUE,5.55111512312578e-16
+"Drift-corrected central indices are advance-weighted",TRUE,
+"Every published-raw central index interval includes zero",TRUE,
+"Obsolete median-centered results and fields are absent",TRUE,
+"Every central-alignment evening-minus-morning point estimate is positive",TRUE,
+"Every central-alignment group contrast includes zero",TRUE,
+"Exactly the reported early-guide raw-PRC work-day exception",TRUE,
+"Every phase point meets local n=4: fixed",TRUE,
+"Pointwise significance matches intervals: fixed",TRUE,
+"Thirteen significant phase-grid coordinates: fixed",TRUE,
+"Reported significant phase range: fixed",TRUE,6.66133814775094e-16
+"Main targets are exactly minus one, zero and plus one",TRUE,0
+"Every phase point meets local n=4: quartiles",TRUE,
+"Pointwise significance matches intervals: quartiles",TRUE,
+"Thirteen significant phase-grid coordinates: quartiles",TRUE,
+"Reported significant phase range: quartiles",TRUE,6.66133814775094e-16
+"Original quartile contrast estimates, SEs and pointwise bounds preserved",TRUE,0
+"Every phase point meets local n=4: p10_p90",TRUE,
+"Pointwise significance matches intervals: p10_p90",TRUE,
+"Thirteen significant phase-grid coordinates: p10_p90",TRUE,
+"Reported significant phase range: p10_p90",TRUE,6.66133814775094e-16
+"Four-person cells included in P10/P90",TRUE,
+"Primary support threshold remains five",TRUE,
+"Daylength numerical table unchanged: daylight_civil_availability.csv",TRUE,
+"Daylength numerical table unchanged: daylight_civil_definition.csv",TRUE,
+"Daylength numerical table unchanged: daylight_civil_interval_definitions.csv",TRUE,
+"Daylength numerical table unchanged: daylight_civil_primary_intervals.csv",TRUE,
+"Daylength numerical table unchanged: daylight_civil_reference_summary.csv",TRUE,
+"Daylength numerical table unchanged: daylight_civil_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_inference_information.csv",TRUE,
+"Daylength numerical table unchanged: daylight_local_support.csv",TRUE,
+"Daylength numerical table unchanged: daylight_model_summary.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_inference_information.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_local_support.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_patterns.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_pointwise_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_pointwise_moderation_exclusions.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_pointwise_windows.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_primary_interval_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_primary_interval_simultaneous_envelopes.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_primary_interval_summaries.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_scenario_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_scenario_targets.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_simultaneous_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_p10_p90_site_composition.csv",TRUE,
+"Daylength numerical table unchanged: daylight_patterns.csv",TRUE,
+"Daylength numerical table unchanged: daylight_pointwise_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_pointwise_moderation_exclusions.csv",TRUE,
+"Daylength numerical table unchanged: daylight_pointwise_windows.csv",TRUE,
+"Daylength numerical table unchanged: daylight_primary_interval_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_primary_interval_simultaneous_envelopes.csv",TRUE,
+"Daylength numerical table unchanged: daylight_primary_interval_summaries.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_inference_information.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_local_support.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_patterns.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_pointwise_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_pointwise_moderation_exclusions.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_pointwise_windows.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_primary_interval_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_primary_interval_simultaneous_envelopes.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_primary_interval_summaries.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_scenario_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_scenario_targets.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_simultaneous_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_quartiles_site_composition.csv",TRUE,
+"Daylength numerical table unchanged: daylight_scenario_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_scenario_targets.csv",TRUE,
+"Daylength numerical table unchanged: daylight_sensitivity_intervals.csv",TRUE,
+"Daylength numerical table unchanged: daylight_sensitivity_targets.csv",TRUE,
+"Daylength numerical table unchanged: daylight_significant_windows.csv",TRUE,
+"Daylength numerical table unchanged: daylight_simultaneous_contrasts.csv",TRUE,
+"Daylength numerical table unchanged: daylight_site_composition.csv",TRUE,
+"Daylength numerical table unchanged: daylight_validation_fold_scores.csv",TRUE,
+"Daylength numerical table unchanged: daylight_validation_paired_differences.csv",TRUE,
+"Daylength numerical table unchanged: daylight_validation_samples.csv",TRUE,
+"Daylength numerical table unchanged: daylight_validation_scores.csv",TRUE,
+"Primary interval overlay starts",TRUE,0
+"Primary interval overlay ends",TRUE,0
+"DLMO guide remains separate",TRUE,8.88178419700125e-16
+"Pre-DLMO trough timing",TRUE,3.5527136788005e-15
+"Pre-DLMO trough is later than the primary early interval",TRUE,
+"Pre-DLMO trough interval still includes one",TRUE,
+"Pre-DLMO reported rounded ratio and bounds",TRUE,
+"Independent weighted percentile targets: quartiles",TRUE,1.33226762955019e-15
+"Independent weighted percentile targets: p10_p90",TRUE,3.5527136788005e-15
+"Linear moderation rescaling: quartiles",TRUE,1.27675647831893e-15
+"Linear moderation rescaling: p10_p90",TRUE,5.55111512312578e-15
+"All protected fitted models and primary analysis caches unchanged",TRUE,

@@ -1,0 +1,521 @@
+---
+title: "Sensitivity to diary-derived corrected midsleep"
+subtitle: "Replacing questionnaire MSFsc with MSF~sc(diary)~ on matched observations"
+date: today
+engine: knitr
+execute:
+  echo: true
+  warning: true
+  message: false
+  cache: false
+---
+
+```{r}
+#| label: setup-dmsfsc
+source(".Rprofile")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+sensitivity_root <- "sensitivity/diary-msfsc"
+knitr::read_chunk(file.path(sensitivity_root, "prepare.R"))
+knitr::read_chunk(file.path(sensitivity_root, "scenario.R"))
+knitr::read_chunk(file.path(sensitivity_root, "compare.R"))
+knitr::read_chunk(file.path(sensitivity_root, "prepare-fixed-groups.R"))
+knitr::read_chunk(file.path(sensitivity_root, "fixed-groups.R"))
+knitr::read_chunk(file.path(sensitivity_root, "compare-fixed-groups.R"))
+comparison <- function(name) read.csv(file.path(sensitivity_root, "comparison", paste0(name, ".csv")))
+scenario_table <- function(scenario, name) read.csv(file.path(sensitivity_root, scenario, "results/tables", paste0(name, ".csv")))
+source("R/report_tables.R")
+```
+
+# Question and comparison design
+
+This sensitivity asks whether the exposure patterns and subsequent analyses depend on using questionnaire-derived midsleep on free days corrected for sleep debt (MSFsc). We replace it with **diary-derived corrected midsleep (MSF~sc(diary)~)**, a single timing measure per participant calculated from recorded sleep episodes. Daily phase is still defined relative to that participant's stable timing measure, not the midpoint of each individual night's sleep.
+
+Three analyses separate changes in the timing measure from changes in the available sample:
+
+1. The original questionnaire-MSFsc analysis includes 140 near-eye participants.
+2. A matched questionnaire-MSFsc analysis retains only participants with a valid diary night before at least one work day and one free day. Quartiles and all models are refitted on this sample.
+3. The MSF~sc(diary)~ analysis uses exactly the same exposure observations as the matched analysis, but recomputes quartiles and relative phase from MSF~sc(diary)~.
+
+A further comparison holds the matched questionnaire quartiles fixed while changing phase alignment to MSF~sc(diary)~. This intermediate scenario separates the timing change from the subsequent reclassification on the same records. It repeats the near-eye phase and daylength models, their inference and diagnostics; the full downstream analyses listed below belong to the two complete matched analyses.
+
+The established questionnaire-based MSFsc measure defines the primary analysis; MSF~sc(diary)~ is a diary-derived correlate used for sensitivity assessment. The Gaussian response, cyclic smooths, random effects, photoperiod terms, autoregressive resets, covariance methods, seeds, and local-support requirement are retained. Clock-time models are also refitted because replacing the timing measure changes chronotype-group membership. Chest measurements, questionnaire-based chronotype sensitivity, predictive validation, attribution, and model-structure sensitivities are repeated in separate output directories.
+
+The [preparation script](sensitivity/diary-msfsc/prepare.R), [scenario driver](sensitivity/diary-msfsc/scenario.R), [generalized interval calculations](sensitivity/diary-msfsc/adapters.R), and [comparison script](sensitivity/diary-msfsc/compare.R) produce the results below. The model fits and covariance simulations are precomputed; this render reads their recorded outputs. The actual producing code is shown beside each analytical stage. A frozen copy of the original R producers is retained in `sensitivity/diary-msfsc/source-snapshot/`.
+
+# Deriving MSF~sc(diary)~
+
+For each diary night, midsleep is the midpoint between sleep onset and final awakening in local wall-clock time. The label comes from the **waking day**: sleep from Saturday to a free Sunday is free-day sleep; sleep from Sunday to a work Monday is work-day sleep. The same upstream interval eligibility and quarantine rules as the diary side-analysis apply. Means use a fixed noon boundary so that nearby sleep times on either side of midnight remain adjacent.
+
+Let $n_W$ and $n_F$ be the numbers of recorded work- and free-day nights, $SD_W$ and $SD_F$ their mean sleep-period durations, and $MS_F$ mean free-day midsleep. We calculate
+
+$$
+SD_{all}=\frac{n_W SD_W+n_F SD_F}{n_W+n_F},\qquad
+\mathrm{MSF}_{\mathrm{sc(diary)}}=MS_F-\frac{\max(0,SD_F-SD_{all})}{2}.
+$$
+
+The work- and free-day means and the observed category counts determine the correction. This is a diary equivalent of MSFsc rather than a complete repeat of MCTQ scoring: the diary input does not identify whether an alarm ended free-day sleep. Participants with only one day type cannot supply the corrected measure and are excluded from both matched analyses.
+
+```{r}
+#| label: dmsfsc-derivation
+#| eval: false
+```
+
+```{r}
+#| label: tbl-dmsfsc-sample
+#| tbl-cap: "Samples and quartile cutoffs. Cutoffs are hours of local clock time."
+sample_summary <- comparison("samples_and_cutoffs")
+show_table(sample_summary |> mutate(cutoffs = sprintf("%.2f / %.2f / %.2f", cutoff25, cutoff50, cutoff75)) |>
+  select(scenario, participants, participant_days, half_hours, cutoffs), digits = 2)
+```
+
+```{r}
+#| label: tbl-dmsfsc-metric
+#| tbl-cap: "Agreement between diary and questionnaire measures in the common near-eye sample. Offsets are diary minus questionnaire timing, in minutes."
+metric_summary <- comparison("metric_comparison")
+show_table(metric_summary |> mutate(offset_IQR = sprintf("%.1f to %.1f",
+  lower_quartile_offset_minutes, upper_quartile_offset_minutes)) |>
+  select(correlation, median_offset_minutes, offset_IQR, median_absolute_offset_minutes))
+reassignment <- read.csv(file.path(sensitivity_root, "quartile-reassignment.csv"))
+changed_groups <- sum(reassignment$n[reassignment$questionnaire_quartile != reassignment$diary_quartile])
+```
+
+The two matched analyses retain `r sample_summary$participants[2]` participants, `r sample_summary$participant_days[2]` participant-days and `r format(sample_summary$half_hours[2], big.mark=',')` half-hours. The timing measures correlate at $r=$ `r sprintf('%.2f', metric_summary$correlation)`, with a median diary-minus-questionnaire difference of `r sprintf('%.1f', metric_summary$median_offset_minutes)` minutes. Nevertheless, `r changed_groups` participants change quartile, so this sensitivity tests both phase alignment and group classification.
+
+```{r}
+#| label: tbl-dmsfsc-reassignment
+#| tbl-cap: "Participant counts by questionnaire and diary quartile on the matched sample."
+show_table(reassignment |> pivot_wider(names_from = diary_quartile, values_from = n, values_fill = 0))
+```
+
+The most common changes were Q4 to Q3 (11 participants, extreme to moderate evening type) and Q3 to Q4 (9 participants, moderate to extreme evening type). The full matrix above retains all transitions, including participants who stayed in the same quartile.
+
+The [night registry](sensitivity/diary-msfsc/diary-night-registry.csv) records waking-day labels and exclusions; the [participant derivation](sensitivity/diary-msfsc/derived-msfsc-participants.csv) records category means, counts and corrections. The MSF~sc(diary)~ derivation is checked against the independently generated diary-side-analysis table before any models are fitted.
+
+```{r}
+#| label: dmsfsc-scenario-data
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show matched-sample preparation and phase reassignment"
+```
+
+# Exposure models and contrasts
+
+Both time coordinates use the original full model structure. Near-eye quartile cutoffs also define groups in the chest analysis. Main contrasts have 95% simultaneous coverage across the registered contrast family and all grid points **within each time coordinate**. The four-participant local-support rule is applied separately to every contributing quartile/day-type cell. The primary exposure-curve bands use the original simultaneous-curve convention.
+
+```{r}
+#| label: dmsfsc-primary-fits
+#| eval: false
+```
+
+```{r}
+#| label: tbl-dmsfsc-fit
+#| tbl-cap: "Fit statistics for the original and matched near-eye models."
+fit_summary <- comparison("model_fit")
+show_table(fit_summary |> select(scenario, axis, ordinary_R2, adjusted_R2, rho, edf), digits = 3)
+```
+
+Ordinary in-sample R² changes little: the matched questionnaire models explain `r sprintf('%.3f', fit_summary$ordinary_R2[fit_summary$scenario == 'Matched questionnaire (135)' & fit_summary$axis == 'clock'])` and `r sprintf('%.3f', fit_summary$ordinary_R2[fit_summary$scenario == 'Matched questionnaire (135)' & fit_summary$axis == 'phase'])` in clock and relative time; the corresponding MSF~sc(diary)~ values are `r sprintf('%.3f', fit_summary$ordinary_R2[fit_summary$scenario == 'Diary dMSFsc (135)' & fit_summary$axis == 'clock'])` and `r sprintf('%.3f', fit_summary$ordinary_R2[fit_summary$scenario == 'Diary dMSFsc (135)' & fit_summary$axis == 'phase'])`. Thus any changes in group contrasts occur within broadly similar overall fit.
+
+```{r}
+#| label: tbl-dmsfsc-diagnostics
+#| tbl-cap: "Primary-model convergence, basis checks, residual dependence and spread."
+diagnostics <- comparison("primary_diagnostics")
+show_table(diagnostics |> select(scenario, axis, convergence_ok, basis_flag,
+  standardized_lag1, spread_ratio))
+```
+
+All four restricted primary fits converge without a basis-dimension flag. Standardized lag-one residual correlations remain about 0.08. Unequal residual spread remains similar to the original analysis; the diary measure does not resolve that feature of the Gaussian model.
+
+```{r}
+#| label: fig-dmsfsc-contrasts
+#| fig-cap: "Extreme evening-type/morning-type exposure ratios using questionnaire MSFsc and MSF~sc(diary)~. The matched analyses contain identical light observations. Bands are simultaneous within coordinate. A ratio of one denotes equal fitted exposure; the timing metric and group definitions differ between the two matched analyses."
+#| fig-alt: "Two panels compare extreme evening-to-morning exposure ratios by clock time and relative midsleep time. Three curves distinguish the original questionnaire analysis, its matched-sample repeat, and the diary-derived analysis."
+knitr::include_graphics(file.path(sensitivity_root, "comparison/contrasts.png"))
+```
+
+```{r}
+#| label: tbl-dmsfsc-selected-windows
+#| tbl-cap: "Simultaneously supported extreme-group windows in the phase models. A TRUE circular-boundary flag means the interval continues through +12/−12 hours; its start is therefore numerically greater than its end."
+selected_windows <- comparison("primary_significant_windows") |>
+  filter(axis == "phase", contrast == "evening_morning_Extreme_Overall")
+show_table(selected_windows |> select(scenario, start, end, wraps_boundary, duration_hours, mean_ratio))
+```
+
+The matched questionnaire repeat and MSF~sc(diary)~ analysis identify their own significant windows. These selected intervals need not have the same endpoints. A window that crosses +12/−12 hours is displayed as circular and should not be interpreted as a simple interval ending at midnight or at MSFsc.
+
+The matched-questionnaire analysis retains a post-MSFsc window but its pre-MSFsc contrast no longer excludes equality throughout any interval under the simultaneous bands. With MSF~sc(diary)~, the post-midsleep window extends from approximately 0.9 to 5.3 hours; the opposite difference extends from +11.9 hours through +12/−12 to −5.3 hours. The latter includes the transferred DLMO reference interval, whose applicability to MSF~sc(diary)~ remains an assumption.
+
+To compare effect sizes over the same phase range, we also average each fitted contrast over the original primary windows and over the matched-questionnaire windows. These **interval-average 95% confidence intervals are unadjusted**, treat the selected window as fixed, and differ from the simultaneous bands used to locate the windows. The table includes the minimum contributing cell count and whether the complete window passes the local-support rule.
+
+```{r}
+#| label: dmsfsc-comparison-primary
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show fixed-window contrasts and their covariance calculation"
+```
+
+```{r}
+#| label: tbl-dmsfsc-fixed-intervals
+#| tbl-cap: "Like-for-like comparisons over the original primary phase windows, using interval-average 95% confidence intervals."
+intervals <- comparison("phase_interval_averages")
+show_table(intervals |> filter(window_source == "Original primary fixed", context == "Overall") |>
+  mutate(ratio_CI = sprintf("%.2f (%.2f–%.2f)", ratio, ratio_lower, ratio_upper)) |>
+  select(scenario, phase_label, ratio_CI, supported, minimum_cell_participants))
+fixed_primary <- intervals |> filter(window_source == "Original primary fixed", context == "Overall")
+fixed_post <- fixed_primary |> filter(phase_label == "Post-MSFsc")
+fixed_pre <- fixed_primary |> filter(phase_label == "Pre-MSFsc")
+```
+
+On the original fixed windows, the evening-type/morning-type ratio changes from `r sprintf('%.2f', fixed_pre$ratio[fixed_pre$scenario == 'Matched questionnaire (135)'])` to `r sprintf('%.2f', fixed_pre$ratio[fixed_pre$scenario == 'Diary dMSFsc (135)'])` pre-MSFsc and from `r sprintf('%.1f', fixed_post$ratio[fixed_post$scenario == 'Matched questionnaire (135)'])` to `r sprintf('%.1f', fixed_post$ratio[fixed_post$scenario == 'Diary dMSFsc (135)'])` post-MSFsc. The direction of both exposure differences is preserved, with larger separation under diary-based classification. These ratios describe the fitted log-scale exposure contrast; their change is not itself a formal between-model test.
+
+```{r}
+#| label: tbl-dmsfsc-work-free
+#| tbl-cap: "Work/free-day comparisons over the same original primary windows."
+show_table(intervals |> filter(window_source == "Original primary fixed", context != "Overall") |>
+  mutate(ratio_CI = sprintf("%.2f (%.2f–%.2f)", ratio, ratio_lower, ratio_upper)) |>
+  select(scenario, context, phase_label, ratio_CI, supported))
+```
+
+# Photoperiod and civil daylight
+
+The expanded phase model retains the constrained quartile-specific photoperiod interaction. Main targets are one hour below, at, and one hour above each site's mean observed civil photoperiod. Participant-weighted quartile and 10th/90th-percentile targets are repeated as sensitivities. The daylength figures retain **95% pointwise intervals**, as in the main report. Low local support withholds significance rather than preventing a scenario from being calculated.
+
+```{r}
+#| label: dmsfsc-daylength
+#| eval: false
+```
+
+```{r}
+#| label: fig-dmsfsc-daylength
+#| fig-cap: "Change in the extreme-group exposure ratio from shorter (−1 h) to longer (+1 h) days. Bands are 95% pointwise intervals. Each model uses its own phase metric and quartile membership; the light observations match between the two restricted analyses."
+#| fig-alt: "Three moderation curves compare the original questionnaire, matched questionnaire, and diary-derived analyses. The horizontal line at one denotes no photoperiod moderation."
+knitr::include_graphics(file.path(sensitivity_root, "comparison/daylength.png"))
+```
+
+```{r}
+#| label: tbl-dmsfsc-daylength-fixed
+#| tbl-cap: "Longer/shorter ratios of the extreme-group exposure ratio within the original primary windows. These are interval-average, unadjusted 95% confidence intervals."
+daylength <- comparison("daylength_intervals")
+show_table(daylength |> filter(window_source == "Original primary fixed", contrast == "Longer_minus_shorter") |>
+  mutate(ratio_CI = sprintf("%.2f (%.2f–%.2f)", ratio, ratio_lower, ratio_upper)) |>
+  select(scenario, target_specification, phase_label, ratio_CI, supported, minimum_cell_participants))
+daylength_post <- daylength |> filter(window_source == "Original primary fixed",
+  contrast == "Longer_minus_shorter", target_specification == "fixed", phase_label == "Post-MSFsc")
+```
+
+The post-MSFsc daylength association is sensitive to the timing measure. On the same original window, the matched questionnaire model gives a longer/shorter ratio of `r sprintf('%.2f', daylength_post$ratio[daylength_post$scenario == 'Matched questionnaire (135)'])` (95% CI `r sprintf('%.2f–%.2f', daylength_post$ratio_lower[daylength_post$scenario == 'Matched questionnaire (135)'], daylength_post$ratio_upper[daylength_post$scenario == 'Matched questionnaire (135)'])`), compared with `r sprintf('%.2f', daylength_post$ratio[daylength_post$scenario == 'Diary dMSFsc (135)'])` (`r sprintf('%.2f–%.2f', daylength_post$ratio_lower[daylength_post$scenario == 'Diary dMSFsc (135)'], daylength_post$ratio_upper[daylength_post$scenario == 'Diary dMSFsc (135)'])`) using MSF~sc(diary)~. The diary-based interval includes one. The pre-MSFsc moderation remains unresolved in both models. This comparison changes both timing and grouping. The fixed-group comparison below separates these steps while retaining the same participants.
+
+Civil dawn and dusk are independently reprojected onto each participant's timing measure. Astronomical daylight uses the original participant/day weighting and an absolute-daylength median split. It describes opportunity for daylight, whereas the exposure model uses site-centered photoperiod.
+
+```{r}
+#| label: tbl-dmsfsc-civil
+#| tbl-cap: "Civil-daylight availability within the original primary phase windows."
+civil <- bind_rows(lapply(c("matched-msfsc", "dmsfsc"), function(scenario)
+  mutate(scenario_table(scenario, "daylight_civil_interval_summaries"), scenario = scenario)))
+show_table(civil |> filter(window_source == "Original primary fixed") |>
+  mutate(phase_window = ifelse(end < 0, "Pre-MSFsc", "Post-MSFsc")) |>
+  select(scenario, phase_window, quartile, daylength, availability_percent, participants))
+```
+
+# Separating phase alignment from quartile classification {#sec-fixed-groups}
+
+We add an intermediate scenario with **diary-based phase alignment and fixed questionnaire quartiles**. Comparing it with the matched questionnaire analysis changes only alignment; comparing it with the full MSF~sc(diary)~ analysis then changes classification while retaining diary alignment. All three use the same light records, site photoperiod centers, model formulas, standardization weights and support rule. Smoothing parameters and residual autocorrelation are re-estimated for each fit.
+
+Here questionnaire membership means the matched 135-person reference. Its refitted questionnaire cutoffs place three retained participants in a different quartile from the original 140-person analysis. The intermediate scenario preserves every matched-reference assignment.
+
+The [preparation](sensitivity/diary-msfsc/prepare-fixed-groups.R) and [model driver](sensitivity/diary-msfsc/fixed-groups.R) use the frozen model producers. The following code was executed before rendering. It copies questionnaire membership into the diary-timed data and preserves that membership when the shared preprocessing would otherwise assign quartiles again.
+
+```{r}
+#| label: fixed-groups-preparation
+#| eval: false
+```
+
+```{r}
+#| label: fixed-groups-classification
+#| eval: false
+```
+
+```{r}
+#| label: tbl-dmsfsc-fixed-groups-samples
+#| tbl-cap: "Matched comparison design. The intermediate scenario changes phase alignment while preserving questionnaire classification."
+show_table(comparison("fixed_groups_samples") |>
+  select(alignment, classification, participants, participant_days, half_hours))
+```
+
+The intermediate scenario repeats the primary phase fit and its simultaneous inference, followed by the photoperiod extension and all three target specifications. It addresses the exposure contrast and daylength moderation directly; it does not repeat the clock-time fits, prediction, attribution or PRC calculations, whose two full-scenario comparisons remain above and below.
+
+```{r}
+#| label: fixed-groups-primary
+#| eval: false
+```
+
+```{r}
+#| label: fixed-groups-daylength
+#| eval: false
+```
+
+```{r}
+#| label: tbl-dmsfsc-fixed-groups-diagnostics
+#| tbl-cap: "Convergence and residual checks for the three matched phase and daylength comparisons."
+show_table(comparison("fixed_groups_diagnostics") |>
+  select(scenario, model, convergence_ok, basis_flag, standardized_lag1, spread_ratio))
+```
+
+For a common comparison, we average the primary contrast and daylength moderation within the original pre- and post-MSFsc windows. Their endpoints remain fixed. The [comparison script](sensitivity/diary-msfsc/compare-fixed-groups.R) calculates interval uncertainty from the covariance of the average design vector, as in the preceding fixed-window tables.
+
+```{r}
+#| label: fixed-groups-average-contrasts
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show the matched fixed-window calculations"
+```
+
+```{r}
+#| label: tbl-dmsfsc-fixed-groups-exposure
+#| tbl-cap: "Overall extreme evening-type/morning-type exposure ratios within the original primary windows. Intervals are unadjusted 95% intervals for the average log contrast."
+fixed_groups_exposure <- comparison("fixed_groups_exposure_intervals") |>
+  filter(context == "Overall")
+show_table(fixed_groups_exposure |>
+  mutate(ratio_CI = sprintf("%.2f (%.2f–%.2f)", ratio, ratio_lower, ratio_upper)) |>
+  select(alignment, classification, phase_label, ratio_CI, minimum_cell_participants))
+```
+
+```{r}
+#| label: tbl-dmsfsc-fixed-groups-daylength
+#| tbl-cap: "Longer/shorter ratios of extreme-group exposure ratios at −1 and +1 hour from the site mean, averaged within the original primary windows. Intervals are unadjusted 95% intervals. One denotes no daylength moderation."
+fixed_groups_daylength <- comparison("fixed_groups_daylength_intervals") |>
+  filter(target_specification == "fixed", contrast == "Longer_minus_shorter")
+show_table(fixed_groups_daylength |>
+  mutate(ratio_CI = sprintf("%.2f (%.2f–%.2f)", ratio, ratio_lower, ratio_upper)) |>
+  select(alignment, classification, phase_label, ratio_CI, minimum_cell_participants))
+timing_only_post <- fixed_groups_daylength |>
+  filter(scenario == "dmsfsc-fixed-groups", phase_label == "Post-MSFsc")
+```
+
+```{r}
+#| label: fig-dmsfsc-fixed-groups
+#| fig-cap: "Sequential changes in alignment and classification on identical observations. A: primary extreme-group exposure contrasts with 95% simultaneous bands. B: daylength moderation from −1 to +1 hour of centered photoperiod, with 95% pointwise bands. Grey areas mark the original pre- and post-MSFsc comparison windows; zero marks the midsleep measure used in each scenario."
+#| fig-alt: "Two panels compare questionnaire timing and groups, diary timing with questionnaire groups retained, and diary timing and groups. The upper panel shows exposure ratios and the lower panel shows longer-day to shorter-day moderation ratios. All three use identical light observations."
+knitr::include_graphics(file.path(sensitivity_root, "comparison/fixed_groups.png"))
+```
+
+Both fixed-group fits converge without a basis-dimension flag. Standardized residual lag-one correlation is approximately 0.083, with residual spread similar to the other matched fits. Both exposure contrasts retain their directions with questionnaire membership fixed: 0.29 (95% CI 0.11–0.76) pre-MSFsc and 8.7 (3.5–21.7) post-MSFsc.
+
+Changing alignment alone gives a post-MSFsc daylength factor of **`r sprintf("%.2f", timing_only_post$ratio)` (95% CI `r sprintf("%.2f–%.2f", timing_only_post$ratio_lower, timing_only_post$ratio_upper)`)**, compared with 2.66 (1.10–6.43) under matched questionnaire timing. The point estimate remains similar, but its interval now includes one. Also changing the quartile classification reduces the estimate to 1.15 (0.52–2.54). Thus reclassification produces the larger reduction in the estimated association in this sequence, while alignment alone is sufficient for the interval to cross the no-moderation reference. Pre-MSFsc daylength moderation remains unresolved in all three scenarios.
+
+The [complete target comparison](sensitivity/diary-msfsc/comparison/fixed_groups_daylength_intervals.csv) also contains the quartile and 10th/90th-percentile targets. The comparisons isolate successive changes in the analysis specification; they do not constitute a formal test of the difference between the fitted moderation estimates.
+
+```{r}
+#| label: tbl-dmsfsc-fixed-groups-checks
+#| tbl-cap: "Checks that alignment and classification change separately."
+fixed_group_checks <- comparison("fixed_groups_checks")
+stopifnot(all(fixed_group_checks$passed))
+show_table(fixed_group_checks)
+```
+
+# PRC weighting and the Emens-style balance
+
+The same reconstructed one-hour light PRC is integrated against the estimated extreme-group curves. Published raw and drift-corrected baselines, zero-exposure centering, the original covariance calculation, all five PRC alignment offsets, and the Emens-style regional exposure balance are retained. These are conceptual summaries of exposure timing, not predicted shifts in hours.
+
+The published DLMO-to-MSFsc offsets were established relative to questionnaire MSFsc. Reusing them relative to **MSF~sc(diary)~ is a sensitivity assumption**, not a new calibration of diary midsleep against DLMO. The central offset remains −6.45 h, the published-reference-interval endpoints −6.95 and −5.95 h, and the wider PRC stress tests −8.45 and −4.45 h. The Emens-style calculation retains its three original reference alignments.
+
+```{r}
+#| label: dmsfsc-phase-response
+#| eval: false
+```
+
+```{r}
+#| label: fig-dmsfsc-prc
+#| fig-cap: "Overall extreme evening-minus-morning PRC-weighted index at the central transferred DLMO alignment. Intervals are 95% coefficient intervals conditional on the external PRC and its alignment. Positive values indicate a relatively more advance-weighted evening-type pattern."
+#| fig-alt: "Two panels compare raw and drift-corrected PRC group contrasts across all three analyses, with confidence intervals and a zero reference line."
+knitr::include_graphics(file.path(sensitivity_root, "comparison/prc.png"))
+```
+
+```{r}
+#| label: tbl-dmsfsc-prc
+#| tbl-cap: "Extreme evening-minus-morning PRC-weighted indices at the central alignment."
+prc <- comparison("prc_contrasts")
+show_table(prc |> arrange(scenario, factor(prc_baseline, c("Published raw", "Drift corrected")), context) |>
+  select(scenario, prc_baseline, context, estimate, lower, upper))
+prc_diary <- prc |> filter(scenario == "Diary dMSFsc (135)", context == "Overall")
+```
+
+Both MSF~sc(diary)~ PRC contrasts remain in the more advance-weighted evening-type direction. The published raw curve gives `r sprintf('%.3f', prc_diary$estimate[prc_diary$prc_baseline == 'Published raw'])` (95% CI `r sprintf('%.3f to %.3f', prc_diary$lower[prc_diary$prc_baseline == 'Published raw'], prc_diary$upper[prc_diary$prc_baseline == 'Published raw'])`), just excluding zero, whereas the drift-corrected contrast is `r sprintf('%.3f', prc_diary$estimate[prc_diary$prc_baseline == 'Drift corrected'])` (`r sprintf('%.3f to %.3f', prc_diary$lower[prc_diary$prc_baseline == 'Drift corrected'], prc_diary$upper[prc_diary$prc_baseline == 'Drift corrected'])`) and includes zero. This distinction remains conditional on the transferred DLMO alignment and PRC baseline.
+
+```{r}
+#| label: tbl-dmsfsc-prc-alignment
+#| tbl-cap: "MSF~sc(diary)~ overall PRC contrasts across all transferred DLMO alignments. Offsets are hours relative to MSF~sc(diary)~."
+alignment <- comparison("prc_alignment_contrasts")
+show_table(alignment |> filter(scenario == "Diary dMSFsc (135)", context == "Overall") |>
+  arrange(factor(prc_baseline, c("Published raw", "Drift corrected")), dlmo_offset) |>
+  select(prc_baseline, dlmo_offset, estimate, lower, upper))
+```
+
+At the earlier reference-interval endpoint (−6.95 h), both MSF~sc(diary)~ PRC contrasts exclude zero; at the later endpoint (−5.95 h), both include zero. The wider −4.45 h stress test changes both point estimates to the opposite direction, with intervals spanning zero. Thus the central raw-PRC result does not establish an alignment-independent group difference.
+
+```{r}
+#| label: tbl-dmsfsc-emens
+#| tbl-cap: "Ratio of extreme evening-type to morning-type Emens-style advance/delay exposure balances at the central alignment. One denotes equal balances between groups."
+emens <- comparison("emens_contrasts")
+show_table(emens |> filter(dlmo_offset == -6.45, contrast == "Evening / morning") |>
+  select(scenario, context, estimate, lower, upper))
+```
+
+The Emens-style balance retains the same group ordering. At the central alignment the overall evening-type/morning-type balance ratio is `r sprintf('%.2f', emens$estimate[emens$scenario == 'Diary dMSFsc (135)' & emens$context == 'Overall' & emens$dlmo_offset == -6.45 & emens$contrast == 'Evening / morning'])` for MSF~sc(diary)~, compared with `r sprintf('%.2f', emens$estimate[emens$scenario == 'Matched questionnaire (135)' & emens$context == 'Overall' & emens$dlmo_offset == -6.45 & emens$contrast == 'Evening / morning'])` for matched questionnaire MSFsc; both intervals exclude one.
+
+# Prediction, attribution and other sensitivities
+
+The five participant-held-out folds and the known-participant final-day holdout are regenerated on the common sample. The two restricted analyses use identical held-out participants and light records. Each training fold estimates its own quartile cutoffs, site photoperiod centers, smoothing parameters and AR correlation. MSF~sc(diary)~ itself is the participant's stable summary of all available diary nights, so validation evaluates held-out **light** prediction conditional on having that diary summary; it does not represent prediction before diary collection.
+
+```{r}
+#| label: dmsfsc-validation
+#| eval: false
+```
+
+```{r}
+#| label: tbl-dmsfsc-validation
+#| tbl-cap: "Held-out prediction on the original and restricted samples."
+validation <- comparison("validation_scores")
+show_table(validation |> select(scenario, target, axis, RMSE, predictive_R2), digits = 3)
+```
+
+```{r}
+#| label: tbl-dmsfsc-paired-validation
+#| tbl-cap: "Paired diary-minus-questionnaire predictive differences on identical held-out records. Intervals use 2,000 participant bootstrap samples stratified by site."
+paired_validation <- comparison("paired_metric_validation")
+show_table(paired_validation |> select(target, axis, metric, diary_minus_questionnaire, lower, upper), digits = 4)
+```
+
+The MSF~sc(diary)~ models have slightly lower held-out RMSE and higher predictive R² for new participants. However, the paired intervals include zero for both coordinates, so the small numerical gains do not establish better prediction. Holding out known participants' final days answers a separate question and is reported in the same table.
+
+```{r}
+#| label: tbl-dmsfsc-daylength-validation
+#| tbl-cap: "Expanded-minus-primary prediction differences for held-out participants. Positive RMSE differences favor the primary model."
+show_table(comparison("daylength_validation_differences") |>
+  filter(metric %in% c("RMSE", "predictive_R2")) |>
+  select(scenario, metric, expanded_minus_primary, lower, upper))
+```
+
+The photoperiod interaction does not improve prediction in either restricted analysis. With MSF~sc(diary)~ it increases held-out RMSE by 0.0065 (95% CI 0.0016–0.0118); the matched-questionnaire increase is 0.0020 (−0.0033–0.0076).
+
+Shapley attribution repeats all 128 model subsets for each time coordinate, holding the full-model AR coefficient fixed as in the primary analysis. Its 2,000 site/participant/day bootstrap replicates use the fitted subset predictions.
+
+```{r}
+#| label: dmsfsc-attribution
+#| eval: false
+```
+
+```{r}
+#| label: tbl-dmsfsc-shapley
+#| tbl-cap: "Shapley allocations of ordinary in-sample R². Bootstrap intervals retain the original fitted-prediction convention."
+shapley <- comparison("shapley")
+show_table(shapley |> select(scenario, axis, component, allocation, lower, upper))
+chronotype_allocation <- shapley |> filter(axis == "phase", component %in% c("direction", "extremity")) |>
+  summarise(allocation = sum(allocation), .by = scenario)
+```
+
+Chronotype direction and strength together receive `r sprintf('%.3f', chronotype_allocation$allocation[chronotype_allocation$scenario == 'Diary dMSFsc (135)'])` R² under MSF~sc(diary)~ phase alignment, compared with `r sprintf('%.3f', chronotype_allocation$allocation[chronotype_allocation$scenario == 'Matched questionnaire (135)'])` under matched questionnaire alignment. Individual daily patterns remain the largest allocation in both analyses.
+
+The MEQ sensitivity repeats its paired grouping comparison on the eligible sample. Larger bases, lower/higher AR correlation, deletion of the most concentrated site and influential participant, variance weighting, and noncyclic group margins retain their original specifications. The noncyclic run permits a discontinuity at the phase boundary rather than treating it as a failed cyclic model. Chest and matched-placement summaries use diary eligibility appropriate to the chest sample, not just the near-eye participants.
+
+```{r}
+#| label: dmsfsc-meq
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show the paired MEQ sensitivity"
+```
+
+```{r}
+#| label: dmsfsc-model-sensitivities
+#| eval: false
+```
+
+```{r}
+#| label: dmsfsc-noncyclic
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show noncyclic group-margin sensitivity"
+```
+
+```{r}
+#| label: tbl-dmsfsc-meq
+#| tbl-cap: "MEQ sensitivity fit and analytical sample."
+show_table(comparison("meq_fit") |>
+  select(scenario, classification, axis, ordinary_R2, participants, participant_days))
+```
+
+```{r}
+#| label: tbl-dmsfsc-meq-windows
+#| tbl-cap: "Phase-aligned overall morning/evening differences within the paired MEQ sensitivity. The MSFsc classification uses the timing measure named by each scenario."
+show_table(comparison("meq_windows") |>
+  filter(axis == "phase", context == "Overall") |>
+  select(scenario, classification, start, end, direction, factor_at_mean_difference))
+```
+
+The MEQ-defined comparison also retains higher evening-type exposure post-midsleep when aligned to MSF~sc(diary)~, from about 1.1 to 4.4 hours, compared with 1.1 to 3.9 hours under matched questionnaire alignment. The MEQ group definitions themselves remain unchanged.
+
+```{r}
+#| label: tbl-dmsfsc-sensitivities
+#| tbl-cap: "Changes in registered contrasts under the existing model-structure sensitivities. Differences are on the log10 response scale."
+show_table(comparison("model_sensitivities") |>
+  select(scenario, axis, sensitivity, maximum_contrast_change, rms_contrast_change, convergence))
+```
+
+All model-structure sensitivity fits converge. Among the MSF~sc(diary)~ phase runs, variance weighting produces the largest change in a registered contrast (0.344 log10 units), followed by larger bases (0.269) and deletion of the most concentrated site (0.242). These summaries quantify changes in fitted contrasts rather than a separate significance test.
+
+```{r}
+#| label: tbl-dmsfsc-chest
+#| tbl-cap: "Simultaneously supported extreme-group windows in the chest phase models."
+show_table(comparison("chest_windows") |>
+  filter(axis == "phase", contrast == "evening_morning_Extreme_Overall") |>
+  select(scenario, start, end, wraps_boundary, duration_hours, mean_ratio))
+```
+
+Chest measurements retain both directions of the extreme-group difference. The positive MSF~sc(diary)~ window runs approximately 0.6–5.9 hours post-midsleep; the opposite window crosses the circular boundary and continues to about 5.1 hours before midsleep.
+
+```{r}
+#| label: tbl-dmsfsc-noncyclic
+#| tbl-cap: "Extreme-group windows under noncyclic group margins on the matched samples. Native endpoints retain the model's 0–24-hour boundary."
+show_table(comparison("noncyclic_windows") |>
+  filter(axis == "phase", contrast == "evening_morning_Extreme_Overall") |>
+  select(scenario, native_start, native_end, start, end, duration_hours, mean_ratio))
+```
+
+With noncyclic group margins, the MSF~sc(diary)~ post-midsleep window remains about 0.9–5.3 hours. The broad opposite cyclic window separates into two pre-midsleep sections, approximately −11.6 to −8.8 hours and −7.8 to −5.3 hours. Thus its precise span depends on the group-curve boundary specification.
+
+Individual-curve and peak-timing calculations are also repeated with the original 1,000 joint coefficient draws. Their [complete timing table](sensitivity/diary-msfsc/comparison/individual_timing.csv), [matched-placement summaries](sensitivity/diary-msfsc/comparison/matched_placement.csv), and each scenario's plots retain the detailed outputs.
+
+```{r}
+#| label: dmsfsc-descriptive-outputs
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show individual timing, common photoperiod and placement calculations"
+```
+
+# Checks and reproducibility
+
+The comparison verifies matched light records and AR ordering, identical validation folds, and training-only cutoffs and site centers. Input hashes cover the fixed normalized inputs, original model/inference files and shared R source. Separately requested diary-figure styling and annotation edits are recorded as authorized display changes; all code outside the plot and scatter-display-data stages is checked against the original snapshot. No primary fit or result is replaced by this sensitivity.
+
+```{r}
+#| label: tbl-dmsfsc-checks
+#| tbl-cap: "Implementation checks for the isolated sensitivity."
+checks <- comparison("implementation_checks")
+stopifnot(all(checks$passed))
+show_table(checks)
+```
+
+```{r}
+#| label: tbl-dmsfsc-completed-stages
+#| tbl-cap: "Completed calculation stages in the two isolated scenarios. Cached replays record their own elapsed time."
+show_table(comparison("completed_stages") |>
+  mutate(elapsed_minutes = elapsed_seconds / 60) |>
+  select(scenario, stage, finished, elapsed_minutes), digits = 1)
+```
+
+To reproduce, run `Rscript --vanilla sensitivity/diary-msfsc/prepare.R` from the project root. In each scenario directory, run `Rscript --vanilla -e 'source("../scenario.R")'` with the stages `primary`, `validation`, `daylight`, `daylight-validation`, `prc`, `meq`, `sensitivity`, `noncyclic`, `outputs`, and `attribution`, then run `Rscript --vanilla ../verify-stages.R`. Set `MELIDOS_MAIN` and `MELIDOS_R_LIBRARY` to the existing project library paths, as shown in [the run instructions](sensitivity/diary-msfsc/README.md). Finally run `Rscript --vanilla sensitivity/diary-msfsc/compare.R` and render this document. The matched questionnaire primary stage must finish before the MSF~sc(diary)~ daylight stage, which also summarizes its fixed windows.
+
+Each scenario keeps saved fits, prediction draws, contrasts, registries, diagnostics, validations, tables and figures under its own `results/`. Comparison figure data are exported under `sensitivity/diary-msfsc/data/intermediate/`. The [complete interval comparison](sensitivity/diary-msfsc/comparison/phase_interval_averages.csv) retains window selection and local support; [PRC contrasts](sensitivity/diary-msfsc/comparison/prc_contrasts.csv) retain the main group comparisons. [Original-input preservation](sensitivity/diary-msfsc/comparison/original_input_preservation.csv) records the before/after checksums.
+
+For the focused fixed-group extension, run `Rscript --vanilla sensitivity/diary-msfsc/prepare-fixed-groups.R`, then run `Rscript --vanilla -e 'source("../fixed-groups.R")' primary` and the corresponding `daylight` stage inside `dmsfsc-fixed-groups/`. From the project root, `Rscript --vanilla sensitivity/diary-msfsc/compare-fixed-groups.R` produces the fixed-group comparisons. The [run instructions](sensitivity/diary-msfsc/README.md#alignment-with-questionnaire-groups-retained) give the directory and library setup. The new fits, diagnostics, input hashes and R session records stay in that isolated scenario directory.

@@ -1,0 +1,41 @@
+"check","passed","value"
+"Two equal 12-hour regions -6.95",TRUE,
+"Six-bin and grid balances agree -6.95 Q1_Overall",TRUE,4.44089209850063e-16
+"Positive simulated delay denominator -6.95 Q1_Overall",TRUE,0.547676720890788
+"Six-bin and grid balances agree -6.95 Q4_Overall",TRUE,8.88178419700125e-16
+"Positive simulated delay denominator -6.95 Q4_Overall",TRUE,0.263733151236023
+"Six-bin and grid balances agree -6.95 Q1_Work",TRUE,4.44089209850063e-16
+"Positive simulated delay denominator -6.95 Q1_Work",TRUE,0.566220082203519
+"Six-bin and grid balances agree -6.95 Q4_Work",TRUE,8.88178419700125e-16
+"Positive simulated delay denominator -6.95 Q4_Work",TRUE,0.252227320536245
+"Six-bin and grid balances agree -6.95 Q1_Free",TRUE,0
+"Positive simulated delay denominator -6.95 Q1_Free",TRUE,0.481507697175892
+"Six-bin and grid balances agree -6.95 Q4_Free",TRUE,4.44089209850063e-16
+"Positive simulated delay denominator -6.95 Q4_Free",TRUE,0.262003735750043
+"Two equal 12-hour regions -6.45",TRUE,
+"Six-bin and grid balances agree -6.45 Q1_Overall",TRUE,0
+"Positive simulated delay denominator -6.45 Q1_Overall",TRUE,0.463484959838999
+"Six-bin and grid balances agree -6.45 Q4_Overall",TRUE,0
+"Positive simulated delay denominator -6.45 Q4_Overall",TRUE,0.24599126581061
+"Six-bin and grid balances agree -6.45 Q1_Work",TRUE,0
+"Positive simulated delay denominator -6.45 Q1_Work",TRUE,0.477184784425752
+"Six-bin and grid balances agree -6.45 Q4_Work",TRUE,8.88178419700125e-16
+"Positive simulated delay denominator -6.45 Q4_Work",TRUE,0.236037457488575
+"Six-bin and grid balances agree -6.45 Q1_Free",TRUE,0
+"Positive simulated delay denominator -6.45 Q1_Free",TRUE,0.423146891153876
+"Six-bin and grid balances agree -6.45 Q4_Free",TRUE,4.44089209850063e-16
+"Positive simulated delay denominator -6.45 Q4_Free",TRUE,0.236190159529267
+"Two equal 12-hour regions -5.95",TRUE,
+"Six-bin and grid balances agree -5.95 Q1_Overall",TRUE,0
+"Positive simulated delay denominator -5.95 Q1_Overall",TRUE,0.387687707046122
+"Six-bin and grid balances agree -5.95 Q4_Overall",TRUE,0
+"Positive simulated delay denominator -5.95 Q4_Overall",TRUE,0.229002313568052
+"Six-bin and grid balances agree -5.95 Q1_Work",TRUE,4.44089209850063e-16
+"Positive simulated delay denominator -5.95 Q1_Work",TRUE,0.397103191560839
+"Six-bin and grid balances agree -5.95 Q4_Work",TRUE,0
+"Positive simulated delay denominator -5.95 Q4_Work",TRUE,0.229915457459048
+"Six-bin and grid balances agree -5.95 Q1_Free",TRUE,1.33226762955019e-15
+"Positive simulated delay denominator -5.95 Q1_Free",TRUE,0.358375969262376
+"Six-bin and grid balances agree -5.95 Q4_Free",TRUE,8.88178419700125e-16
+"Positive simulated delay denominator -5.95 Q4_Free",TRUE,0.222608053817932
+"Zero light maps to zero",TRUE,

@@ -1,0 +1,5 @@
+"model","axis","rho","adjusted_R2","deviance_explained","ordinary_R2","edf","coefficients","rank","convergence","warnings","participants","participant_days","half_hours"
+"primary","clock",0.593986244821507,0.788694801509134,0.795116103670005,0.795116103670005,1095.2078888208,2258,2258,"TRUE","openMP not available: single threaded computation only",140,778,35949
+"primary","phase",0.595995176930004,0.78696951127334,0.7936355383329,0.793635538332899,1127.07140778297,2258,2258,"TRUE","openMP not available: single threaded computation only",140,778,35949
+"chest","clock",0.582454119525054,0.749534469190172,0.756592491830345,0.756592491830347,1131.03965921881,2450,2450,"TRUE","openMP not available: single threaded computation only",153,864,40039
+"chest","phase",0.582935751760487,0.749095086797466,0.756362551774788,0.75636255177479,1161.55285757033,2450,2450,"TRUE","openMP not available: single threaded computation only",153,864,40039

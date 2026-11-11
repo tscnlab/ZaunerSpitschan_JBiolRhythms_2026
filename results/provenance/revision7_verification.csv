@@ -1,0 +1,24 @@
+"check","passed"
+"All fitted models, prepared observations and validation inputs remain byte-identical",TRUE
+"primary clock 95% simultaneous within-coordinate family",TRUE
+"primary phase 95% simultaneous within-coordinate family",TRUE
+"chest clock 95% simultaneous within-coordinate family",TRUE
+"chest phase 95% simultaneous within-coordinate family",TRUE
+"noncyclic_sz clock 95% simultaneous within-coordinate family",TRUE
+"noncyclic_sz phase 95% simultaneous within-coordinate family",TRUE
+"meq_defined clock 95% within-coordinate classification sensitivity",TRUE
+"meq_defined phase 95% within-coordinate classification sensitivity",TRUE
+"meq_matched_msfsc clock 95% within-coordinate classification sensitivity",TRUE
+"meq_matched_msfsc phase 95% within-coordinate classification sensitivity",TRUE
+"Primary window 1 full-covariance average and interval",TRUE
+"Primary window 2 full-covariance average and interval",TRUE
+"Two extreme-group phase intervals lie before the DLMO guide and after MSFsc",TRUE
+"daylight summaries use the updated primary intervals",TRUE
+"daylight 95% pointwise bands retain their original definition",TRUE
+"daylight_quartiles summaries use the updated primary intervals",TRUE
+"daylight_quartiles 95% pointwise bands retain their original definition",TRUE
+"daylight_p10_p90 summaries use the updated primary intervals",TRUE
+"daylight_p10_p90 95% pointwise bands retain their original definition",TRUE
+"Civil daylight summaries use the updated primary intervals",TRUE
+"Manuscript areas of interest match the primary inference",TRUE
+"Figure 2 intervals and exclusions match the current inference",TRUE

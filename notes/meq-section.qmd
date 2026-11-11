@@ -1,0 +1,115 @@
+## Sensitivity to questionnaire-based chronotype {#sec-meq}
+
+The Morningness–Eveningness Questionnaire (MEQ) measures reported preference for earlier or later activity and sleep. It offers a second way to define the comparison groups [@horne1976]. This sensitivity analysis changes **group membership**. The phase coordinate still uses MSFsc, so it does not provide a separate measurement of circadian phase.
+
+All 140 participants in the complete near-eye sample have MEQ scores. The recorded categories agree with the conventional score ranges: 70–86 definitely morning, 59–69 moderately morning, 42–58 intermediate, 31–41 moderately evening, and 16–30 definitely evening. @tbl-meq-categories includes the full sample before restricting the sensitivity analysis.
+
+```{r}
+#| label: tbl-meq-categories
+#| tbl-cap: "MEQ categories in the complete near-eye sample. Counts are unique within each row."
+show_table(table_data("meq_category_sample"))
+```
+
+There are only **three definitely evening participants**, contributing 17 participant-days. A separate extreme-evening curve would be poorly supported. We therefore pool definite and moderate types within each direction and exclude the 72 intermediate participants. The fitted sensitivity sample contains **68 participants, 379 participant-days, and 17,558 valid half-hours**: 44 morning and 24 evening participants.
+
+### Matched models and comparison sample
+
+The pooled MEQ models use the same response, bin rules, work/free labels, cyclic spline structure, photoperiod adjustment, and true-elapsed AR(1) sequence boundaries as the primary analysis. The quartile term is replaced by a two-level MEQ direction factor. The cyclic `sz` group and day-type deviations, their interaction, and the participant `fs` curves remain in the model. Population bases use `k = 12`, participant bases use `k = 10`, and the photoperiod basis uses `k = 5`. No extreme-versus-moderate effect is fitted in this reduced sample.
+
+To separate the change in questionnaire from the change in sample, we also fit MSFsc models to **exactly the same observations**, dividing these participants at the original full-sample MSFsc median. These labels mean earlier and later MSFsc. Of the 68 participants, 60 retain the same direction and eight switch direction. The [classification overlap table](results/tables/meq_classification_overlap.csv) gives the participant, participant-day, and half-hour counts for each pairing.
+
+```{r}
+#| label: meq-fit-code
+source("R/meq.R")
+meq_raw <- meq_prepare(prepared)
+meq_preprocessing <- fit_preprocess(meq_raw, prepared$cutoffs)
+model_formula(k = 12L, kp = 10L)
+
+# Each call checks the data and formula signature before reusing its fit.
+meq_fit_checks <- list()
+for (classification in c("MEQ", "MSFsc")) {
+  for (axis in c("clock", "phase")) {
+    fitted_meq <- meq_fit(meq_raw, meq_preprocessing, axis,
+                          classification, k = 12L, kp = 10L)
+    meq_fit_checks[[paste(classification, axis)]] <-
+      model_summary(fitted_meq) |>
+      mutate(classification = classification)
+    rm(fitted_meq)
+  }
+}
+show_table(bind_rows(meq_fit_checks) |>
+  select(classification, axis, convergence, participants,
+         participant_days, half_hours))
+```
+
+In the printed formula, `quartile` is the binary morning/evening grouping for this sensitivity. The preprocessing centers photoperiod within site on the restricted sample and retains the original MSFsc cutoffs. Rendering executes these steps and checks the four cached fits. The diagnostics, standardized predictions, and contrasts below read the exports produced by `run_meq(prepared)`; rendering does not repeat the 10,000 coefficient draws. The full analytical entry point also writes the acceptance checks.
+
+Population predictions use the restricted sample's common photoperiod distribution, with equal participant weights and equal weights for each person's observed days. Overall curves use the same work/free proportions in both groups. Site, participant, and participant-day effects are omitted from the displayed predictions.
+
+### Model checks
+
+All four fits converged. The basis checks did not flag an undersized basis, and the fitted curves join continuously at the daily boundary. The AR correction reduces lag-one residual correlation from about 0.62 to about 0.085. Residual spread remains uneven: the largest residual standard deviation across fitted-value deciles is **7.5–8.0 times** the smallest. High overlap among the hierarchical population, site, and participant curves also limits interpretation of isolated model terms; the full concurvity results are exported.
+
+This variance pattern limits the Gaussian uncertainty bands. We therefore use these fits to assess the **direction and shape** of the sensitivity results and do not treat their candidate intervals as established periods of difference. The next remedy is to model residual scale as a function of fitted exposure or daily time while retaining serial dependence, then check the contrast bands with participant-level refitting bootstrap samples. Increasing the mean-curve basis alone does not address this problem.
+
+```{r}
+#| label: tbl-meq-diagnostics
+#| tbl-cap: "MEQ sensitivity diagnostics. Each model uses the same 68 participants, 379 participant-days, and 17,558 valid half-hours. Spread ratio is the largest divided by the smallest residual standard deviation across fitted-value deciles."
+show_table(table_data("meq_diagnostic_verdicts") |>
+  select(classification, axis, convergence_ok, basis_flag,
+         standardized_lag1, spread_ratio, cyclic_ok,
+         participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: fig-meq-appraise
+#| fig-cap: "Diagnostic views for the MEQ clock-time and MSFsc-relative models. Each fit uses 68 participants, 379 participant-days, and 17,558 valid half-hours."
+#| fig-subcap: ["Clock time", "MSFsc-relative time"]
+#| layout-ncol: 1
+show_figure("meq_defined_clock_appraise")
+show_figure("meq_defined_phase_appraise")
+```
+
+The in-sample fits are very similar under both classifications and both time coordinates (@tbl-meq-fit). These values include participant and day effects. They do not establish which questionnaire or time coordinate predicts new observations better. Predictive validation and Shapley attribution remain focused on the primary near-eye sample.
+
+```{r}
+#| label: tbl-meq-fit
+#| tbl-cap: "In-sample fit for the MEQ sensitivity and the paired MSFsc comparison. Adjusted R² is the mgcv estimate; ordinary R² compares residual variation with the observed response variation."
+show_table(table_data("meq_model_fit") |>
+  select(classification, axis, rho, adjusted_R2, ordinary_R2,
+         deviance_explained, participants, participant_days, half_hours), digits = 4)
+```
+
+### Daily patterns and differences
+
+The MEQ curves retain the main later-timing pattern: evening participants have higher exposure around late clock evening and during the rising portion of the curve after MSFsc. The same-subset MSFsc contrast has a similar shape (@fig-meq-factors). This agreement shows that these patterns are not confined to the full sample's quartile classification. It does not establish agreement between the two instruments in the full cohort, because intermediate MEQ participants are excluded here.
+
+```{r}
+#| label: fig-meq-patterns
+#| fig-cap: "Near-eye exposure grouped by MEQ: clock time (A) and MSFsc-relative time (B), overall and by day type. Each curve reports participants and participant-days. Bands are pointwise 95% intervals under the Gaussian reference model. Phase shading is the published group-average DLMO guide."
+show_figure("meq_patterns_meq")
+```
+
+```{r}
+#| label: fig-meq-factors
+#| fig-cap: "Evening-to-morning factors for MEQ and MSFsc classifications on identical observations. Panels report participants / participant-days for both sides. Bands use 10,000 coefficient draws, include smoothing-parameter uncertainty, and jointly cover the three day contexts, both time coordinates, and both classifications at least 95% under the fitted covariance model."
+show_figure("meq_factor_comparison")
+```
+
+Large factors in the early rising portion of the phase curve occur at low absolute exposure. For example, at 2.5 hours after MSFsc, the overall MEQ curves estimate approximately **0.17 lx** for morning participants and **2.94 lx** for evening participants. The factor compares **melanopic EDI + 0.1**, so it is not an unshifted lux ratio. The factor plot should be read alongside the intensity plot.
+
+The Gaussian reference bands identify a candidate overall MEQ interval from 1.25 to 3.58 hours after MSFsc. There is no supported candidate interval in the published DLMO guide. These remain descriptive candidates because of the residual-spread problem. The [candidate-window table](results/tables/meq_candidate_windows.csv) provides circular interval boundaries, directions, magnitudes, and the participants, participant-days, and half-hours observed inside each interval. Claims are withheld wherever either direction has fewer than five contributing participants; overall comparisons require that support in both work and free-day cells. Time-varying support is retained in the [curve data](results/tables/meq_all_curves.csv) and [contrast data](results/tables/meq_all_contrasts.csv).
+
+Site composition also limits this comparison. Only MPI has at least five participants in each MEQ direction, and four sites contribute only one direction. Adjusting for site cannot supply the missing within-site comparisons. The sensitivity is therefore evidence about this smaller pooled sample, not a separate confirmation of a general MEQ effect.
+
+```{r}
+#| label: tbl-meq-sites
+#| tbl-cap: "Site support for the MEQ sensitivity. Each cell gives participants / participant-days / valid half-hours."
+show_table(table_data("meq_site_support") |>
+  mutate(sample = paste(participants, participant_days, half_hours, sep = " / ")) |>
+  select(site, meq_direction, sample) |>
+  pivot_wider(names_from = meq_direction, values_from = sample,
+              values_fill = "0 / 0 / 0"))
+```
+
+The [paired MSFsc pattern figure](results/figures/meq_patterns_msfsc.pdf), [sample registry](results/tables/meq_sample_registry.csv), [diagnostic tables](results/diagnostics), [acceptance checks](results/provenance/meq_acceptance.csv), and [complete analytical code](R/meq.R) accompany this section. The entry point is `Rscript --vanilla R/meq.R`; cached fits are reused when their data and specification signatures agree.

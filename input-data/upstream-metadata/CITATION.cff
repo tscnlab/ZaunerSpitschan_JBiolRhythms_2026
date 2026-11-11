@@ -1,0 +1,192 @@
+cff-version: 1.2.0
+message: "If you use this research compendium, manuscript, code, or derived materials, please cite it using the metadata in this file."
+type: dataset
+title: "The health-relevant architecture of the everyday light exposome"
+authors:
+  - given-names: Johannes
+    family-names: Zauner
+    email: johannes.zauner@tum.de
+    orcid: "https://orcid.org/0000-0003-2171-4566"
+    affiliation: "Department Health and Sports Sciences, TUM School of Medicine and Health, Chronobiology & Health, Technical University of Munich, Munich, Germany"
+  - given-names: Altug
+    family-names: Didikoglu
+    orcid: "https://orcid.org/0000-0002-5582-6956"
+    affiliation: "Division of Diabetes, Endocrinology, and Gastroenterology, School of Medical Sciences, Faculty of Biology, Medicine and Health, The University of Manchester, Manchester, UK; Faculty of Science, Department of Neuroscience, Izmir Institute of Technology, Izmir, Turkey"
+  - given-names: Sam
+    family-names: Aerts
+    orcid: "https://orcid.org/0000-0002-7444-4312"
+    affiliation: "Smart Sensor Systems research group, The Hague University of Applied Sciences, Delft, The Netherlands"
+  - given-names: Gabriel Kwaku
+    family-names: Agbeshie
+    orcid: "https://orcid.org/0009-0009-6135-7111"
+    affiliation: "Department of Optometry and Visual Science, College of Science, Kwame Nkrumah University of Science and Technology, Kumasi, Ghana"
+  - given-names: Kwadwo Owusu
+    family-names: Akuffo
+    orcid: "https://orcid.org/0000-0001-6683-249X"
+    affiliation: "Department of Optometry and Visual Science, College of Science, Kwame Nkrumah University of Science and Technology, Kumasi, Ghana"
+  - given-names: Sena Gulsum
+    family-names: Akgun
+    affiliation: "Faculty of Science, Department of Neuroscience, Izmir Institute of Technology, Izmir, Turkey"
+  - given-names: Sema Nur
+    family-names: Aydin
+    affiliation: "Faculty of Science, Department of Neuroscience, Izmir Institute of Technology, Izmir, Turkey"
+  - given-names: David
+    family-names: Baeza Moyano
+    orcid: "https://orcid.org/0000-0001-8395-9994"
+    affiliation: "Fundación Universitaria CEU San Pablo, Boadilla del Monte, Madrid, Spain"
+  - given-names: Daan
+    family-names: Boesten
+    affiliation: "Smart Sensor Systems research group, The Hague University of Applied Sciences, Delft, The Netherlands"
+  - given-names: John F.B.
+    family-names: Bolte
+    orcid: "https://orcid.org/0000-0001-8301-5547"
+    affiliation: "Smart Sensor Systems research group, The Hague University of Applied Sciences, Delft, The Netherlands; Centre for Sustainability, Environment and Health of the National Institute for Public Health and the Environment (RIVM), The Netherlands"
+  - given-names: Kai
+    family-names: Broszio
+    orcid: "https://orcid.org/0000-0002-8269-8654"
+    affiliation: "Federal Institute for Occupational Safety and Health (BAuA)"
+  - given-names: Guadalupe
+    family-names: Cantarero García
+    orcid: "https://orcid.org/0000-0003-3169-8547"
+    affiliation: "Fundación Universitaria CEU San Pablo, Boadilla del Monte, Madrid, Spain"
+  - given-names: Roberto Alonso
+    family-names: González Lezcano
+    orcid: "https://orcid.org/0000-0002-6185-4929"
+    affiliation: "Fundación Universitaria CEU San Pablo, Boadilla del Monte, Madrid, Spain"
+  - given-names: Carolina
+    family-names: Guidolin
+    orcid: "https://orcid.org/0009-0007-4959-2667"
+    affiliation: "Max Planck Institute for Biological Cybernetics, Max Planck Research Group Translational Sensory & Circadian Neuroscience, Tübingen, Germany"
+  - given-names: Sarina
+    family-names: Hilden
+    affiliation: "Department Health and Sports Sciences, TUM School of Medicine and Health, Chronobiology & Health, Technical University of Munich, Munich, Germany"
+  - given-names: Nico
+    family-names: Hogervorst
+    affiliation: "Smart Sensor Systems research group, The Hague University of Applied Sciences, Delft, The Netherlands"
+  - given-names: Astrid
+    family-names: Jansen
+    affiliation: "Smart Sensor Systems research group, The Hague University of Applied Sciences, Delft, The Netherlands"
+  - given-names: Zeynep
+    family-names: Kayar
+    affiliation: "Faculty of Science, Department of Neuroscience, Izmir Institute of Technology, Izmir, Turkey"
+  - given-names: Stefan
+    family-names: Källberg
+    orcid: "https://orcid.org/0009-0003-8259-3400"
+    affiliation: "RISE Research Institutes of Sweden"
+  - given-names: Suyoun
+    family-names: Lee
+    affiliation: "Department Health and Sports Sciences, TUM School of Medicine and Health, Chronobiology & Health, Technical University of Munich, Munich, Germany"
+  - given-names: Sofía
+    family-names: Melero Tur
+    orcid: "https://orcid.org/0000-0002-5902-4539"
+    affiliation: "Fundación Universitaria CEU San Pablo, Boadilla del Monte, Madrid, Spain"
+  - given-names: Maria
+    family-names: Nilsson Tengelin
+    orcid: "https://orcid.org/0000-0002-0909-626X"
+    affiliation: "RISE Research Institutes of Sweden"
+  - given-names: María Concepción
+    family-names: Pérez Gutiérrez
+    orcid: "https://orcid.org/0000-0003-0963-6147"
+    affiliation: "Fundación Universitaria CEU San Pablo, Boadilla del Monte, Madrid, Spain"
+  - given-names: Andrea
+    family-names: Sancho-Salas
+    orcid: "https://orcid.org/0000-0002-6566-2772"
+    affiliation: "School of Architecture, University of Costa Rica, Costa Rica"
+  - given-names: Oliver
+    family-names: Stefani
+    orcid: "https://orcid.org/0000-0003-0199-6500"
+    affiliation: "Lucerne University of Applied Sciences and Arts, Lucerne, CH"
+  - given-names: Ingemar
+    family-names: Svensson
+    orcid: "https://orcid.org/0009-0006-9283-509X"
+    affiliation: "RISE Research Institutes of Sweden"
+  - given-names: Helga
+    family-names: von-Breymann
+    orcid: "https://orcid.org/0000-0002-6841-5953"
+    affiliation: "School of Architecture, University of Costa Rica, Costa Rica"
+  - given-names: Manuel
+    family-names: Spitschan
+    email: manuel.spitschan@tum.de
+    orcid: "https://orcid.org/0000-0002-8572-9268"
+    affiliation: "Department Health and Sports Sciences, TUM School of Medicine and Health, Chronobiology & Health, Technical University of Munich, Munich, Germany; Max Planck Institute for Biological Cybernetics, Max Planck Research Group Translational Sensory & Circadian Neuroscience, Tübingen, Germany; TUM Institute for Advanced Study (TUM-IAS), Technical University of Munich, Garching, Germany; TUMCREATE Ltd., Singapore, Singapore"
+keywords:
+  - wearable
+  - light logging
+  - personal light exposure
+  - experience sampling
+  - exposome
+  - human health
+  - circadian
+license: CC-BY-4.0
+repository-code: "https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026/"
+url: "https://tscnlab.github.io/ZaunerEtAl_bioRxiv_2026"
+references:
+  - type: website
+    title: "Rendered Quarto website"
+    url: "https://tscnlab.github.io/ZaunerEtAl_bioRxiv_2026"
+  - type: software
+    title: "Analysis repository"
+    url: "https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026/"
+  - type: data
+    title: "MeLiDos project data source"
+    url: "https://github.com/MeLiDosProject"
+preferred-citation:
+  type: article
+  title: "The health-relevant architecture of the everyday light exposome"
+  authors:
+    - given-names: Johannes
+      family-names: Zauner
+    - given-names: Altug
+      family-names: Didikoglu
+    - given-names: Sam
+      family-names: Aerts
+    - given-names: Gabriel Kwaku
+      family-names: Agbeshie
+    - given-names: Kwadwo Owusu
+      family-names: Akuffo
+    - given-names: Sena Gulsum
+      family-names: Akgun
+    - given-names: Sema Nur
+      family-names: Aydin
+    - given-names: David
+      family-names: Baeza Moyano
+    - given-names: Daan
+      family-names: Boesten
+    - given-names: John F.B.
+      family-names: Bolte
+    - given-names: Kai
+      family-names: Broszio
+    - given-names: Guadalupe
+      family-names: Cantarero García
+    - given-names: Roberto Alonso
+      family-names: González Lezcano
+    - given-names: Carolina
+      family-names: Guidolin
+    - given-names: Sarina
+      family-names: Hilden
+    - given-names: Nico
+      family-names: Hogervorst
+    - given-names: Astrid
+      family-names: Jansen
+    - given-names: Zeynep
+      family-names: Kayar
+    - given-names: Stefan
+      family-names: Källberg
+    - given-names: Suyoun
+      family-names: Lee
+    - given-names: Sofía
+      family-names: Melero Tur
+    - given-names: Maria
+      family-names: Nilsson Tengelin
+    - given-names: María Concepción
+      family-names: Pérez Gutiérrez
+    - given-names: Andrea
+      family-names: Sancho-Salas
+    - given-names: Oliver
+      family-names: Stefani
+    - given-names: Ingemar
+      family-names: Svensson
+    - given-names: Helga
+      family-names: von-Breymann
+    - given-names: Manuel
+      family-names: Spitschan

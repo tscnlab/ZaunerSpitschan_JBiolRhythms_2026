@@ -1,0 +1,58 @@
+<!-- Integration notes: the introductory text and comparison section are ready to
+copy into analysis.qmd. Reconcile the brief summary with the final daylight and
+MEQ fits before rendering. These notes do not run an independent analysis. -->
+
+## Standalone introduction
+
+MeLiDos is a multicentre study of personal light exposure during everyday life. Participants wore light loggers near the eyes and on the chest and recorded sleep, device removal, and daily activities. The study used a common protocol across nine sites in seven countries, with measurements collected between August 2023 and October 2025. The sample was recruited through participating research groups rather than through population sampling [@zauner2026exposome].
+
+This secondary analysis uses the prepared measurements and diary data from the [MeLiDos analysis repository](https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026) [@melidosanalysis2026]. Copies of the imported files, their checksums, and their source information are included with this analysis. The accompanying preprint is *The health-relevant architecture of the everyday light exposome*, version 3, posted on 23 September 2026 [@zauner2026exposome].
+
+The primary analysis asks whether chronotype differences in daily light exposure persist after aligning observations to sleep timing, and whether they differ between work and free days. The primary outcome is near-eye melanopic equivalent daylight illuminance, a measure of light weighted for melanopsin sensitivity. Chest measurements provide a check on measurement position. During recorded sleep, the loggers were placed near the bed, so those readings describe the sleeping environment [@zauner2026exposome]. An additional exploratory analysis asks whether day length helps explain the phase differences; it leaves the primary analysis and its contrasts unchanged.
+
+Chronotype is defined by the midpoint of sleep on free days, corrected for sleep debt, abbreviated MSFsc. Its sample quartiles define extreme morning, moderate morning, moderate evening, and extreme evening groups. These labels refer to positions within this sample. A separate analysis uses categories from the Morningness–Eveningness Questionnaire, or MEQ [@horne1976]. We compare local clock time with time relative to each participant's MSFsc. Dim-light melatonin onset, or DLMO, was not measured in MeLiDos. The shaded guide on the phase plots shows published group-average timing relative to MSFsc, rather than an estimated onset for each participant [@facerchilds2019; @kantermann2015].
+
+## Brief summary comparison language
+
+The primary near-eye analysis includes 140 participants and 778 participant-days, represented by 35,949 valid half-hour observations. Morning and evening groups differ in the timing of light exposure, with larger differences between the extreme quartiles. Aligning exposure to MSFsc changes the comparison but does not remove all group differences. Local clock time predicts exposure in new participants more accurately than MSFsc-relative time in the current validation. Uneven residual spread limits the reference model's interval claims, so these are treated as candidate difference intervals until the sensitivity checks resolve them.
+
+The motivating study by @goulet2007 also showed that the conclusion depends on the time coordinate and how extreme groups are defined. Its phase-specific result came from four morning and five evening participants selected for extreme measured DLMO timing. Our larger sample extends the question to melanopic exposure, work and free days, and variation in day length, but MSFsc alignment does not reproduce alignment to measured DLMO. The present results therefore support comparison of daily patterns, rather than a direct replication of the earlier circadian-phase result.
+
+<!-- Add the final daylight and MEQ findings here after those analyses have run.
+Do not turn a selected-model R-squared increase or a smaller contrast on short
+days into evidence that daylight is a dominant causal driver. -->
+
+## Comparison with Goulet and colleagues {#sec-comparison-goulet}
+
+### The question shared by the two studies
+
+@goulet2007 asked whether morning and evening types encounter different light patterns when exposure is expressed in clock time or relative to measured circadian phase. That distinction also motivates this analysis. In both studies, the phase comparison tests whether a clock-time difference reflects a shift of the whole daily pattern or a difference that remains after alignment.
+
+The earlier study analysed nine morning and ten evening participants after data-quality exclusions. In the full sample, morning types received more light in the morning and evening types more light late at night. Aligning the observations to measured DLMO removed a statistically detectable group-by-time difference in that full sample. The important exception was the subset with extreme DLMO timing: four morning and five evening participants. In that subset, morning types had higher exposure during much of the three hours before to three hours after DLMO, and evening types had higher exposure 10–12 hours after DLMO. The intermediate-DLMO subset did not show a statistically detectable group-by-time interaction [@goulet2007, pp. 153–156].
+
+“Intermediate” and “extreme” in that comparison described DLMO timing within participants already selected as morning or evening types by MEQ. They were not MEQ severity categories or MSFsc quartiles. The two studies therefore address related questions with different group definitions.
+
+### Design differences and what they contribute
+
+| Feature | Goulet and colleagues | This analysis | Consequence for interpretation |
+|---|---|---|---|
+| Analytical sample | 19 participants overall; the extreme-DLMO comparison used 4 morning and 5 evening participants. The protocol covered 7 recording days; the paper does not report a total of valid participant-days. | Primary near-eye sample: 140 participants, 778 participant-days, and 35,949 valid half-hours. | The larger sample supports estimation of individual variation and work/free differences. It does not remove imbalance between chronotype groups and sites. |
+| Recruitment and daily schedules | Healthy adults aged 19–34, selected by MEQ, with few external constraints on sleep and instructed to keep their preferred sleep schedule. | Adults recruited through several research sites, observed during everyday work and free days. | The earlier design reduced schedule variation. MeLiDos captures more everyday variation, but schedules and environments can contribute to group differences. |
+| Chronotype and phase | MEQ determined morning/evening membership. Laboratory saliva samples measured DLMO, which also defined the intermediate and extreme subsets. | MSFsc defines the primary quartiles and phase coordinate. MEQ categories provide a sensitivity analysis; DLMO is a published reference guide only. | The earlier study measured the biological phase marker needed for its main interpretation. The MEQ sensitivity narrows the difference in group definition, but does not supply measured DLMO. |
+| Exposure measurement | Wrist-worn photopic illuminance in lux. | Near-eye melanopic EDI, with chest measurements as a placement check; bedside measurements during sleep. | MeLiDos measures a spectrally relevant quantity closer to the eyes during waking hours. Neither measurement is retinal exposure, and the numerical exposure levels are not interchangeable. |
+| Geography and daylight | One location, Montréal, during May–September. | Multiple locations and dates, with site-specific photoperiod information. | MeLiDos can examine whether phase contrasts vary with day length. Uneven chronotype representation across sites limits separation of daylight from geography and related behaviours. |
+| Analysis | Hourly averages of log illuminance, group-by-time repeated-measures ANOVA, and comparisons at individual time points. | Cyclic generalized additive mixed models of half-hour means, with repeated observations, individual curves, day effects, residual correlation, registered contrasts, and held-out prediction. | The current models describe smooth timing differences and explicitly represent several sources of dependence. Their additional flexibility requires diagnostic checks; the unresolved residual spread affects interpretation of interval claims. |
+
+Both studies concern observed personal exposure rather than a controlled change in light. Goulet and colleagues interpreted the extreme-DLMO result as compatible with differences in intrinsic circadian period, but did not measure intrinsic period. The association could also reflect differences in behaviour and available light. Likewise, an association between day length and the MeLiDos contrasts does not establish which exposure caused a chronotype or which behavioural response produced the exposure.
+
+### What the additional daylight analysis can add
+
+The earlier study took place during relatively long days. Its methods report sunsets between 20:03 and 20:47, whereas DLMO in its extreme morning subgroup ranged from 17:25 to 20:59. Evening daylight could therefore have contributed to the exposure measured around early DLMO. The late subgroup's DLMO ranged from 23:57 to 01:35. These reported timings make daylight availability a plausible explanation to test; they do not quantify each person's daylight exposure [@goulet2007, pp. 152–154].
+
+The additional exploratory analysis uses MeLiDos's variation in day length to evaluate the morning–evening contrast at common short and long photoperiods. A smaller contrast on shorter days, supported where both groups have observations, would be consistent with the daylight explanation. This comparison is pooled across sites: no individual site has at least five participants in both extreme MSFsc quartiles. Here, photoperiod is the duration from civil dawn to civil dusk; it does not measure the light that entered a participant's environment. Civil dawn and dusk relative to MSFsc provide a more direct check of the proposed timing mechanism than day length alone. This extension complements the primary standardized group comparisons rather than changing their target.
+
+The strongest comparison is therefore about the shape and timing of exposure differences. Agreement would show that a related pattern appears with a different exposure metric and broader everyday sampling. Disagreement could arise from the chronotype definition, phase marker, schedules, season, measurement position, or statistical uncertainty. A direct test of Goulet and colleagues' DLMO-specific finding would require measured DLMO in the same participants.
+
+## MEQ methods sentence
+
+The MEQ sensitivity uses the recorded questionnaire categories and checks them against the original scoring ranges: definitely morning, 70–86; moderately morning, 59–69; neither type, 42–58; moderately evening, 31–41; and definitely evening, 16–30 [@horne1976, p. 99]. “Intermediate” is the report's label for the original “neither type” category. These thresholds classify questionnaire preference and are separate from the sample-relative MSFsc quartiles.

@@ -1,0 +1,28 @@
+"check","passed"
+"Two extreme-group overall phase candidate intervals are exported",TRUE
+"Primary interval 1 mean factor matches curve grid",TRUE
+"Primary interval 1 Q1 counts match observed phase coordinates",TRUE
+"Primary interval 1 Q4 counts match observed phase coordinates",TRUE
+"Primary interval 2 mean factor matches curve grid",TRUE
+"Primary interval 2 Q1 counts match observed phase coordinates",TRUE
+"Primary interval 2 Q4 counts match observed phase coordinates",TRUE
+"Daylength 1 Shorter matches saved grid",TRUE
+"Daylength 1 Typical matches saved grid",TRUE
+"Daylength 1 Longer matches saved grid",TRUE
+"Daylength 1 Longer_minus_shorter matches saved grid",TRUE
+"Daylength 2 Shorter matches saved grid",TRUE
+"Daylength 2 Typical matches saved grid",TRUE
+"Daylength 2 Longer matches saved grid",TRUE
+"Daylength 2 Longer_minus_shorter matches saved grid",TRUE
+"clock seven Shapley credits reconcile full minus baseline R2",TRUE
+"phase seven Shapley credits reconcile full minus baseline R2",TRUE
+"Known participants: final day clock scores match held-out predictions",TRUE
+"Known participants: final day clock assessment counts match predictions",TRUE
+"Known participants: final day phase scores match held-out predictions",TRUE
+"Known participants: final day phase assessment counts match predictions",TRUE
+"New participants clock scores match held-out predictions",TRUE
+"New participants clock assessment counts match predictions",TRUE
+"New participants phase scores match held-out predictions",TRUE
+"New participants phase assessment counts match predictions",TRUE
+"Every primary participant has MEQ",TRUE
+"MEQ exclusions reconcile existing sample flow",TRUE

@@ -1,0 +1,3 @@
+"contrast","description","significant_grid_points","supported_grid_points","minimum_ratio","maximum_ratio","minimum_lower","maximum_upper"
+"direction_daytype","Direction by day type",0,144,0.740917189364809,1.4846574261446,0.392169457704876,3.17792170941039
+"direction_extremity_daytype","Direction by extremity by day type",0,144,0.754029648277617,1.76961470345658,0.184485453306745,7.48933569921989

@@ -1,0 +1,15 @@
+"check","passed"
+"Every near-eye participant occurs exactly once",TRUE
+"All participant-days and half-hours are represented",TRUE
+"Sample is 140 participants / 778 days / 35949 half-hours",TRUE
+"Neither histogram drops a missing chronotype value",TRUE
+"Frozen type-7 quartiles are retained and ties stay together",TRUE
+"Intermediate MEQ participants remain in the histogram",TRUE
+"msfsc histogram bins agree with participant records",TRUE
+"msfsc histogram contains 140 participant observations",TRUE
+"msfsc histogram has the requested bin width",TRUE
+"meq histogram bins agree with participant records",TRUE
+"meq histogram contains 140 participant observations",TRUE
+"meq histogram has the requested bin width",TRUE
+"Both histograms use identical MSFsc quartile colors",TRUE
+"MEQ top labels retain all five ordered category counts",TRUE

@@ -1,0 +1,3 @@
+"axis","sensitivity","maximum_contrast_change","rms_contrast_change","rho","k","participant_k","deleted","convergence","warnings","participants","participant_days","half_hours","innovation_spread_ratio"
+"clock","delete_site",0.376223077301347,0.0833600123630038,0.593986244821507,12,10,"KNUST",TRUE,"openMP not available: single threaded computation only",125,697,32248,NA
+"phase","delete_site",0.337496523500316,0.0741909969175973,0.595995176930004,12,10,"KNUST",TRUE,"openMP not available: single threaded computation only",125,697,32248,NA

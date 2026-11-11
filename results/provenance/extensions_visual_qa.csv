@@ -1,0 +1,10 @@
+check,status,detail
+render,pass,Fresh R session completed the final Quarto render
+desktop,pass,1280 by 720; summary and pattern panels and daylight figures and MEQ figures and comparison table inspected
+narrow_screen,pass,390 by 844; summary and MEQ figures and references inspected; comparison table has horizontal scrolling within the page width
+figure_enlargement,pass,Shapley lightbox image loaded and displayed clock and phase tags and sample counts
+sample_labels,pass,Representative main and daylight and MEQ figures visibly retain participants and participant-days
+preview_server,closed,Python PID 55853; served report directory on 127.0.0.1 port 51807; terminated after inspection; no listener remained
+preview_tab,closed,Agent-created temporary tab 6 closed; browser viewport override reset
+immutable_artifacts,pass,434 source and rendered files identical before and after browser inspection; zero symlinks
+screenshots,saved,results/provenance/qa-extensions-*.png

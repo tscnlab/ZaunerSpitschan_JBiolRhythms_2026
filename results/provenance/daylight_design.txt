@@ -1,0 +1,11 @@
+Exploratory reporting specification: fixed
+Formula: response ~ s(t, bs = "cc", k = 12) + s(t, quartile, bs = "sz",      xt = list(bs = "cc"), k = 12) + s(t, daytype, bs = "sz",      xt = list(bs = "cc"), k = 12) + s(t, quartile, daytype, bs = "sz",      xt = list(bs = "cc"), k = 12) + s(t, site, bs = "sz", xt = list(bs = "cc"),      k = 12) + s(photo, bs = "cr", k = 5) + ti(t, photo, bs = c("cc",      "cr"), k = c(12, 5)) + s(t, participant, bs = "fs", xt = list(bs = "cc"),      k = 10) + s(participant_day, bs = "re") + s(t, quartile,      by = photo, bs = "szphoto", xt = list(bs = "cc"), k = 12)
+Targets: Shorter -1; Typical  0; Longer  1
+Pooled free-day weight: 0.404897959
+Inverse weighted empirical CDF; equal participant weights, then equal weights for their observed days.
+Inference family: Q4 minus Q1 at Shorter; Q4 minus Q1 at Typical; Q4 minus Q1 at Longer; Longer minus shorter of Q4 minus Q1
+Pointwise 95% Gaussian bands and full-covariance interval-average CIs; exploratory and unadjusted.
+At least four participants in each extreme-quartile by day-type cell, within one hour of the centered photoperiod target and the half-hour phase bin.
+Exploratory pooled association with site adjustment; targets and support threshold revised after examining the fit.
+Moderation is linear in centered photoperiod and shared across work and free days. Primary fits are unchanged.
+szphoto retains the original mgcv sz constructor, prediction method and sum-to-zero constraint.

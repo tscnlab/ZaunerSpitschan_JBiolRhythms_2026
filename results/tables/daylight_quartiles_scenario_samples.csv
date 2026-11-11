@@ -1,0 +1,13 @@
+"quartile","daytype","participants","participant_days","half_hours","scenario","photo_target","photo_tolerance_hours"
+"Q4","Free",15,33,1504,"Shorter",-0.772073190644567,1
+"Q4","Work",16,43,1991,"Shorter",-0.772073190644567,1
+"Q1","Work",18,55,2538,"Shorter",-0.772073190644567,1
+"Q1","Free",19,45,2068,"Shorter",-0.772073190644567,1
+"Q4","Work",15,44,2028,"Typical",6.53740432525751e-05,1
+"Q4","Free",14,38,1760,"Typical",6.53740432525751e-05,1
+"Q1","Work",16,48,2217,"Typical",6.53740432525751e-05,1
+"Q1","Free",16,41,1884,"Typical",6.53740432525751e-05,1
+"Q1","Work",11,30,1380,"Longer",1.34873224135718,1
+"Q1","Free",10,22,1028,"Longer",1.34873224135718,1
+"Q4","Work",7,25,1158,"Longer",1.34873224135718,1
+"Q4","Free",7,17,787,"Longer",1.34873224135718,1

@@ -1,0 +1,6 @@
+"check","value","expected","tolerance","passed","participants","participant_days","half_hours"
+"Constrained cyclic sz coefficient count",33,33,0,TRUE,140,778,35949
+"Sum to zero across all quartiles",0,0,1e-12,TRUE,140,778,35949
+"Zero moderation at centered photoperiod zero",0,0,1e-12,TRUE,140,778,35949
+"Linear scaling in centered photoperiod",0,0,1e-12,TRUE,140,778,35949
+"Cyclic 0/24 endpoint agreement",2.22044604925031e-16,0,1e-12,TRUE,140,778,35949

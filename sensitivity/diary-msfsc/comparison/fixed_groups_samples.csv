@@ -1,0 +1,4 @@
+"scenario","alignment","classification","label","participants","participant_days","half_hours"
+"matched-msfsc","Questionnaire","Questionnaire","Questionnaire timing + groups",135,755,34884
+"dmsfsc-fixed-groups","Diary","Questionnaire","Diary timing + questionnaire groups",135,755,34884
+"dmsfsc","Diary","Diary","Diary timing + groups",135,755,34884

@@ -1,0 +1,172 @@
+## Exploratory daylength analysis {#sec-daylight}
+
+Civil daylight occurs at different MSFsc-relative times in the extreme morning and evening groups. This supports the proposed solar-timing explanation. The exposure model does **not resolve a change in the extreme-group ratio between shorter and longer days**, and adding that interaction does not improve prediction in new participants. This section is an additional exploration. The primary models, contrasts and attribution results remain unchanged.
+
+### Question, model and comparison
+
+The question is whether the extreme evening/morning exposure ratio changes with daylength, particularly during the phase intervals identified in the primary analysis. Photoperiod here means the duration from civil dawn to civil dusk, when the Sun is no more than 6° below the horizon. It describes astronomical daylight availability. The measured exposure can also include artificial light, indoor attenuation and participants' choices of location and activity.
+
+We add a cyclic quartile-specific change per hour of photoperiod to the full phase model. Photoperiod remains centered within each site's observed date distribution. The common phase curve, original quartile and day-type deviations, site curves, participant curves, day intercepts and common photoperiod terms remain in the model. The added quartile change is linear in centered photoperiod and shared across work and free days. Predictions use the same pooled work/free mix as the primary comparisons and exclude site, participant and day effects.
+
+The added term retains cyclic cubic `sz` smooths and their sum-to-zero constraint. In the installed `mgcv` version, a varying numeric `by` variable otherwise removes that constraint. The short wrapper below keeps the original constructor and prediction method, retains the constraint, and supplies native `sz` bookkeeping for discrete fitting. Its fitted design is checked for zero sums across quartiles, zero contribution at centered photoperiod zero, linear scaling and cyclic continuity.
+
+```{r}
+#| label: daylight-model
+source("R/daylight.R")
+smooth.construct.szphoto.smooth.spec
+smooth.info.szphoto.smooth.spec
+daylight_formula()
+# This reads verified caches when available. All new artifacts have a daylight prefix.
+daylight_result <- run_daylight(prepared)
+```
+
+The scenario targets were recorded before fitting: the participant/day-weighted 25th, 50th and 75th percentiles of centered photoperiod, approximately **−0.77, 0.00 and +1.35 hours**. Each participant receives equal weight, then their observed days receive equal weight. These are shorter or longer days relative to a site's reference, not three universal absolute daylengths. An observation supports a target when its centered photoperiod is within one hour. Every phase comparison also requires five participants in each extreme-quartile by day-type cell in the corresponding half-hour phase bin. All 144 grid points pass this rule at the chosen targets.
+
+```{r}
+#| label: tbl-daylight-scenario-samples
+#| tbl-cap: "Observations within one hour of each centered-photoperiod target. Participants can contribute to both day types and to more than one target; these counts must not be added."
+show_table(table_data("daylight_scenario_samples") |>
+  select(scenario, photo_target, quartile, daytype,
+         participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: tbl-daylight-model
+#| tbl-cap: "Expanded phase-model fit and its analytical sample. Ordinary R² and deviance explained are in-sample measures."
+show_table(table_data("daylight_model_summary") |>
+  select(rho, adjusted_R2, deviance_explained, ordinary_R2,
+         participants, participant_days, half_hours))
+```
+
+### Exposure patterns and changes in the group ratio
+
+The higher phase-aligned exposure in the extreme evening group after MSFsc becomes more pronounced in the longer-day point estimates. The uncertainty around the change is wide. We use 10,000 coefficient draws with smoothing-parameter correction to form one 95% simultaneous band family across the three scenario ratios, their longer/shorter ratio of ratios, and the 10-minute phase grid. This is a separate exploratory family from the primary contrasts.
+
+```{r}
+#| label: fig-daylight-patterns
+#| fig-cap: "Phase curves at three centered-photoperiod targets. Bands are pointwise 95% intervals. Facet counts describe observed participants and days within one hour of the target; the full model uses 140 participants and 778 days."
+#| fig-alt: "Three panels show extreme morning and evening phase curves on shorter, typical and longer days. The evening curve rises earlier after MSFsc in all panels. Each panel gives separate participant and day counts for both groups."
+show_figure("daylight_phase_patterns")
+```
+
+```{r}
+#| label: fig-daylight-ratios
+#| fig-cap: "Extreme-evening/extreme-morning ratios of melanopic EDI plus 0.1 at the three targets. The simultaneous bands include uncertainty across the complete exploratory contrast family."
+#| fig-alt: "The evening-to-morning ratio falls below one before MSFsc and rises above one after it. The later peak is higher in the longer-day scenario, with wide uncertainty bands."
+show_figure("daylight_phase_contrasts")
+```
+
+```{r}
+#| label: fig-daylight-moderation
+#| fig-cap: "Change in the extreme-group ratio from shorter to longer days. A value of one means the group ratio is unchanged. The simultaneous band includes one throughout the phase cycle."
+#| fig-alt: "The longer-to-shorter ratio of group ratios dips before MSFsc and peaks around two hours after MSFsc. Its wide simultaneous band includes one at every phase."
+show_figure("daylight_phase_moderation")
+```
+
+Over the primary candidate interval from **0.92 to 4.25 hours after MSFsc**, the geometric mean evening/morning ratio is **9.20** at the shorter-day target and **25.98** at the longer-day target. Their ratio is **2.82**, with a conservative simultaneous envelope of **0.57 to 13.92**. Over the earlier interval, approximately **10.92 to 10.08 hours before MSFsc**, the corresponding change is **0.87**, with an envelope of **0.18 to 4.24**. Thus the point estimates follow the proposed direction for the post-MSFsc difference, but the change is not resolved. These intervals were selected in the primary analysis and are reused here for description, not as independent confirmatory tests.
+
+```{r}
+#| label: tbl-daylight-primary-intervals
+#| tbl-cap: "Scenario ratios within the two primary candidate phase intervals. Bounds average the simultaneous log-scale envelopes before exponentiation. Counts include actual observed phase midpoints within each reported interval and within one hour of the target. Each sample entry gives participants / participant-days / valid half-hours."
+daylight_interval_counts <- table_data("daylight_primary_interval_samples") |>
+  filter(contrast != "Longer_minus_shorter") |>
+  mutate(sample = paste(participants, participant_days, half_hours, sep = " / ")) |>
+  select(interval, contrast, quartile, sample) |>
+  pivot_wider(names_from = quartile, values_from = sample)
+show_table(table_data("daylight_primary_interval_summaries") |>
+  filter(contrast != "Longer_minus_shorter") |>
+  select(interval, start_phase, end_phase, contrast, ratio, ratio_lower, ratio_upper) |>
+  left_join(daylight_interval_counts, by = c("interval", "contrast")))
+```
+
+The complete [scenario contrast table](results/tables/daylight_contrasts.csv), [candidate windows](results/tables/daylight_significant_windows.csv), [interval-specific sample records](results/tables/daylight_primary_interval_samples.csv) and [time-varying support counts](results/tables/daylight_local_support.csv) are available as CSV files. The supported windows remain exploratory because residual spread is uneven.
+
+### Solar timing relative to MSFsc
+
+We separately project each retained participant-day's civil dawn and dusk onto its participant's MSFsc coordinate. Here the shorter/longer split is **absolute civil daylength**, divided at the full sample's participant-weighted median of **13.25 hours**. This differs from the site-centered targets used in the exposure model. Within each group and absolute-daylength category, participants receive equal weight and their days receive equal weight.
+
+```{r}
+#| label: fig-daylight-civil-availability
+#| fig-cap: "Astronomical civil daylight availability in the two extreme groups, using 70 participants and 390 participant-days. The shaded interval is the published group-average DLMO reference, not measured or estimated DLMO for these participants. Counts describe days with solar metadata."
+#| fig-alt: "On longer days, civil daylight often extends into the shaded phase reference for extreme morning participants but rarely for extreme evening participants. On shorter days, it rarely reaches that reference for either group. Civil dawn occurs earlier relative to MSFsc for evening participants in both panels."
+show_figure("daylight_civil_availability")
+```
+
+Across the shaded reference interval, civil daylight availability averages about **72% on longer days and 6% on shorter days for the extreme morning group**, compared with **1% and 0% for the extreme evening group**. Civil dawn also occurs earlier relative to MSFsc in the evening group. This is consistent with the proposed timing mechanism. It does not identify the source of the measured light or establish that daylight explains the exposure differences. DLMO itself was not measured.
+
+```{r}
+#| label: tbl-daylight-civil-reference
+#| tbl-cap: "Mean civil daylight availability across the published reference interval, evaluated on the 10-minute phase grid. Participants and participant-days refer to available day-level solar metadata; valid half-hours are the input observations from those days, not measurements restricted to the shaded interval."
+show_table(table_data("daylight_civil_reference_summary") |>
+  mutate(mean_availability_percent = 100 * mean_availability) |>
+  select(quartile, daylength, mean_availability_percent,
+         participants, participant_days, half_hours))
+```
+
+### Prediction, diagnostics and scope
+
+The expanded model is evaluated in the same five participant-held-out folds as the primary phase model. Quartile cutoffs, site photoperiod centers, smoothing and AR correlation are estimated from training data. Neither participant nor day effects enter predictions for the held-out participants. Model comparisons use paired predictions on identical observations and 2,000 participant bootstrap samples stratified by site.
+
+```{r}
+#| label: tbl-daylight-validation-samples
+#| tbl-cap: "Separate training and assessment samples for each participant-held-out fold. Each row uses the same split for both models; training participants and days are disjoint from assessment participants and days."
+show_table(table_data("daylight_validation_samples") |>
+  filter(model == "Photoperiod moderation") |>
+  select(split, training_participants, training_days, training_half_hours,
+         assessment_participants, assessment_days, assessment_half_hours))
+```
+
+```{r}
+#| label: tbl-daylight-validation-scores
+#| tbl-cap: "Participant-weighted out-of-sample prediction on identical held-out observations. Error measures use log10(melanopic EDI + 0.1). R² is relative to the training-mean baseline. Counts are assessment counts pooled uniquely across the five folds."
+show_table(table_data("daylight_validation_scores"))
+```
+
+The expanded model's predictive R² is **0.649**, compared with **0.652** for the primary phase model. Its RMSE is **0.0044 higher**, with a paired 95% interval from **−0.0008 to 0.0100**. Adding photoperiod moderation does not improve new-participant prediction in these data.
+
+```{r}
+#| label: tbl-daylight-validation-differences
+#| tbl-cap: "Paired expanded-minus-primary score differences, with 95% intervals from 2,000 site-stratified participant bootstrap samples. Positive RMSE/MAE differences favor the primary model; positive R² differences favor the expanded model."
+show_table(table_data("daylight_validation_paired_differences"), digits = 4)
+```
+
+The model converges, its cyclic curves join correctly, and the basis check does not call for larger dimensions. AR-standardized lag-one residual correlation is approximately **0.080**. The main unresolved problem is residual spread: the largest fitted-value decile SD is **6.06 times** the smallest. The simultaneous bands and interval results therefore remain exploratory. A next model extension should allow the residual variance to change across exposure levels and phase, then repeat these held-out checks. Increasing the mean-curve basis or adjusting AR correlation alone would not address that spread pattern.
+
+```{r}
+#| label: tbl-daylight-diagnostics
+#| tbl-cap: "Diagnostic checks for the expanded phase model and its analytical sample."
+show_table(table_data("daylight_phase_verdict", "results/diagnostics") |>
+  select(convergence_ok, basis_flag, standardized_lag1, spread_ratio,
+         cyclic_ok, spread_flag, participants, participant_days, half_hours))
+```
+
+```{r}
+#| label: fig-daylight-model-checks
+#| fig-cap: "Residual checks for the expanded phase model: distribution, fitted-value pattern and spread. The model uses 140 participants, 778 days and 35,949 half-hours."
+#| fig-alt: "Residual diagnostic panels show the expanded phase model's distribution and residual patterns, including unequal residual spread across fitted values."
+show_figure("daylight_phase_appraise")
+```
+
+```{r}
+#| label: fig-daylight-spread
+#| fig-cap: "Residual standard deviation across fitted-value deciles. Uneven spread remains unresolved in the expanded model."
+#| fig-alt: "Residual standard deviation varies strongly across the ten fitted-value groups rather than remaining constant."
+show_figure("daylight_phase_spread")
+```
+
+```{r}
+#| label: fig-daylight-autocorrelation
+#| fig-cap: "Raw and AR-standardized residual autocorrelation within true-elapsed sequences."
+#| fig-alt: "Standardized residual autocorrelation is lower than raw residual autocorrelation across within-sequence time lags."
+show_figure("daylight_phase_acf")
+```
+
+Finally, the extreme chronotypes have little overlap within individual sites: **no site has at least five participants in both Q1 and Q4**. Site curves adjust for shared site patterns, but cannot replace that missing overlap. The daylength result is a pooled exploratory association with site adjustment. It cannot establish daylight as the dominant driver of the chronotype difference. A stronger test needs both extreme groups observed at the same sites across a wider seasonal range, together with information separating outdoor daylight from artificial or indoor light.
+
+```{r}
+#| label: tbl-daylight-site-composition
+#| tbl-cap: "Site composition of the two extreme quartiles. Zero rows show an absent group; only Q1 and Q4 are included."
+show_table(table_data("daylight_site_composition"))
+```
+
+The [basis checks](results/provenance/daylight_basis_acceptance.csv), [independent design audit](results/provenance/daylight_independent_audit.txt), [acceptance checks](results/provenance/daylight_acceptance_checks.csv) and [primary-cache checksums](results/provenance/daylight_primary_cache_preservation.csv) document the constrained smooth, unchanged primary results and separate daylight outputs. The complete additional analysis is in [R/daylight.R](R/daylight.R).

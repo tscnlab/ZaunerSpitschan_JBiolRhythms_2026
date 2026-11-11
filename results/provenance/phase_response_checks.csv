@@ -1,0 +1,77 @@
+"check","passed","value"
+"Absolute weights sum to one TRUE -8.45",TRUE,
+"Direct integral agrees TRUE -8.45 Q1_Overall Zero-exposure centered",TRUE,3.33066907387547e-16
+"Direct integral agrees TRUE -8.45 Q4_Overall Zero-exposure centered",TRUE,6.66133814775094e-16
+"Direct integral agrees TRUE -8.45 Q1_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -8.45 Q4_Work Zero-exposure centered",TRUE,4.44089209850063e-16
+"Direct integral agrees TRUE -8.45 Q1_Free Zero-exposure centered",TRUE,0
+"Direct integral agrees TRUE -8.45 Q4_Free Zero-exposure centered",TRUE,6.66133814775094e-16
+"Absolute weights sum to one TRUE -6.95",TRUE,
+"Direct integral agrees TRUE -6.95 Q1_Overall Zero-exposure centered",TRUE,0
+"Direct integral agrees TRUE -6.95 Q4_Overall Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -6.95 Q1_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -6.95 Q4_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -6.95 Q1_Free Zero-exposure centered",TRUE,0
+"Direct integral agrees TRUE -6.95 Q4_Free Zero-exposure centered",TRUE,2.22044604925031e-16
+"Absolute weights sum to one TRUE -6.45",TRUE,
+"Direct integral agrees TRUE -6.45 Q1_Overall Zero-exposure centered",TRUE,4.44089209850063e-16
+"Direct integral agrees TRUE -6.45 Q4_Overall Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -6.45 Q1_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -6.45 Q4_Work Zero-exposure centered",TRUE,4.44089209850063e-16
+"Direct integral agrees TRUE -6.45 Q1_Free Zero-exposure centered",TRUE,8.88178419700125e-16
+"Direct integral agrees TRUE -6.45 Q4_Free Zero-exposure centered",TRUE,4.44089209850063e-16
+"Absolute weights sum to one TRUE -5.95",TRUE,
+"Direct integral agrees TRUE -5.95 Q1_Overall Zero-exposure centered",TRUE,0
+"Direct integral agrees TRUE -5.95 Q4_Overall Zero-exposure centered",TRUE,1.33226762955019e-15
+"Direct integral agrees TRUE -5.95 Q1_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -5.95 Q4_Work Zero-exposure centered",TRUE,1.55431223447522e-15
+"Direct integral agrees TRUE -5.95 Q1_Free Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -5.95 Q4_Free Zero-exposure centered",TRUE,1.11022302462516e-15
+"Absolute weights sum to one TRUE -4.45",TRUE,
+"Direct integral agrees TRUE -4.45 Q1_Overall Zero-exposure centered",TRUE,4.44089209850063e-16
+"Direct integral agrees TRUE -4.45 Q4_Overall Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -4.45 Q1_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees TRUE -4.45 Q4_Work Zero-exposure centered",TRUE,4.44089209850063e-16
+"Direct integral agrees TRUE -4.45 Q1_Free Zero-exposure centered",TRUE,0
+"Direct integral agrees TRUE -4.45 Q4_Free Zero-exposure centered",TRUE,6.66133814775094e-16
+"Absolute weights sum to one FALSE -8.45",TRUE,
+"Direct integral agrees FALSE -8.45 Q1_Overall Zero-exposure centered",TRUE,6.66133814775094e-16
+"Direct integral agrees FALSE -8.45 Q4_Overall Zero-exposure centered",TRUE,6.66133814775094e-16
+"Direct integral agrees FALSE -8.45 Q1_Work Zero-exposure centered",TRUE,8.88178419700125e-16
+"Direct integral agrees FALSE -8.45 Q4_Work Zero-exposure centered",TRUE,1.66533453693773e-16
+"Direct integral agrees FALSE -8.45 Q1_Free Zero-exposure centered",TRUE,8.88178419700125e-16
+"Direct integral agrees FALSE -8.45 Q4_Free Zero-exposure centered",TRUE,0
+"Absolute weights sum to one FALSE -6.95",TRUE,
+"Direct integral agrees FALSE -6.95 Q1_Overall Zero-exposure centered",TRUE,1.22124532708767e-15
+"Direct integral agrees FALSE -6.95 Q4_Overall Zero-exposure centered",TRUE,1.12757025938492e-15
+"Direct integral agrees FALSE -6.95 Q1_Work Zero-exposure centered",TRUE,9.99200722162641e-16
+"Direct integral agrees FALSE -6.95 Q4_Work Zero-exposure centered",TRUE,1.32532873564628e-15
+"Direct integral agrees FALSE -6.95 Q1_Free Zero-exposure centered",TRUE,7.7715611723761e-16
+"Direct integral agrees FALSE -6.95 Q4_Free Zero-exposure centered",TRUE,6.10622663543836e-16
+"Absolute weights sum to one FALSE -6.45",TRUE,
+"Direct integral agrees FALSE -6.45 Q1_Overall Zero-exposure centered",TRUE,3.88578058618805e-16
+"Direct integral agrees FALSE -6.45 Q4_Overall Zero-exposure centered",TRUE,2.77555756156289e-16
+"Direct integral agrees FALSE -6.45 Q1_Work Zero-exposure centered",TRUE,8.32667268468867e-17
+"Direct integral agrees FALSE -6.45 Q4_Work Zero-exposure centered",TRUE,3.05311331771918e-16
+"Direct integral agrees FALSE -6.45 Q1_Free Zero-exposure centered",TRUE,5.55111512312578e-17
+"Direct integral agrees FALSE -6.45 Q4_Free Zero-exposure centered",TRUE,7.28583859910259e-17
+"Absolute weights sum to one FALSE -5.95",TRUE,
+"Direct integral agrees FALSE -5.95 Q1_Overall Zero-exposure centered",TRUE,3.01841884819964e-16
+"Direct integral agrees FALSE -5.95 Q4_Overall Zero-exposure centered",TRUE,9.15933995315754e-16
+"Direct integral agrees FALSE -5.95 Q1_Work Zero-exposure centered",TRUE,5.93275428784068e-16
+"Direct integral agrees FALSE -5.95 Q4_Work Zero-exposure centered",TRUE,5.55111512312578e-17
+"Direct integral agrees FALSE -5.95 Q1_Free Zero-exposure centered",TRUE,3.46944695195361e-16
+"Direct integral agrees FALSE -5.95 Q4_Free Zero-exposure centered",TRUE,9.22872889219661e-16
+"Absolute weights sum to one FALSE -4.45",TRUE,
+"Direct integral agrees FALSE -4.45 Q1_Overall Zero-exposure centered",TRUE,3.88578058618805e-16
+"Direct integral agrees FALSE -4.45 Q4_Overall Zero-exposure centered",TRUE,3.88578058618805e-16
+"Direct integral agrees FALSE -4.45 Q1_Work Zero-exposure centered",TRUE,1.11022302462516e-16
+"Direct integral agrees FALSE -4.45 Q4_Work Zero-exposure centered",TRUE,2.22044604925031e-16
+"Direct integral agrees FALSE -4.45 Q1_Free Zero-exposure centered",TRUE,3.60822483003176e-16
+"Direct integral agrees FALSE -4.45 Q4_Free Zero-exposure centered",TRUE,2.08166817117217e-16
+"24 h phase grid",TRUE,
+"Published PRC cyclic continuity",TRUE,
+"Source retained one period and 18 participants",TRUE,18
+"Source duplicates match",TRUE,
+"Fitted minimum agrees with published rounded value",TRUE,-1.74839881062593
+"Fitted maximum agrees with published rounded value",TRUE,0.450929068078425

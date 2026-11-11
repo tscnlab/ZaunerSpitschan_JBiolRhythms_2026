@@ -1,0 +1,99 @@
+@fig-chronotype-distributions shows the participant distributions of MSFsc and MEQ score. Both histograms include each of the 140 participants once. Participant-day counts describe the exposure records available for each group; they do not weight the histograms. Both panels use the same colors for MSFsc quartiles, with fixed cutoffs from the complete near-eye sample. The MEQ histogram includes the intermediate group, which is excluded only from the MEQ morning-versus-evening sensitivity.
+
+```{r}
+#| label: chronotype-distribution-data
+distribution_source <- prepared$frames$glasses
+distribution_people <- distribution_source |>
+  distinct(participant_key, site, msf_hours, quartile, meq, meq_type) |>
+  left_join(distribution_source |>
+    summarise(participant_days = n_distinct(participant_day_key),
+              half_hours = n(), .by = participant_key),
+    by = "participant_key", relationship = "one-to-one")
+stopifnot(!anyDuplicated(distribution_people$participant_key))
+
+msfsc_names <- c(Q1 = "Extreme morning", Q2 = "Moderate morning",
+                Q3 = "Moderate evening", Q4 = "Extreme evening")
+distribution_people$quartile <- factor(distribution_people$quartile,
+                                      levels = names(msfsc_names))
+distribution_meq_order <- c("Definitely evening type", "Moderately evening type",
+               "Intermediate", "Moderately morning type",
+               "Definitely morning type")
+distribution_people$meq_type <- factor(distribution_people$meq_type,
+                                      levels = distribution_meq_order)
+msfsc_distribution_counts <- distribution_people |>
+  summarise(participants = n(), participant_days = sum(participant_days),
+            half_hours = sum(half_hours), .by = quartile) |>
+  arrange(quartile) |>
+  mutate(group = unname(msfsc_names[as.character(quartile)]))
+meq_distribution_counts <- distribution_people |>
+  summarise(participants = n(), participant_days = sum(participant_days),
+            half_hours = sum(half_hours), .by = meq_type) |>
+  arrange(meq_type)
+save_table(distribution_people, "chronotype_distribution_registry")
+save_table(msfsc_distribution_counts, "chronotype_distribution_msfsc_groups")
+save_table(meq_distribution_counts, "chronotype_distribution_meq_groups")
+```
+
+```{r}
+#| label: fig-chronotype-distributions
+#| fig-alt: "Two participant-count histograms. Panel A shows corrected midsleep on free days in 20-minute bins. Panel B shows MEQ scores in one-point bins. Both panels use the same four colors for MSFsc quartiles. Dashed lines mark the MSFsc quartile cutoffs in A and the boundaries between five MEQ categories in B. MEQ category labels appear above the bars. Group labels give participants and participant-days."
+#| fig-cap: "Participant-level distributions in the complete near-eye sample: 140 participants, 778 participant-days, and 35,949 valid half-hours. A: MCTQ-derived MSFsc, with 20-minute bins and dashed quartile cutoffs. B: MEQ scores, with one-point bins, dashed category boundaries, and category labels above the bars. Both panels are filled by the same MSFsc quartiles. Higher MEQ scores indicate greater morning preference. Each participant is counted once in each panel. The 72 intermediate MEQ participants, contributing 399 participant-days, remain visible here and are excluded from the MEQ sensitivity."
+msfsc_colors <- c(Q1 = "#0072B2", Q2 = "#56B4E9",
+                 Q3 = "#E69F00", Q4 = "#D55E00")
+msfsc_legend <- setNames(
+  paste0(msfsc_distribution_counts$quartile, ": ",
+         msfsc_distribution_counts$group, "\n",
+         msfsc_distribution_counts$participants, " participants; ",
+         msfsc_distribution_counts$participant_days, " participant-days"),
+  msfsc_distribution_counts$quartile)
+msfsc_histogram <- ggplot(distribution_people,
+                         aes(msf_hours, fill = quartile)) +
+  geom_histogram(binwidth = 20 / 60, boundary = 0, closed = "left",
+                 color = "white", linewidth = 0.2) +
+  geom_vline(xintercept = prepared$cutoffs, linetype = "dashed",
+             color = "grey35", linewidth = 0.4) +
+  scale_fill_manual(values = msfsc_colors, labels = msfsc_legend) +
+  scale_x_continuous(breaks = 0:12, labels = clock_label) +
+  scale_y_continuous(breaks = scales::breaks_width(5),
+                     expand = expansion(mult = c(0, 0.08))) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(tag = "A", title = "MCTQ: corrected midsleep on free days",
+       x = "MSFsc (local clock time)", y = "Participants", fill = NULL,
+       subtitle = paste("Quartile cutoffs:",
+                        paste(clock_label(prepared$cutoffs), collapse = ", ")))
+
+meq_category_labels <- meq_distribution_counts |>
+  mutate(x = c(23.25, 36, 50, 64, 77.75),
+         label = paste0(sub(" type$", "", meq_type) |>
+                          sub(" ", "\n", x = _), "\n",
+                        participants, " people / ", participant_days, " days"))
+meq_histogram_height <- max(table(distribution_people$meq))
+meq_histogram <- ggplot(distribution_people,
+                       aes(meq, fill = quartile)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, closed = "left",
+                 color = "white", linewidth = 0.2) +
+  geom_vline(xintercept = c(30.5, 41.5, 58.5, 69.5),
+             linetype = "dashed", color = "grey35", linewidth = 0.4) +
+  geom_text(data = meq_category_labels,
+            aes(x = x, y = meq_histogram_height * 1.30, label = label),
+            inherit.aes = FALSE, size = 3.2, vjust = 1, lineheight = 0.95) +
+  scale_fill_manual(values = msfsc_colors, labels = msfsc_legend) +
+  scale_x_continuous(breaks = c(16, 30, 41, 58, 69, 86)) +
+  coord_cartesian(xlim = c(16, 86)) +
+  scale_y_continuous(breaks = scales::breaks_width(2),
+                     expand = expansion(mult = c(0, 0.04))) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(tag = "B", title = "Morningness-Eveningness Questionnaire",
+       x = "MEQ score (higher scores indicate morning preference)",
+       y = "Participants", fill = NULL,
+       subtitle = "Intermediate participants are shown here and excluded from the MEQ sensitivity.")
+
+chronotype_distribution_plot <- patchwork::wrap_plots(
+  msfsc_histogram, meq_histogram, ncol = 1, guides = "collect") +
+  patchwork::plot_annotation(
+    title = "Chronotype distributions",
+    subtitle = sample_label(distribution_source),
+    caption = "Each participant contributes once to each histogram. Colors indicate MSFsc quartiles in both panels.\nThe MEQ category labels give people / participant-days; the shared legend gives MSFsc group counts.")
+save_plot(chronotype_distribution_plot, "chronotype_distributions", 13, 11)
+knitr::include_graphics("results/figures/chronotype_distributions.png")
+```

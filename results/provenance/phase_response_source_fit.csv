@@ -1,0 +1,2 @@
+"fit_rmse","r_squared","adjusted_r_squared","minimum_shift","maximum_shift","source_participants","source"
+0.579013487384579,0.582465302273401,0.453993087588293,-1.74839881062593,0.450929068078425,18,"input-data/phase_response/hilaire_12_Fig3A_digitized_data.csv"

@@ -1,0 +1,190 @@
+## Sleep-diary midsleep and MSFsc {#sec-sleep-diary}
+
+This separate analysis compares questionnaire-derived MSFsc with the timing of recorded sleep episodes. The main comparison includes all available diary nights from the 140 participants in the primary near-eye exposure analysis, including nights whose waking day has no retained light observations. A second comparison uses every participant with valid diary and MSFsc data in the imported cohort. The exposure models are unchanged.
+
+### Sleep episodes and waking-day labels
+
+Midsleep is the midpoint between diary-derived **sleep onset** and **final awakening**, using dated local-clock timestamps. Sleep onset incorporates the reported delay between trying to sleep and falling asleep; it is not bedtime. The midpoint describes the sleep period and does not redistribute time around intervening awakenings. The diary question “Today is...” supplies the work/free label for the **waking date**. Thus Saturday-to-Sunday sleep is labelled free when Sunday is free, while Sunday-to-Monday sleep is labelled work when Monday is a work day.
+
+The code below reads the fixed input snapshot and the participant list from the primary analysis. The staged code is also available as a [standalone R script](R/sleep_diary_alignment.R).
+
+```{r}
+#| label: sleep-diary-register-code
+#| echo: true
+#| code-fold: true
+#| code-summary: "Register the executable diary-analysis stages"
+knitr::read_chunk("R/sleep_diary_alignment.R")
+```
+
+```{r}
+#| label: sleep-diary-inputs
+#| echo: true
+#| code-fold: true
+#| code-summary: "Read the diary, chronotype and primary-sample inputs"
+```
+
+We retain records with a valid sleep onset, awakening, MSFsc and waking-day label, respecting the upstream interval checks. Midnight is handled through the dated timestamps before extracting the midpoint's clock time. For correlation and variability, both clock variables use a fixed noon-to-noon scale, so times immediately before and after midnight remain adjacent.
+
+```{r}
+#| label: sleep-diary-prepare
+#| echo: true
+#| output: false
+```
+
+```{r}
+#| label: tbl-sleep-diary-flow
+#| tbl-cap: "Sleep-diary sample flow. All valid nights from primary-analysis participants contribute, irrespective of waking-day light-data availability."
+show_table(sleep_diary_flow)
+```
+
+The 140 primary-analysis participants supplied **972 diary entries**, of which **971** had the required timing and day-type information. One entry lacked the required sleep timing and day type. Of the retained nights, **778** correspond to waking dates in the exposure analysis and **193** provide additional diary information. There are **620 work-day nights from 139 participants** and **351 free-day nights from 136 participants**. In the full imported cohort, **1,268 valid nights from 183 participants** are available for comparison.
+
+### Association with MSFsc
+
+We calculate Pearson correlations between nightly midsleep and MSFsc overall and separately for work and free days. The nightly correlation weights each recorded night equally. Its 95% interval comes from 2,000 bootstrap samples of participants, carrying each selected participant's nights together. We also correlate each participant's mean diary midsleep with MSFsc, giving each participant one observation within the relevant day-type context. This second summary distinguishes habitual timing agreement from night-to-night variation; MSFsc itself does not vary across a participant's nights.
+
+```{r}
+#| label: sleep-diary-correlation-helper
+#| echo: true
+#| code-fold: true
+#| code-summary: "Calculate correlations and resample whole participants"
+```
+
+```{r}
+#| label: sleep-diary-correlations
+#| echo: true
+#| output: false
+```
+
+```{r}
+#| label: tbl-sleep-diary-correlations
+#| tbl-cap: "Association of diary midsleep with MSFsc. Nightly correlations use individual nights; participant-mean correlations use one mean per participant and context. Intervals are 95% participant-cluster bootstrap intervals."
+sleep_diary_correlation_display <- sleep_diary_correlation_table |>
+  mutate(
+    nightly = sprintf("%.2f (%.2f to %.2f)", night_r, night_lower, night_upper),
+    participant_mean = sprintf("%.2f (%.2f to %.2f)", participant_mean_r,
+      participant_mean_lower, participant_mean_upper)
+  ) |>
+  select(scope, context, participants, nights, nightly, participant_mean)
+show_table(sleep_diary_correlation_display,
+  labels = c(nightly = "Nightly r (95% CI)", participant_mean = "Participant-mean r (95% CI)"))
+```
+
+Among the primary-analysis participants, nightly midsleep correlated with MSFsc at **r = 0.66 overall (95% CI 0.59–0.73)**, **0.67 on work days (0.59–0.74)** and **0.74 on free days (0.67–0.81)**. The corresponding participant-mean correlations were **0.81, 0.75 and 0.82**. The full-cohort nightly correlations were similar: **0.65 overall, 0.67 on work days and 0.70 on free days**.
+
+Correlation describes ordering across participants rather than equality of the two timings. Diary midsleep was a median **34 minutes earlier than MSFsc on work days** and **18 minutes later on free days**. This comparison uses observed diary midsleep without a sleep-debt correction, whereas MSFsc includes that correction. The stronger association on free days is consistent with the construction of MSFsc from free-day midsleep, with work-day sleep duration contributing to the sleep-debt correction.
+
+### Within-participant variability
+
+We calculate the sample standard deviation of midsleep separately within each participant overall and within each day type. An SD is reported only when that participant has **at least three valid nights in that context**. The table summarizes these participant-specific SDs with equal participant weight; the work-day and free-day summaries can involve different subsets of participants.
+
+```{r}
+#| label: sleep-diary-variability
+#| echo: true
+#| output: false
+```
+
+```{r}
+#| label: tbl-sleep-diary-variability
+#| tbl-cap: "Within-participant variation in diary midsleep. SDs require at least three nights per participant within the indicated context; the median and quartiles summarize those SDs across eligible participants."
+show_table(sleep_diary_sd_summary |>
+    select(context, participants, nights, median_sd_minutes, q1_sd_minutes, q3_sd_minutes),
+  digits = 1,
+  labels = c(median_sd_minutes = "Median SD (min)", q1_sd_minutes = "25th percentile (min)",
+    q3_sd_minutes = "75th percentile (min)"))
+```
+
+Across **139 participants with at least three nights**, the median within-participant SD was **47 minutes (interquartile range 34–62 minutes)**. Within day types, the median was **30 minutes on work days** and **35 minutes on free days**, based on **127** and **59** eligible participants, respectively. The stronger association after averaging nights and the remaining nightly variation show that MSFsc tracks habitual sleep timing but does not locate each night's actual midpoint.
+
+### Diary-derived MSFsc equivalent (MSF~sc(diary)~)
+
+We also construct a diary-derived MSFsc equivalent (MSF~sc(diary)~) from the recorded sleep episodes. For each participant, we average midsleep and sleep-period duration separately before work days and free days. The correction follows the [MCTQ sleep-debt formula](https://docs.ropensci.org/mctq/reference/msf_sc.html), replacing the usual weekly work/free-day weights with the **observed numbers of valid diary nights** in each category. With mean durations $SD_W$ and $SD_F$ and counts $n_W$ and $n_F$,
+
+$$
+\overline{SD}_{\mathrm{diary}} =
+\frac{n_W SD_W+n_F SD_F}{n_W+n_F},
+\qquad
+\mathrm{MSF}_{\mathrm{sc(diary)}} = MSF_{\mathrm{diary}}
+-\frac{\max(0,SD_F-\overline{SD}_{\mathrm{diary}})}{2}.
+$$
+
+Thus work-day sleep duration and the recorded day counts determine the correction to mean free-day midsleep. Work-day and free-day midsleep are not themselves averaged to obtain the corrected value. If free-day sleep is no longer than work-day sleep, the correction is zero. Durations use the same local-clock interval from sleep onset to final awakening as the midsleep calculation. Each participant needs at least one valid night of both types. The diaries have no alarm-use field, so this is a diary-derived equivalent rather than a full MCTQ re-scoring.
+
+```{r}
+#| label: sleep-diary-msfsc
+#| echo: true
+```
+
+The estimate is available for **`r sleep_diary_msfsc_flow$eligible_participants` participants**, contributing **`r sleep_diary_msfsc_flow$work_nights` work-day nights** and **`r sleep_diary_msfsc_flow$free_nights` free-day nights**. Four participants had no valid free-day night and one had no valid work-day night. The correction is positive for **`r sleep_diary_msfsc_flow$corrected_participants` participants**; its median across all eligible participants is **`r round(sleep_diary_msfsc_flow$median_correction_minutes)` minutes**.
+
+For a direct comparison, the next table uses the same eligible participants for mean work-day midsleep, mean free-day midsleep and the corrected estimate. We give each participant equal weight and obtain 95% correlation intervals from 2,000 participant bootstrap samples. Timing differences are diary minus questionnaire MSFsc.
+
+```{r}
+#| label: sleep-diary-msfsc-summary
+#| echo: true
+#| output: false
+```
+
+```{r}
+#| label: tbl-sleep-diary-msfsc
+#| tbl-cap: "Diary-derived timing measures versus questionnaire MSFsc in the common sample with both work-day and free-day nights. Correlation intervals use participant bootstrapping; timing differences are diary minus questionnaire MSFsc."
+sleep_diary_msfsc_display <- sleep_diary_msfsc_summary |>
+  mutate(
+    measure = c("Mean work-day midsleep", "Mean free-day midsleep", "Diary MSFsc equivalent"),
+    correlation = sprintf("%.2f (%.2f to %.2f)", r, lower, upper),
+    difference = sprintf("%+.0f (%+.0f to %+.0f)",
+      median_difference_minutes, q1_difference_minutes, q3_difference_minutes)
+  ) |>
+  select(measure, participants, correlation, difference)
+show_table(sleep_diary_msfsc_display,
+  labels = c(correlation = "r (95% CI)", difference = "Median difference (IQR), min"))
+sleep_diary_msfsc_result <- sleep_diary_msfsc_summary |>
+  filter(metric == "diary_msfsc_hours")
+```
+
+The diary-derived MSFsc equivalent correlates with questionnaire MSFsc at **r = `r sprintf("%.2f", sleep_diary_msfsc_result$r)` (95% CI `r sprintf("%.2f–%.2f", sleep_diary_msfsc_result$lower, sleep_diary_msfsc_result$upper)`)**. It is a median **`r round(sleep_diary_msfsc_result$median_difference_minutes)` minutes later** (IQR `r sprintf("%+.0f to %+.0f", sleep_diary_msfsc_result$q1_difference_minutes, sleep_diary_msfsc_result$q3_difference_minutes)` minutes), compared with **23 minutes later** for uncorrected mean free-day midsleep in the same participants. The median absolute difference is **`r round(sleep_diary_msfsc_result$median_absolute_difference_minutes)` minutes**. The correction therefore reduces the typical offset, while the correlation is slightly lower than for uncorrected free-day means.
+
+### Diary midsleep versus MSFsc
+
+Panel A of @fig-sleep-diary-scatter shows individual sleep episodes. Panel B averages diary midsleep within each participant separately for work and free days, giving each participant one point per available day type. Its marginal histogram compares those day-type means in common 30-minute bins, with offset half-width bars for the two day types. These means include participants with at least one valid night in that day type; the three-night requirement applies only to the SD analysis. The overall correlation uses all nights in A and one all-night mean per participant in B. Panel C shows one diary-derived MSFsc equivalent per eligible participant. Colors and shapes in A and B identify the waking day's work/free label, and dashed lines denote equal diary and questionnaire timings. Vertical spreads in panel A reflect recorded night-to-night variation, although participants with the same MSFsc can overlap.
+
+```{r}
+#| label: sleep-diary-scatter-data
+#| echo: true
+```
+
+```{r}
+#| label: fig-sleep-diary-scatter
+#| ref.label: sleep-diary-plot
+#| echo: true
+#| code-fold: true
+#| code-summary: "Draw the diary-midsleep comparison"
+#| fig-width: 11.8
+#| fig-height: 5.6
+#| fig-cap: "Diary sleep timing versus questionnaire MSFsc, in local clock time. (A) Individual nights: 620 work-day and 351 free-day nights from 140 primary-analysis participants. (B) Participant-average midsleep: 139 work-day means and 136 free-day means. The marginal histogram counts these means in common 30-minute bins, using offset half-width bars with the same fill transparency as the points. Solarized blue circles and labels denote work days; red triangles and labels denote free days, classified by the waking day. Overall correlations use all nights in A and one all-night mean per participant in B. (C) Diary-derived MSFsc equivalents for 135 participants with both day types; the sleep-debt correction uses each participant's observed work/free-day counts. Points have black outlines. Dashed diagonals mark equal timings. Labels give Pearson correlations and n: nights in A, participants in B and C."
+#| fig-alt: "Three scatterplots compare questionnaire MSFsc with diary timing. A shows individual nights, with overall/work/free correlations of 0.66, 0.67 and 0.74. B shows participant means with corresponding correlations of 0.81, 0.75 and 0.82; offset blue and red histogram bars show free-day means generally later than work-day means. Blue circles and red triangles have black outlines. C shows 135 cyan points for diary-derived MSFsc equivalents, with correlation 0.79 and a median difference of six minutes later than questionnaire MSFsc. Correlation labels include night counts in A and participant counts in B and C. Dashed diagonals mark equality."
+```
+
+### Timing checks and reproducibility
+
+MSFsc and the primary midpoint comparison use local clock time. Three retained nights cross a daylight-saving transition. As a check, we also calculate their midpoints using true elapsed UTC time and then convert back to local time. The affected midpoint changes are 30 minutes; the overall correlation remains **0.66** under either convention. All observed midsleep values lie between **00:18 and 11:06**, so the fixed noon cut does not split the recorded distribution.
+
+```{r}
+#| label: sleep-diary-checks
+#| echo: true
+#| code-fold: true
+#| code-summary: "Check waking-day labels, midnight handling, SD eligibility and daylight-saving transitions"
+```
+
+```{r}
+#| label: sleep-diary-export
+#| echo: true
+#| code-fold: true
+#| code-summary: "Export figure data, tables and computational provenance"
+```
+
+The [night-level registry](results/data/sleep_diary_nights.csv) retains inclusion decisions for all imported entries. The [participant SD table](results/tables/sleep_diary_participant_sd.csv), [correlation table](results/tables/sleep_diary_correlations.csv), [participant-level correction inputs and results](results/tables/sleep_diary_msfsc_participants.csv), [corrected-timing summary](results/tables/sleep_diary_msfsc_summary.csv), [exact scatterplot data for all three panels](data/intermediate/sleep_diary_scatter_data.csv), [marginal histogram counts](data/intermediate/sleep_diary_scatter_histogram_data.csv), [plotted correlation labels](data/intermediate/sleep_diary_scatter_correlations_data.csv), [input checksums](results/provenance/sleep_diary_inputs.csv) and [runtime record](results/provenance/sleep_diary_runtime.txt) support reproduction. Running `Rscript --vanilla R/sleep_diary_alignment.R` executes the same stages independently; the report executes them here in analysis order.
+
+### Exposure-analysis sensitivity using MSF~sc(diary)~
+
+The separate [MSF~sc(diary)~ sensitivity analysis](diary-msfsc-sensitivity.qmd) repeats the exposure models and downstream calculations using this diary-derived correlate. It compares the established questionnaire-based MSFsc measure with MSF~sc(diary)~ on the same 135 participants, 755 participant-days and 34,884 half-hours. Both pre- and post-midsleep exposure contrasts retain their directions. However, within the original post-MSFsc window, the longer-day/shorter-day ratio is **2.66 (95% CI 1.10–6.43)** with questionnaire MSFsc and **1.15 (0.52–2.54)** with MSF~sc(diary)~. Daylength moderation is significant in the primary questionnaire-based analysis and its matched repeat, but not in the diary-derived sensitivity. An additional comparison uses diary timing while retaining questionnaire quartiles: its post-MSFsc factor is **2.39 (0.95–6.02)**. Alignment alone therefore leaves the point estimate similar but its interval includes one; reclassification produces the larger reduction in the estimate. The separate document reports this [fixed-group comparison](diary-msfsc-sensitivity.qmd#sec-fixed-groups) and the full matched-sample analyses, including PRC and Emens summaries, prediction, attribution and model-structure checks.

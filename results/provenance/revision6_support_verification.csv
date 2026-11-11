@@ -1,0 +1,12 @@
+"file","minimum_cell_participants","minimum_support","changed_support_points","passed"
+"results/tables/chest_clock_contrasts.csv",25,4,0,TRUE
+"results/tables/chest_phase_contrasts.csv",25,4,0,TRUE
+"results/tables/meq_all_contrasts.csv",23,4,0,TRUE
+"results/tables/meq_defined_clock_contrasts.csv",23,4,0,TRUE
+"results/tables/meq_defined_phase_contrasts.csv",23,4,0,TRUE
+"results/tables/meq_matched_msfsc_clock_contrasts.csv",25,4,0,TRUE
+"results/tables/meq_matched_msfsc_phase_contrasts.csv",25,4,0,TRUE
+"results/tables/noncyclic_sz_clock_contrasts.csv",27,4,0,TRUE
+"results/tables/noncyclic_sz_phase_contrasts.csv",27,4,0,TRUE
+"results/tables/primary_clock_contrasts.csv",27,4,0,TRUE
+"results/tables/primary_phase_contrasts.csv",27,4,0,TRUE

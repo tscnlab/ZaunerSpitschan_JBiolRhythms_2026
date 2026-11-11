@@ -1,0 +1,5 @@
+"quartile","direction","extremity","participants","participant_days","half_hours","prc_baseline","exposure_scale","reference_log10","reference_melEDI","estimate","lower","upper","unnormalized_integral"
+"Q1","Morning","Extreme",36,200,9241,"Drift corrected","Zero-exposure centered",-1,0,1.27609342410636,1.10425694619573,1.44792990201699,22.0672822990938
+"Q4","Evening","Extreme",34,190,8825,"Drift corrected","Zero-exposure centered",-1,0,1.42192421676282,1.25456390311857,1.58928453040707,24.5891111939527
+"Q1","Morning","Extreme",36,200,9241,"Published raw","Zero-exposure centered",-1,0,-0.15225554504601,-0.350665294440064,0.0461542043480427,-2.36831543327462
+"Q4","Evening","Extreme",34,190,8825,"Published raw","Zero-exposure centered",-1,0,0.0459229447780224,-0.147683230270928,0.239529119826972,0.714325503391958

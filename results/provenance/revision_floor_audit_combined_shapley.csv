@@ -1,0 +1,7 @@
+"axis","combined_group","allocation","lower","upper","replicates","interval","participants","participant_days","half_hours"
+"clock","chronotype",0.00695495870806362,0.00261287995194774,0.0118817995214441,2000,"95% percentile interval from the joint site-participant-day fixed-prediction bootstrap; conditional on fitted models",140,778,35949
+"clock","individual_variation",0.133954339828,0.110976498074133,0.164328516344657,2000,"95% percentile interval from the joint site-participant-day fixed-prediction bootstrap; conditional on fitted models",140,778,35949
+"clock","all_seven",0.17176027991998,0.142742011091287,0.209490281779727,2000,"95% percentile interval from the joint site-participant-day fixed-prediction bootstrap; conditional on fitted models",140,778,35949
+"phase","chronotype",0.0122984668474921,0.00589076248252695,0.01894551511476,2000,"95% percentile interval from the joint site-participant-day fixed-prediction bootstrap; conditional on fitted models",140,778,35949
+"phase","individual_variation",0.152699240676116,0.125111371027529,0.188952737343741,2000,"95% percentile interval from the joint site-participant-day fixed-prediction bootstrap; conditional on fitted models",140,778,35949
+"phase","all_seven",0.192195586224183,0.154345746067203,0.24046467788024,2000,"95% percentile interval from the joint site-participant-day fixed-prediction bootstrap; conditional on fitted models",140,778,35949

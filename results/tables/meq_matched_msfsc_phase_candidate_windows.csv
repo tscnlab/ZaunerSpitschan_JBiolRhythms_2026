@@ -1,0 +1,4 @@
+"classification","axis","context","start","end","wraps_boundary","duration_hours","direction","mean_log10_difference","factor_at_mean_difference","evening_participants","evening_days","evening_half_hours","morning_participants","morning_days","morning_half_hours"
+"MSFsc","phase","Overall",0.916666666666666,4.25,FALSE,3.33333333333333,"Evening higher",0.928857135665045,8.48901176871335,26,147,984,42,232,1554
+"MSFsc","phase","Work",0.916666666666666,4.25,FALSE,3.33333333333333,"Evening higher",0.920074910565216,8.31907252705145,26,90,603,41,144,960
+"MSFsc","phase","Free",0.916666666666666,4.25,FALSE,3.33333333333333,"Evening higher",0.943223996753596,8.77453269917906,26,57,381,37,88,594

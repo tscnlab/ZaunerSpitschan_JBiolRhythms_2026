@@ -1,0 +1,16 @@
+"check","passed"
+"Identical primary analysis observations",TRUE
+"Preserved true-elapsed AR ordering",TRUE
+"All target-level quartile/day cells have four participants",TRUE
+"All significant grid points pass local support",TRUE
+"Scenario contrast signs and longer-minus-shorter identity",TRUE
+"No site has five participants in both extreme quartiles",TRUE
+"Constrained cyclic sz coefficient count",TRUE
+"Sum to zero across all quartiles",TRUE
+"Zero moderation at centered photoperiod zero",TRUE
+"Linear scaling in centered photoperiod",TRUE
+"Cyclic 0/24 endpoint agreement",TRUE
+"Primary model, inference and validation files unchanged",TRUE
+"Pointwise moderation covers all 144 phase grid points",TRUE
+"Pointwise exclusions obey local support",TRUE
+"Civil summaries use the two primary phase windows",TRUE

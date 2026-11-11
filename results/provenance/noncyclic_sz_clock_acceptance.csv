@@ -1,0 +1,22 @@
+"axis","check","error","tolerance","passed"
+"clock","Identical analysis data and row ordering",0,0,TRUE
+"clock","Identical preprocessing and cutoffs",0,0,TRUE
+"clock","Sample: 140 participants, 778 days, 35949 half-hours",0,0,TRUE
+"clock","Same smooth term labels",0,0,TRUE
+"clock","Unchanged basis definition s(t)",0,0,TRUE
+"clock","Retained cyclic endpoint s(t)",1.11022302462516e-16,1e-08,TRUE
+"clock","Noncyclic cr margin s(t,quartile)",0,0,TRUE
+"clock","Sum-to-zero s(t,quartile) across quartile",0,1e-08,TRUE
+"clock","Noncyclic cr margin s(t,daytype)",0,0,TRUE
+"clock","Sum-to-zero s(t,daytype) across daytype",0,1e-08,TRUE
+"clock","Noncyclic cr margin s(t,quartile,daytype)",0,0,TRUE
+"clock","Sum-to-zero s(t,quartile,daytype) across quartile",0,1e-08,TRUE
+"clock","Sum-to-zero s(t,quartile,daytype) across daytype",0,1e-08,TRUE
+"clock","Noncyclic cr margin s(t,site)",0,0,TRUE
+"clock","Sum-to-zero s(t,site) across site",0,1e-08,TRUE
+"clock","Unchanged basis definition s(photo)",0,0,TRUE
+"clock","Unchanged basis definition ti(photo,t)",0,0,TRUE
+"clock","Retained cyclic endpoint ti(photo,t)",5.55111512312578e-17,1e-08,TRUE
+"clock","Unchanged basis definition s(t,participant)",0,0,TRUE
+"clock","Retained cyclic endpoint s(t,participant)",2.42861286636753e-17,1e-08,TRUE
+"clock","Unchanged basis definition s(participant_day)",0,0,TRUE

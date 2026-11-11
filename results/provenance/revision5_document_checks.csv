@@ -1,0 +1,49 @@
+"check","passed"
+"All rendered tables use native gt",TRUE
+"Every internal link resolves",TRUE
+"Every relative resource link resolves",TRUE
+"All revised figures and tables are present",TRUE
+"PRC source figure appears in its source/alignment section",TRUE
+"Daylength sensitivities have functioning tab structure",TRUE
+"PRC result row count tbl-phase-response-overall",TRUE
+"PRC estimates match export tbl-phase-response-overall",TRUE
+"PRC intervals match export tbl-phase-response-overall",TRUE
+"PRC result row count tbl-phase-response-contrasts",TRUE
+"PRC estimates match export tbl-phase-response-contrasts",TRUE
+"PRC intervals match export tbl-phase-response-contrasts",TRUE
+"Every figure and table has a prose reference",TRUE
+"No unresolved cross-reference remains",TRUE
+"Superseded PRC exposure variants removed from prose",TRUE
+"Both PRC baselines and zero-exposure centering described",TRUE
+"Directional PRC interpretation includes direct-contrast uncertainty",TRUE
+"PRC alignment exception is reported",TRUE
+"Both source-paper citations render",TRUE
+"Background states the PRC hypothesis and integration aim",TRUE
+"PRC prose contains no editing history",TRUE
+"Median-reference table and link are absent",TRUE
+"Both phase guides described in figure alt text: fig-daylight-patterns",TRUE
+"Both phase guides described in figure alt text: fig-daylight-ratios",TRUE
+"Both phase guides described in figure alt text: fig-daylight-moderation",TRUE
+"Both phase guides described in figure alt text: fig-daylight-quartile-sensitivity",TRUE
+"Both phase guides described in figure alt text: fig-daylight-decile-sensitivity",TRUE
+"Both phase guides described in figure alt text: fig-daylight-civil-availability",TRUE
+"Both phase guides described in figure alt text: fig-phase-response-kernel",TRUE
+"AI disclosure contains the specified model and setting",TRUE
+"Selected candidate qualifier removed",TRUE
+"Requested simultaneous-exports sentence removed",TRUE
+"Vague daylength summary removed",TRUE
+"Selected target-choice phrase removed",TRUE
+"Pre-DLMO trough and its uncertainty reported",TRUE
+"Singular-driver wording present",TRUE
+"Work/free-day result paragraph retained",TRUE
+"Twenty-minute histogram bins retained",TRUE
+"Abstract daylength percentage 1 percent_change",TRUE
+"Abstract daylength percentage 1 percent_lower",TRUE
+"Abstract daylength percentage 1 percent_upper",TRUE
+"Abstract daylength percentage 2 percent_change",TRUE
+"Abstract daylength percentage 2 percent_lower",TRUE
+"Abstract daylength percentage 2 percent_upper",TRUE
+"All current analytical checks pass",TRUE
+"Current analytical verification appears in acceptance table",TRUE
+"Final render preserves every protected model/cache",TRUE
+"All report R cells parse",TRUE

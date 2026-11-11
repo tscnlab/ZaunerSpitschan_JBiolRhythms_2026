@@ -1,0 +1,56 @@
+"check","passed"
+"primary_clock curves original estimates, intervals and counts retained",TRUE
+"primary_clock contrasts original estimates, intervals and counts retained",TRUE
+"primary_clock windows original estimates, intervals and counts retained",TRUE
+"primary_clock lux columns reproduce fitted response",TRUE
+"primary_clock factor bands preserve supported interval decisions",TRUE
+"primary_clock Moderate Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_clock Moderate Work evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_clock Moderate Free evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_clock Extreme Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_clock Extreme Work evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_clock Extreme Free evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_clock photoperiod median is reference factor one",TRUE
+"primary_clock photoperiod positive, ordered factor bounds",TRUE
+"primary_phase curves original estimates, intervals and counts retained",TRUE
+"primary_phase contrasts original estimates, intervals and counts retained",TRUE
+"primary_phase windows original estimates, intervals and counts retained",TRUE
+"primary_phase lux columns reproduce fitted response",TRUE
+"primary_phase factor bands preserve supported interval decisions",TRUE
+"primary_phase Moderate Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_phase Moderate Work evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_phase Moderate Free evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_phase Extreme Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_phase Extreme Work evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_phase Extreme Free evening/morning factor matches displayed intensity plus offset",TRUE
+"primary_phase photoperiod median is reference factor one",TRUE
+"primary_phase photoperiod positive, ordered factor bounds",TRUE
+"chest_clock curves original estimates, intervals and counts retained",TRUE
+"chest_clock contrasts original estimates, intervals and counts retained",TRUE
+"chest_clock windows original estimates, intervals and counts retained",TRUE
+"chest_clock lux columns reproduce fitted response",TRUE
+"chest_clock factor bands preserve supported interval decisions",TRUE
+"chest_clock Moderate Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_clock Moderate Work evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_clock Moderate Free evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_clock Extreme Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_clock Extreme Work evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_clock Extreme Free evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_clock photoperiod median is reference factor one",TRUE
+"chest_clock photoperiod positive, ordered factor bounds",TRUE
+"chest_phase curves original estimates, intervals and counts retained",TRUE
+"chest_phase contrasts original estimates, intervals and counts retained",TRUE
+"chest_phase windows original estimates, intervals and counts retained",TRUE
+"chest_phase lux columns reproduce fitted response",TRUE
+"chest_phase factor bands preserve supported interval decisions",TRUE
+"chest_phase Moderate Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_phase Moderate Work evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_phase Moderate Free evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_phase Extreme Overall evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_phase Extreme Work evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_phase Extreme Free evening/morning factor matches displayed intensity plus offset",TRUE
+"chest_phase photoperiod median is reference factor one",TRUE
+"chest_phase photoperiod positive, ordered factor bounds",TRUE
+"clock individual peak locations unchanged",TRUE
+"phase individual peak locations unchanged",TRUE
+"Fitted models, inference caches and timing results byte-identical",TRUE
