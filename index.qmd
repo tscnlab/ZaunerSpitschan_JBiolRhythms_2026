@@ -248,7 +248,7 @@ The MeLiDos project (22NRM05 MeLiDos) received funding from the European Partner
 
 ### Data availability
 
-The source MeLiDos datasets are available through the [MeLiDos Project GitHub organisation](https://github.com/MeLiDosProject) and archived in the [MeLiDos Zenodo community](https://zenodo.org/communities/22nrm05_melidos/). The [source analysis repository](https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026) provides the original analysis code and prepared data. The accompanying chronotype analysis contains a fixed input snapshot, source checksums, R code and package versions for reproducing this analysis, prepared for release in the [chronotype analysis repository](https://github.com/tscnlab/ZaunerSpitschan_JBiolRhythms_2026).[@zaunerspitschan2026analysis]
+The source MeLiDos datasets are available through the [MeLiDos Project GitHub organisation](https://github.com/MeLiDosProject) and archived in the [MeLiDos Zenodo community](https://zenodo.org/communities/22nrm05_melidos/). The [source analysis repository](https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026) provides the original analysis code and prepared data. The accompanying chronotype analysis contains a fixed input snapshot, source checksums, R code and package versions for reproducing this analysis, available in the [chronotype analysis repository](https://github.com/tscnlab/ZaunerSpitschan_JBiolRhythms_2026).[@zaunerspitschan2026analysis]
 
 ## Artificial-intelligence assistance
 
