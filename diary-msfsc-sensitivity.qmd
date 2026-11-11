@@ -496,6 +496,8 @@ Individual-curve and peak-timing calculations are also repeated with the origina
 
 # Checks and reproducibility
 
+This sensitivity's code, prepared inputs and retained comparison outputs are included in the [chronotype analysis repository](https://github.com/tscnlab/ZaunerSpitschan_JBiolRhythms_2026), whose released snapshots are preserved in the [Zenodo archive, doi:10.5281/zenodo.24140946](https://doi.org/10.5281/zenodo.24140946).
+
 The comparison verifies matched light records and AR ordering, identical validation folds, and training-only cutoffs and site centers. Input hashes cover the fixed normalized inputs, original model/inference files and shared R source. Separately requested diary-figure styling and annotation edits are recorded as authorized display changes; all code outside the plot and scatter-display-data stages is checked against the original snapshot. No primary fit or result is replaced by this sensitivity.
 
 ```{r}

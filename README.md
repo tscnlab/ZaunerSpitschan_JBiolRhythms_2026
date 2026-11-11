@@ -2,6 +2,8 @@
 
 # Light Exposure and Chronotype
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24140946.svg)](https://doi.org/10.5281/zenodo.24140946)
+
 This repository accompanies the working manuscript **Daily light exposure differences between extreme chronotypes persist after alignment to habitual sleep timing**, by Johannes Zauner and Manuel Spitschan.
 
 [Read the manuscript](https://tscnlab.github.io/ZaunerSpitschan_JBiolRhythms_2026/) · [Online Supplement S1](https://tscnlab.github.io/ZaunerSpitschan_JBiolRhythms_2026/analysis.html) · [Online Supplement S2](https://tscnlab.github.io/ZaunerSpitschan_JBiolRhythms_2026/diary-msfsc-sensitivity.html)
@@ -12,7 +14,7 @@ The analysis compares daily melanopic light exposure across four chronotype grou
 
 The project also examines work/free-day differences, photoperiod moderation, questionnaire and sensor-placement sensitivities, prediction and attribution, and agreement between sleep-diary timing and MSFsc. Exploratory PRC weighting is a conceptual summary of exposure timing. It is not calibrated to predict phase shifts. A separate sensitivity repeats the analyses using diary-derived corrected midsleep, with matched-sample and fixed-classification comparisons.
 
-The manuscript and supplements are drafts and will be updated. For a stable reference, record the Git commit used.
+The manuscript and supplements are drafts and will be updated. The [Zenodo archive](https://doi.org/10.5281/zenodo.24140946) provides a persistent DOI for the repository across releases. For exact reproducibility, record the version-specific DOI or Git commit used.
 
 ## Project layout
 
@@ -87,6 +89,8 @@ The result is `report/chronotype-manuscript.docx`. The reference document and Lu
 The [Pages workflow](.github/workflows/pages.yml) runs on pushes to `main` and on manual dispatch. It installs the pinned Quarto version, renders the website from `_freeze/`, checks local links and deploys `report/` to GitHub Pages. It does not install the research package library or refit models. GitHub Pages uses **GitHub Actions** as its publishing source.
 
 ## Inputs, provenance and attribution
+
+Released snapshots of this repository, including the prepared inputs, analysis code, Quarto sources and retained outputs, are archived on Zenodo at [doi:10.5281/zenodo.24140946](https://doi.org/10.5281/zenodo.24140946). GitHub contains the ongoing development version; Zenodo preserves the archived releases.
 
 The prepared inputs originate from [Zauner et al.'s MeLiDos analysis repository](https://github.com/tscnlab/ZaunerEtAl_bioRxiv_2026), primarily at commit `a5ca7e6e9968e3ca904528a2638f215dfbbd0212`. See [input-data/README.md](input-data/README.md) and [the input manifest](input-data/manifest.csv) for paths and checksums. The small demographic snapshot used for the manuscript's descriptive summary is documented by `R/manuscript_review_checks.R` and `results/provenance/manuscript_review_inputs.csv`.
 

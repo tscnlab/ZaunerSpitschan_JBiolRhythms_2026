@@ -1342,6 +1342,8 @@ The main strengths here are the larger analytical sample, measurements of melano
 
 ## Reproducibility and outputs
 
+The prepared input snapshot, analysis code, Quarto sources and retained outputs are available in the [chronotype analysis repository](https://github.com/tscnlab/ZaunerSpitschan_JBiolRhythms_2026). Released snapshots are preserved in the [Zenodo archive, doi:10.5281/zenodo.24140946](https://doi.org/10.5281/zenodo.24140946).[@zaunerspitschan2026analysis] The [README](README.md) describes environment restoration and reproduction from source.
+
 All counts originate from the shared observation registry. Participants are counted uniquely across day types. Individual plots show their contributing days, model and diagnostic tables show the full analytical sample, and validation separates training from assessment counts.
 
 @tbl-acceptance summarizes the primary acceptance checks.

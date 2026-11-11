@@ -83,6 +83,8 @@ website:
           - href: diary-msfsc-sensitivity.qmd
             text: Diary-derived MSFsc sensitivity
   page-navigation: false
+  page-footer:
+    center: "Repository archive: [10.5281/zenodo.24140946](https://doi.org/10.5281/zenodo.24140946)"
 engine: knitr
 format:
   html:
