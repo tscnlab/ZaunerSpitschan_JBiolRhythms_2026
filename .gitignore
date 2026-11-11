@@ -1,4 +1,6 @@
 # Local state and generated site / Word review deliveries
+# Private journal and preprint submission packages
+/manuscript/
 .DS_Store
 .Rhistory
 .RData
