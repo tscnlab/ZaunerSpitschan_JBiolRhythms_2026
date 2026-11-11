@@ -1,3 +1,5 @@
+<img src="https://github.com/tscnlab/Templates/blob/main/logo/logo_with_text-01.png" alt="Translational Sensory and Circadian Neuroscience" width="400"/>
+
 # Light Exposure and Chronotype
 
 This repository accompanies the working manuscript **Daily light exposure differences between extreme chronotypes persist after alignment to habitual sleep timing**, by Johannes Zauner and Manuel Spitschan.
